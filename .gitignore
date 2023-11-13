@@ -1,4 +1,3 @@
-/venv_scrapers
-/Bash_scrapers
+/venv
 **/__pycache__
-sites/000_delete_api_data.py
+
