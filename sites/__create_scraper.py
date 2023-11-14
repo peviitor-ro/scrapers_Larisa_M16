@@ -1,4 +1,4 @@
-
+#
 #
 #  You can create new files for scrapers from ->
 #  ... your terminal. For example:
@@ -23,6 +23,7 @@ def create_static_scraper_config(nume_scraper, link):
 #  Basic for scraping data from static pages
 #  ... project made by Andrei Cojocaru
 #  LinkedIn: https://www.linkedin.com/in/andrei-cojocaru-985932204/
+#  Github: https://github.com/andreireporter13
 #
 # ------ IMPORTANT! ------
 # if you need return soup object:
@@ -35,11 +36,13 @@ def create_static_scraper_config(nume_scraper, link):
 # Link ------> {link}
 #
 #
-from __utils import GetStaticSoup
-from __utils import get_county
-from __utils import get_job_type
-from __utils import Item
-from __utils import UpdateAPI
+from __utils import (
+    GetStaticSoup,
+    get_county,
+    get_job_type,
+    Item,
+    UpdateAPI,
+)
 
 
 '''
@@ -61,8 +64,9 @@ from __utils import UpdateAPI
     default_headers.py unde poti sa-ti setezi headerele tale default.
 
     --------------IMPORTANT----------------
-    In interiorul clasei GetStaticSoup este definit Session() ->
-    deci requesturile se fac in aceeasi sesiune!
+    La nivel de proiect, ca o variabila globala, este definit Session()!
+    ... acest session inseamna ca orice clasa va putea folosi
+    ... aceeasi sesiune, practic se va evita multiple requests;
 
     ########################################################################
 
@@ -155,6 +159,7 @@ def create_dynamic_json_get_scraper_config(nume_scraper, link):
 # Config for Dynamic Get Method -> For Json format!
 #  ... project made by Andrei Cojocaru
 #  LinkedIn: https://www.linkedin.com/in/andrei-cojocaru-985932204/
+#  Github: https://github.com/andreireporter13
 #
 # Company ---> {nume_scraper}
 # Link ------> {link}
@@ -167,11 +172,13 @@ def create_dynamic_json_get_scraper_config(nume_scraper, link):
 # ---> get_data_with_regex(expression: str, object: str)
 #
 #
-from __utils import GetRequestJson
-from __utils import get_county
-from __utils import get_job_type
-from __utils import Item
-from __utils import UpdateAPI
+from __utils import (
+    GetRequestJson,
+    get_county,
+    get_job_type,
+    Item,
+    UpdateAPI,
+)
 
 '''
     Daca deja te-ai deprins cu aceasta formula de cod,
@@ -190,8 +197,9 @@ from __utils import UpdateAPI
     json_data = GetRequestJson(link, custom_headers=headers -> new headers)
 
     --------------IMPORTANT----------------
-    In interiorul clasei GetRequestJson este definit Session() ->
-    deci requesturile se fac in aceeasi sesiune!
+    La nivel de proiect, ca o variabila globala, este definit Session()!
+    ... acest session inseamna ca orice clasa va putea folosi
+    ... aceeasi sesiune, practic se va evita multiple requests;
 
     ########################################################################
 
@@ -284,6 +292,7 @@ def create_dynamic_json_post_scraper_config(nume_scraper, link):
 # Config for Dynamic Post Method -> For Json format!
 #  ... project made by Andrei Cojocaru
 #  LinkedIn: https://www.linkedin.com/in/andrei-cojocaru-985932204/
+#  Github: https://github.com/andreireporter13
 #
 # Company ---> {nume_scraper}
 # Link ------> {link}
@@ -296,11 +305,13 @@ def create_dynamic_json_post_scraper_config(nume_scraper, link):
 # ---> get_data_with_regex(expression: str, object: str)
 #
 #
-from __utils import PostRequestJson
-from __utils import get_county
-from __utils import get_job_type
-from __utils import Item
-from __utils import UpdateAPI
+from __utils import (
+    PostRequestJson,
+    get_county,
+    get_job_type,
+    Item,
+    UpdateAPI,
+)
 
 
 '''
@@ -321,8 +332,9 @@ from __utils import UpdateAPI
     ceea ce inseamna ca trebuie o logica mai avansata. Dar nu e nimic greu.
 
     --------------IMPORTANT----------------
-    In interiorul clasei PostRequestJson este definit Session() ->
-    deci requesturile se fac in aceeasi sesiune!
+    La nivel de proiect, ca o variabila globala, este definit Session()!
+    ... acest session inseamna ca orice clasa va putea folosi
+    ... aceeasi sesiune, practic se va evita multiple requests;
 
     ########################################################################
 
@@ -414,6 +426,7 @@ def create_dynamic_render_scraper_config(nume_scraper, link):
 # Configurare pentru Scraperul Dynamic Render!
 #  ... project made by Andrei Cojocaru
 #  LinkedIn: https://www.linkedin.com/in/andrei-cojocaru-985932204/
+#  Github: https://github.com/andreireporter13
 #
 # Company ---> {nume_scraper}
 # Link ------> {link}
@@ -426,11 +439,13 @@ def create_dynamic_render_scraper_config(nume_scraper, link):
 # ---> get_data_with_regex(expression: str, object: str)
 #
 #
-from __utils import GetDynamicSoup
-from __utils import get_county
-from __utils import get_job_type
-from __utils import Item
-from __utils import UpdateAPI
+from __utils import (
+    GetDynamicSoup,
+    get_county,
+    get_job_type,
+    Item,
+    UpdateAPI,
+)
 
 
 '''
@@ -454,8 +469,9 @@ from __utils import UpdateAPI
     GetDynamicSoup(link, custom_headers=headers)
 
     --------------IMPORTANT----------------
-    In interiorul clasei GetDynamicSoup este definit Session() ->
-    deci requesturile se fac in aceeasi sesiune!
+    La nivel de proiect, ca o variabila globala, este definit Session()!
+    ... acest session inseamna ca orice clasa va putea folosi
+    ... aceeasi sesiune, practic se va evita multiple requests;
 
     ########################################################################
 
@@ -620,7 +636,7 @@ if __name__ == "__main__":
 
         # Verificați dacă fișierul scraper există deja sau nu
         if os.path.exists(f'{nume_scraper.lower()}_scraper.py'):
-            print(f"File {nume_scraper}__scraper.py already exists!")
+            print(f"File {nume_scraper.lower()}_scraper.py already exists!")
         else:
             if scraper_type == 'static':
                 create_static_scraper_config(nume_scraper, link)
