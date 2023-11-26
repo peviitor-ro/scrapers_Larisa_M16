@@ -117,7 +117,7 @@ def main():
     ---> update_jobs() and update_logo()
     '''
     company_name = "Catena"
-    logo_link = "https://www.catena.ro/assets/uploads/files/images/dacia_960x180%281%29.jpg"
+    logo_link = "https://www.catena.ro/assets/uploads/content_images/noimage-og.png"
 
     jobs = scraper()
 
