@@ -21,10 +21,6 @@ def create_static_scraper_config(nume_scraper, link):
     config_content = f"""#
 #
 #  Basic for scraping data from static pages
-#  ... project made by Andrei Cojocaru
-#  LinkedIn: https://www.linkedin.com/in/andrei-cojocaru-985932204/
-#  Github: https://github.com/andreireporter13
-#
 # ------ IMPORTANT! ------
 # if you need return soup object:
 # you cand import from __utils -> GetHtmlSoup
@@ -157,10 +153,6 @@ def create_dynamic_json_get_scraper_config(nume_scraper, link):
     config_content = f"""#
 #
 # Config for Dynamic Get Method -> For Json format!
-#  ... project made by Andrei Cojocaru
-#  LinkedIn: https://www.linkedin.com/in/andrei-cojocaru-985932204/
-#  Github: https://github.com/andreireporter13
-#
 # Company ---> {nume_scraper}
 # Link ------> {link}
 #
@@ -290,10 +282,6 @@ def create_dynamic_json_post_scraper_config(nume_scraper, link):
     config_content = f"""#
 #
 # Config for Dynamic Post Method -> For Json format!
-#  ... project made by Andrei Cojocaru
-#  LinkedIn: https://www.linkedin.com/in/andrei-cojocaru-985932204/
-#  Github: https://github.com/andreireporter13
-#
 # Company ---> {nume_scraper}
 # Link ------> {link}
 #
@@ -424,10 +412,6 @@ def create_dynamic_render_scraper_config(nume_scraper, link):
     config_content = f"""#
 #
 # Configurare pentru Scraperul Dynamic Render!
-#  ... project made by Andrei Cojocaru
-#  LinkedIn: https://www.linkedin.com/in/andrei-cojocaru-985932204/
-#  Github: https://github.com/andreireporter13
-#
 # Company ---> {nume_scraper}
 # Link ------> {link}
 #

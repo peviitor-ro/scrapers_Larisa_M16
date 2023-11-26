@@ -1,10 +1,6 @@
 #
 #
 #  Basic for scraping data from static pages
-#  ... project made by Andrei Cojocaru
-#  LinkedIn: https://www.linkedin.com/in/andrei-cojocaru-985932204/
-#  Github: https://github.com/andreireporter13
-#
 # ------ IMPORTANT! ------
 # if you need return soup object:
 # you cand import from __utils -> GetHtmlSoup
