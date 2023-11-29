@@ -90,7 +90,12 @@ def scraper():
 
         country_ = job.find("span", attrs={"class":"custom-css-style-job-location-country"}).text 
 
-        job_type_ = job.find("span", attrs={"class":"sc-1s8re0d-0 feitSf"}).text 
+        job_type_ = job.find("span", attrs={"class":"sc-1s8re0d-0 feitSf"})
+        if job_type_:
+            new_job_type = job_type_.text
+        else:
+            new_job_type = "on-site"
+
         if country_.lower() == "romania":
 
 
@@ -102,7 +107,7 @@ def scraper():
                 country=country_,
                 county=get_county(location),
                 city=location,
-                remote=get_job_type(job_type_),
+                remote=get_job_type(new_job_type),
             ).to_dict())
 
     return job_list
@@ -120,7 +125,7 @@ def main():
     logo_link = "https://www.yopeso.com/wp-content/uploads/2022/05/logo-Yopeso-150x78.png"
 
     jobs = scraper()
-
+    
     # uncomment if your scraper done
     UpdateAPI().update_jobs(company_name, jobs)
     UpdateAPI().update_logo(company_name, logo_link)
