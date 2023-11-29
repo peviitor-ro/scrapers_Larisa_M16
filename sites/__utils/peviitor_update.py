@@ -58,7 +58,7 @@ class UpdateAPI:
         # not delete this lines if you want to see the graph on scraper's page
         file = company_name.lower() + '_scraper.py'
         data = {'data': len(data_jobs)}
-        dataset_url = f'https://dev.laurentiumarian.ro/dataset/Scrapy_peviitor_jobs/{file}/'
+        dataset_url = f'https://dev.laurentiumarian.ro/dataset/scrapers_Larisa_M16/{file}/'
         requests.post(dataset_url, json=data)
         #######################################################################
 
