@@ -104,7 +104,7 @@ def scraper():
             country='Romania',
             county=[get_county(town) for town in jumbo_locations],
             city=jumbo_locations,
-            remote='on-site',
+            remote='on-site'
         ).to_dict())
 
     return job_list
@@ -121,7 +121,7 @@ def main():
     logo_link = "https://corporate.e-jumbo.gr/uploads/images/logo.png"
 
     jobs = scraper()
-    
+
     # uncomment if your scraper done
     UpdateAPI().update_jobs(company_name, jobs)
     UpdateAPI().update_logo(company_name, logo_link)
