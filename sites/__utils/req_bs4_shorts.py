@@ -32,7 +32,7 @@ class GetStaticSoup:
         if custom_headers:
             headers.update(custom_headers)
 
-        response = session.get(link, headers=headers)
+        response = session.get(link, headers=headers,verify=False)
 
         # return soup object from static page
         return BeautifulSoup(response.content, 'lxml')
