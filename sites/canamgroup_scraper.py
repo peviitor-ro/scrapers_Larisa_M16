@@ -96,7 +96,7 @@ def scraper():
             company='CanamGroup',
             country='Romania',
             county=get_county(location),
-            city=location,
+            city="Brasov",
             remote=get_job_type(location),
         ).to_dict())
 
@@ -116,8 +116,8 @@ def main():
     jobs = scraper()
     
     # uncomment if your scraper done
-    #UpdateAPI().update_jobs(company_name, jobs)
-    #UpdateAPI().update_logo(company_name, logo_link)
+    UpdateAPI().update_jobs(company_name, jobs)
+    UpdateAPI().update_logo(company_name, logo_link)
 
 
 if __name__ == '__main__':
