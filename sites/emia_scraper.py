@@ -112,7 +112,6 @@ def main():
     logo_link = "https://emia.com/image/emia-logo.png"
 
     jobs = scraper()
-    print(jobs)
 
     # uncomment if your scraper done
     UpdateAPI().update_jobs(company_name, jobs)
