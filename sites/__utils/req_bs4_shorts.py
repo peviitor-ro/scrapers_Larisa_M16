@@ -12,7 +12,6 @@ from bs4 import BeautifulSoup
 #
 from .default_headers import DEFAULT_HEADERS
 
-
 # Global Session -> avoid multiple requests
 # ... and all classes can use it in one script
 session = requests.Session()
@@ -32,7 +31,7 @@ class GetStaticSoup:
         if custom_headers:
             headers.update(custom_headers)
 
-        response = session.get(link, headers=headers,verify=False)
+        response = session.get(link, headers=headers)
 
         # return soup object from static page
         return BeautifulSoup(response.content, 'lxml')
