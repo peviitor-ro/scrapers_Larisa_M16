@@ -7,6 +7,7 @@
 #  Start here!
 #
 #
+import cfscrape
 import requests
 from bs4 import BeautifulSoup
 #
@@ -91,3 +92,19 @@ class PostRequestsJson:
         except ValueError as e:
             print(f"Errors. No JSON! Details: {e}")
             return None
+class HackCloudFlare:
+    '''
+    ... this method can help you avoid CloudFlare protection.
+    Is not a hack, but useful tool.
+    '''
+
+    def __new__(cls, url, custom_headers=None):
+        headers = DEFAULT_HEADERS.copy()
+
+        # if headers is requiered
+        if custom_headers:
+            headers.update(custom_headers)
+
+        scraper = cfscrape.create_scraper()
+
+        return BeautifulSoup(scraper.get(url).content, 'lxml')
