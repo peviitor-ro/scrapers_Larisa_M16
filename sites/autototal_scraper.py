@@ -22,6 +22,8 @@ from __utils import (
 
 from datetime import date
 import uuid
+import requests
+ 
  
 '''
     Daca te-ai deprins cu aceasta formula de cod,
@@ -78,71 +80,88 @@ import uuid
 
     ########################################################################
 '''
-location_mapping = {
-    'Expiră 9 Nov. 2023': 'Sibiu',
-    'Expiră 23 Dec. 2023': '',
-    'Expiră 20 Dec. 2023': 'Bacau',
-    'Expiră 28 Dec. 2023': 'Deva',
-    'Expiră 21 Dec. 2023': 'Targu Neamt',
-    'Expiră 21 Dec. 2023':'Alba Iulia / Campeni',
-    'Expiră 21 Dec. 2023':'Campeni ',
-    'Expiră 20 Dec. 2023':"Iasi",
-    'Expiră 14 Dec. 2023':"Neamt",
-    "Expir\u0103 10 Dec. 2023":'Onesti - Bacau',
-    "Expir\u0103 2 Dec. 2023":'Piatra Neamt',
-    "Expir\u0103 7 Dec. 2023":'Targoviste',
-    "Expir\u0103 6 Dec. 2023":'Bucuresti',
-    
+import datetime
+import re
+import calendar
 
-}
-
+current_year = datetime.datetime.now().year
 
 def scraper():
     '''
-    ... scrape data from autototal scraper.
+    ... scrape data from Autototal scraper.
     '''
-    soup = GetStaticSoup("https://www.autototal.ro/cariere")
+    soup = GetStaticSoup("https://www.autototal.ro/cariere/")
 
+    # date and month
     today_date = date.today().day
     current_month = date.today().month
+
+    # dict for clean data by date
     autototal_months = {'ian.': 1, 'febr.': 2, 'mart.': 3,
                         'apr.': 4, 'mai': 5, 'iun.': 6,
                         'iul.': 7, 'aug.': 8, 'sept.': 9,
                         'oct.': 10, 'nov.': 11, 'dec.': 12,
                         'august.': 8}
-    
-
 
     job_list = []
-    for job in soup.find_all("div", attrs={'class':'gem-compact-tiny-right'}):
-        location = job.find("div", attrs={'class':'summary text-body-tiny'}).text.split(",")[-1].strip()
-        if location in location_mapping:
-            location = location_mapping[location]
+    for job in soup.find_all('div', attrs={'class': 'gem-compact-tiny-right'}):
 
-        location_words = location.split()
-        summary = job.find('div', class_='post-text').find('div', class_='summary').text.lower().split()
-        
-        summary_sort = []
-        for ij in [2023, 2024, 2025]:
+        # save title and link -> if check_data == true
+        link_job = job.find('a')['href']
+        summary = job.find('div', attrs={'class': 'summary text-body-tiny'}).text.lower()
+
+        # extract date
+        summary_sort = ''
+        for ij in [2024, 2025, 2026]:
             if str(ij) in summary:
-                summary_sort = summary[summary.index('expiră'):summary.index(str(ij)) +1 ]
+                summary_sort = summary[summary.index('expiră'):summary.index(str(ij)) +4]
                 break
 
-        # here check if conditions
-        if int(summary_sort[1]) > today_date and autototal_months[summary_sort[2]] == current_month or \
-                autototal_months[summary_sort[2]] > current_month:
- 
-         job_list.append(Item(
-            job_title=job.find('a').text.strip(),
-            job_link=job.find('a')['href'],
-            company='AutoTotal',
-            country='Romania',
-            county=location,
-            city=location,
-            remote="on-sites",
-        ).to_dict())
-        
+        # split to make list from string
+        summary_sort = summary_sort.split()
+        try:
+            if int(summary_sort[1]) > today_date and autototal_months[summary_sort[2]] == current_month or autototal_months[summary_sort[2]] > current_month:
                  
+                
+                location_info = job.find("div", attrs={'class': 'summary text-body-tiny'}).text.strip()
+                if location_info== 'BUCURESTI\nExpiră 9 Febr. 2024':
+                    location_info = 'Bucuresti'            # SCOATE DIACRITICELE
+                    county = 'Bucuresti'                   # GET_COUNTY NU POATE
+                if location_info == 'VASLUI\nExpiră 19 Ian. 2024':
+                    location_info = 'Vaslui'
+                    county = 'Vaslui'
+                if location_info == 'Expiră 8 Febr. 2024':
+                    location_info = 'Timisoara'
+                    county = 'Timis'
+                if location_info == 'Expiră 8 Febr. 2024':
+                    location_info = 'Deva'
+                    county = 'Hunedoara'
+                if location_info == 'Expiră 2 Febr. 2024':
+                    location_info = 'Bucuresti'
+                    county = 'Bucuresti'
+                if location_info == 'Expiră 2 Febr. 2024':
+                    location_info = 'Vaslui'
+                    county = 'Vaslui'
+                if location_info == 'Expiră 19 Ian. 2024':
+                    location_info = 'Vaslui'
+                    county = 'Vaslui'
+            
+                else:
+                    county = county
+
+                
+                job_list.append(Item(
+                    job_title=job.find('a').text.strip(),
+                    job_link=link_job,
+                    company='AUTO TOTAL',
+                    country='Romania',
+                    county=county,
+                    city=location_info,
+                    remote='on sites',
+                ).to_dict())
+        except:
+            continue
+        
     return job_list
 
 
@@ -153,12 +172,12 @@ def main():
     ---> update_jobs() and update_logo()
     '''
 
-    company_name = "AutoTotal"
-    logo_link = "https://www.autototal.ro/wp-content/uploads/thegem-logos/logo_f7149358a9d89410af13364be85f4883_3x.png"
+    company_name = "AUTO TOTAL"
+    logo_link = "https://www.autototal.ro/wp-content/uploads/thegem-logos/logo_f7149358a9d89410af13364be85f4883_1x.png"
 
     jobs = scraper()
      
-      
+
     # uncomment if your scraper done
     UpdateAPI().update_jobs(company_name, jobs)
     UpdateAPI().update_logo(company_name, logo_link)
