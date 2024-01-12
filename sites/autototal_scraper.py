@@ -112,7 +112,7 @@ def scraper():
 
         # extract date
         summary_sort = ''
-        for ij in [2024, 2025, 2026]:
+        for ij in range (2024, 2030):
             if str(ij) in summary:
                 summary_sort = summary[summary.index('expiră'):summary.index(str(ij)) +4]
                 break
@@ -121,43 +121,18 @@ def scraper():
         summary_sort = summary_sort.split()
         try:
             if int(summary_sort[1]) > today_date and autototal_months[summary_sort[2]] == current_month or autototal_months[summary_sort[2]] > current_month:
-                 
-                
-                location_info = job.find("div", attrs={'class': 'summary text-body-tiny'}).text.strip()
-                if location_info== 'BUCURESTI\nExpiră 9 Febr. 2024':
-                    location_info = 'Bucuresti'            # SCOATE DIACRITICELE
-                    county = 'Bucuresti'                   # GET_COUNTY NU POATE
-                if location_info == 'VASLUI\nExpiră 19 Ian. 2024':
-                    location_info = 'Vaslui'
-                    county = 'Vaslui'
-                if location_info == 'Expiră 8 Febr. 2024':
-                    location_info = 'Timisoara'
-                    county = 'Timis'
-                if location_info == 'Expiră 8 Febr. 2024':
-                    location_info = 'Deva'
-                    county = 'Hunedoara'
-                if location_info == 'Expiră 2 Febr. 2024':
-                    location_info = 'Bucuresti'
-                    county = 'Bucuresti'
-                if location_info == 'Expiră 2 Febr. 2024':
-                    location_info = 'Vaslui'
-                    county = 'Vaslui'
-                if location_info == 'Expiră 19 Ian. 2024':
-                    location_info = 'Vaslui'
-                    county = 'Vaslui'
-            
-                else:
-                    county = county
+                request_for_city = GetStaticSoup(link_job)
+                city_name = request_for_city.find('div', attrs={'class': 'wpb_wrapper'}).find('p').text.split('\n')[0].split(':')[1].strip().split()
+                special_c = ['–','.',':',';' ]
 
-                
                 job_list.append(Item(
                     job_title=job.find('a').text.strip(),
                     job_link=link_job,
-                    company='AUTO TOTAL',
+                    company='AUTOTOTAL',
                     country='Romania',
-                    county=county,
-                    city=location_info,
-                    remote='on sites',
+                    county=[get_county(city_l) for city_l in city_name if city_l not in special_c],
+                    city=[city_l for city_l in city_name if city_l not in special_c],
+                    remote='onsite',
                 ).to_dict())
         except:
             continue
@@ -172,15 +147,16 @@ def main():
     ---> update_jobs() and update_logo()
     '''
 
-    company_name = "AUTO TOTAL"
+    company_name = "AUTOTOTAL"
     logo_link = "https://www.autototal.ro/wp-content/uploads/thegem-logos/logo_f7149358a9d89410af13364be85f4883_1x.png"
 
     jobs = scraper()
+    print(jobs)
      
 
     # uncomment if your scraper done
-    UpdateAPI().update_jobs(company_name, jobs)
-    UpdateAPI().update_logo(company_name, logo_link)
+    #UpdateAPI().update_jobs(company_name, jobs)
+    #UpdateAPI().update_logo(company_name, logo_link)
 
 
 if __name__ == '__main__':
