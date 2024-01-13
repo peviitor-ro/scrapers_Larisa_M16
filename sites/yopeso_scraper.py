@@ -101,8 +101,8 @@ def scraper():
 
             # get jobs items from response
             job_list.append(Item(
-                job_title=job.find("a", attrs={"class":"sc-6exb5d-1 harIFI"}).text,
-                job_link='https://careers.yopeso.com' + job.find("a", attrs={"class":"sc-6exb5d-1 harIFI"})["href"],
+                job_title=job.find("a", attrs={"class":"sc-6exb5d-1 fmfYYf"}).text,
+                job_link='https://careers.yopeso.com' + job.find("a", attrs={"class":"sc-6exb5d-1 fmfYYf"})["href"],
                 company='yopeso',
                 country=country_,
                 county=get_county(location),
