@@ -13,7 +13,7 @@
 # Link ------> https://monefy.ro/careers/
 #
 #
-from __utils import (
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -107,7 +107,7 @@ def scraper():
             job_title=job.find('a').text,
             job_link=job.a['href'],
             company='monefy',
-            country='Romania',
+            country='România',
             county=get_county(get_location(response)),
             city=get_location(response),
             remote='Remote',

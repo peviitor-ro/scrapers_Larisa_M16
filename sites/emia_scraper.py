@@ -12,7 +12,7 @@
 # Link ------> https://emia.com/jobs/
 #
 #
-from __utils import (
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -92,7 +92,7 @@ def scraper():
             job_title=job.find('h5', attrs={'class':'h5'}).text,
             job_link=job.find('a', attrs={'class':'card-job top-only'})['href'],
             company='Emia',
-            country='Romania',
+            country='România',
             county="Bucuresti",
             city='Bucuresti',
             remote='on-site',

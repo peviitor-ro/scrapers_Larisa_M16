@@ -13,7 +13,7 @@
 # Link ------> https://corporate.e-jumbo.gr/ro/job-opportunities/theseis-ergasias/
 #
 #
-from __utils import (
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -101,7 +101,7 @@ def scraper():
             job_title=job.find('h2', attrs={'class': 'title'}).text.strip(),
             job_link='https://corporate.e-jumbo.gr' + job.find('a', attrs={'class': 'view-more'})['href'],
             company='Jumbo',
-            country='Romania',
+            country='România',
             county=[get_county(town) for town in jumbo_locations],
             city=jumbo_locations,
             remote='on-site'
