@@ -21,7 +21,6 @@ from __utils import (
     UpdateAPI,
 )
 
-
 '''
     Daca te-ai deprins cu aceasta formula de cod,
     atunci poti sterge acest comentariu din fisierul
@@ -80,6 +79,7 @@ from __utils import (
 
 
 def scraper():
+    
     '''
     ... scrape data from bandainamco scraper.
     '''

@@ -1,7 +1,6 @@
 #
 #
 #  Basic for scraping data from static pages
-
 # ------ IMPORTANT! ------
 # if you need return soup object:
 # you cand import from __utils -> GetHtmlSoup
@@ -9,8 +8,8 @@
 # you cand import from __utils ->
 # ---> get_data_with_regex(expression: str, object: str)
 #
-# Company ---> Azur
-# Link ------> https://www.azur.ro/ro/cariere
+# Company ---> centric
+# Link ------> https://careers.centric.eu/ro/open-positions/
 #
 #
 from __utils import (
@@ -22,24 +21,28 @@ from __utils import (
 )
 
 
+
 def scraper():
     '''
-    ... scrape data from Azur scraper.
+    ... scrape data from centric scraper.
     '''
-    soup = GetStaticSoup("https://www.azur.ro/ro/cariere")
+    soup = GetStaticSoup("https://careers.centric.eu/ro/open-positions/")
 
     job_list = []
-    for job in soup.find_all("div",attrs={"class":"titlu-sortare22"}):
-        
+    for job in soup.find_all('div', attrs={'class':'card-grid__wrapper'}):
+        job_ = job.find('div', attrs={'class':'card  default'})
+       
+         
+
         # get jobs items from response
         job_list.append(Item(
-            job_title=job.find('a').text.strip(),
-            job_link="https://www.azur.ro" + job.find("a")["href"].strip(),
-            company='AZUR',
-            country='Romania',
-            county=get_county("Timisoara"),
-            city='Timisoara',
-            remote='on-site',
+            job_title=job_,
+            job_link=job.find("a", attrs={"class":'card__anchor'})['href'],
+            company='centric',
+            country='',
+            county='',
+            city='',
+            remote='',
         ).to_dict())
 
     return job_list
@@ -52,14 +55,15 @@ def main():
     ---> update_jobs() and update_logo()
     '''
 
-    company_name = "AZUR"
-    logo_link = "https://www.azur.ro/images/logo.png"
+    company_name = "centric"
+    logo_link = "logo_link"
 
     jobs = scraper()
-    
+    print(jobs)
+
     # uncomment if your scraper done
-    UpdateAPI().update_jobs(company_name, jobs)
-    UpdateAPI().update_logo(company_name, logo_link)
+    #UpdateAPI().update_jobs(company_name, jobs)
+    #UpdateAPI().update_logo(company_name, logo_link)
 
 
 if __name__ == '__main__':
