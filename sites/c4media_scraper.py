@@ -12,7 +12,7 @@
 # Link ------> https://c4media.com/career
 #
 #
-from __utils import (
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -94,7 +94,7 @@ def scraper():
                 job_title=link.text,
                 job_link='https://c4media.com' + link.get('href'),
                 company='C4Media',
-                country='Romania',
+                country='România',
                 county='',
                 city='',
                 remote='remote',

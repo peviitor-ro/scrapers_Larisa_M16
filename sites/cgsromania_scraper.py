@@ -12,7 +12,7 @@
 # Link ------> https://romania.cgsinc.com/vino-in-echipa-cgs/
 #
 #
-from __utils import (
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -23,7 +23,7 @@ from __utils import (
  
 import cfscrape
 from bs4 import BeautifulSoup
-from __utils import DEFAULT_HEADERS
+from sites.__utils import DEFAULT_HEADERS
 from sites.__utils.req_bs4_shorts import HackCloudFlare
 
 data = HackCloudFlare('https://romania.cgsinc.com/vino-in-echipa-cgs/') 
@@ -46,7 +46,7 @@ def scraper(html_content):
             job_title='',
             job_link='',
             company='CGSRomania',
-            country='Romania',
+            country='România',
             county='',
             city='',
         ).to_dict())
@@ -66,11 +66,10 @@ def main():
     logo_link = "logo_link"
 
     jobs = scraper(html_content)
-    print(jobs)
 
     # uncomment if your scraper done
-    #UpdateAPI().update_jobs(company_name, jobs)
-    #UpdateAPI().update_logo(company_name, logo_link)
+    UpdateAPI().update_jobs(company_name, jobs)
+    UpdateAPI().update_logo(company_name, logo_link)
 
 
 if __name__ == '__main__':

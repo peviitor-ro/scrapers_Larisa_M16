@@ -89,7 +89,9 @@ class TestUtils:
 
         if not expected_titles and not actual_titles:
             msg = f"Scraper is not grabbing any job titles"
-
+            allure.step(msg)
+            raise AssertionError(msg)
+        
         allure.step(msg)
         assert expected_titles == actual_titles, msg
 
@@ -105,6 +107,8 @@ class TestUtils:
 
         if not expected_cities and not actual_cities:
             msg = f"Scraper is not grabbing any job cities"
+            allure.step(msg)
+            raise AssertionError(msg)
 
         allure.step(msg)
         assert expected_cities == actual_cities, msg
@@ -121,6 +125,8 @@ class TestUtils:
 
         if not expected_countries and not actual_countries:
             msg = f"Scraper is not grabbing any job countries"
+            allure.step(msg)
+            raise AssertionError(msg)
 
         allure.step(msg)
         assert expected_countries == actual_countries, msg
@@ -137,6 +143,8 @@ class TestUtils:
         
         if not expected_links and not actual_links:
             msg = f"Scraper is not grabbing any job links"
+            allure.step(msg)
+            raise AssertionError(msg)
 
         allure.step(msg)
         assert expected_links == actual_links, msg
@@ -144,13 +152,18 @@ class TestUtils:
     # Check method for job links
     def check_code_job_links(self, status_codes_expected_result, status_codes_actual_result):
         http_codes = self.get_missing_items(status_codes_expected_result, status_codes_actual_result)
+        msg = ""
 
         if not http_codes:
             msg = f"Some job links from scraper do not return 200 http status code: {http_codes}"
+            allure.step(msg)
         
         if not status_codes_expected_result and not status_codes_actual_result:
             msg = f"Scraper is not grabbing any job links"
+            allure.step(msg)
+            raise AssertionError(msg)
 
-        allure.step(msg)
+        if not msg:
+            msg = f"An unexpected error occured {status_codes_expected_result} {status_codes_actual_result}"
         assert status_codes_expected_result == status_codes_actual_result, msg
         

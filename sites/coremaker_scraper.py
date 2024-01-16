@@ -13,7 +13,7 @@
 # Link ------> https://coremaker.io/careers/
 #
 #
-from __utils import (
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -94,7 +94,7 @@ def scraper():
             job_title=job.find('h5',attrs={'class': 'MuiTypography-root jss42 MuiTypography-h5'}).text.strip(),
             job_link="https://coremaker.io" + job.a['href'].strip(),
             company='Coremaker',
-            country='Romania',
+            country='România',
             county=get_county('Bucuresti'),
             city='Bucuresti',
             remote=get_job_type(location),

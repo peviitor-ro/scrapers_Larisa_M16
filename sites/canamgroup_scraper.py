@@ -12,7 +12,7 @@
 # Link ------>  https://www.canam.com/en/job-opportunities/?country%5B%5D=romania&search=
 #
 #
-from __utils import (
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -94,7 +94,7 @@ def scraper():
             job_title=job_,
             job_link=job.get('href'),
             company='CanamGroup',
-            country='Romania',
+            country='România',
             county=get_county(location),
             city="Brasov",
             remote=get_job_type(location),
