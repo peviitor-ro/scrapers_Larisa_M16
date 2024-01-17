@@ -12,7 +12,7 @@
 # Link ------> https://jobs.elektrobit.com/job-offers.html?order%5Bdir%5D=asc&order%5Bfield%5D=stellenbezeichnung&filter[countr][]=Romania+-+Brasov&filter[countr][]=Romania+-+Oradea&filter[countr][]=Romania+-+Timisoara&filter[volltext]=
 #
 #
-from __utils import (
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -38,7 +38,7 @@ def scraper():
             job_title=job.find('a').text,
             job_link=job.find('a')['href'],
             company='Elektrobit',
-            country='Romania',
+            country='România',
             county= [get_county(town) for town in locations_],
             city=locations_,
             remote='on site',

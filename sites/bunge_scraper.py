@@ -14,7 +14,7 @@
 # Link ------>  https://jobs.bunge.com/search/?createNewAlert=false&q=&locationsearch=Romania&optionsFacetsDD_country=
 #
 #
-from __utils import (
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -40,7 +40,7 @@ def scraper():
             job_title=job.find("a", attrs={"class":"jobTitle-link"}).text.strip(),
             job_link="https://jobs.bunge.com" + job.find("a",attrs={"class":"jobTitle-link"})['href'].strip(),
             company='Bunge',
-            country='Romania',
+            country='România',
             county=get_county(location_),
             city=location_,
             remote='on-site',

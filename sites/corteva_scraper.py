@@ -12,7 +12,7 @@
 # ---> get_data_with_regex(expression: str, object: str)
 #
 #
-from __utils import (
+from sites.__utils import (
     GetDynamicSoup,
     get_county,
     get_job_type,
@@ -35,7 +35,7 @@ def scraper():
             job_title=job.find('a').text,
             job_link='https://careers.corteva.com/' + job.find('a')['href'],
             company='CORTEVA',
-            country='Romania',
+            country='România',
             county=location,
             city=location,
             remote='remote',

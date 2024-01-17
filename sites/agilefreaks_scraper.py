@@ -12,7 +12,7 @@
 # Link ------>  https://careers.agilefreaks.com/jobs
 #
 #
-from __utils import (
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -105,7 +105,7 @@ def scraper():
             job_title=job.find("span", attrs={"class":"text-block-base-link sm:min-w-[25%] sm:truncate company-link-style"}).text,
             job_link=job.find('a', attrs={'class': 'flex flex-col py-6 text-center sm:px-6 hover:bg-gradient-block-base-bg focus-visible-company focus-visible:rounded'})['href'],
             company='AgileFreaks',
-            country='Romania',
+            country='România',
             county=get_county(location[0].text),
             city= location[0].text,
             remote=get_job_type(jobtype),
