@@ -80,5 +80,5 @@ jobs:
         git config --local user.name "GitHub Action"
         git add docs/api_test_report.html docs/allure-results
         git commit -m "Add Allure test report"
-        git push origin automated_tests
+        git push origin main
         
