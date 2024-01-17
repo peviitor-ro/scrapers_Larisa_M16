@@ -20,65 +20,6 @@ from sites.__utils import (
     UpdateAPI,
 )
 
-
-'''
-    Daca deja te-ai deprins cu aceasta formula de cod,
-    atunci poti sterge acest comentariu din fisierul
-    __create_scraper.py, din functia - create_static_scraper_config -.
-
-    Deci:
-    ########################################################################
-
-    1) --->  clasa GetDynamicSoup returneaza un obiect HTML in urma unui
-    request pe un site dinamic, car se incarca cu javascript.
-
-    De obicei unele site-uri nu pot fi scrapuite cu get request sau cu post request.
-    Motive sunt diferite. Dar, folosind GetDynamicSoup, putem sa returnam un html
-    care sta in spatele unui cod de JS.
-
-    get_dynamic_soup = GetDynamicSoup(link) -> si primim html intr-un obiect BeautifulSoup.
-
-    Putem sa-i dam si headere:
-    GetDynamicSoup(link, custom_headers=headers)
-
-    --------------IMPORTANT----------------
-    La nivel de proiect, ca o variabila globala, este definit Session()!
-    ... acest session inseamna ca orice clasa va putea folosi
-    ... aceeasi sesiune, practic se va evita multiple requests;
-
-    ########################################################################
-
-    2) ---> get_county(nume_localitat) -> returneaza numele judetului;
-    poti pune chiar si judetul, de exemplu, nu va fi o eroare.
-
-    ########################################################################
-
-    3) --->get_job_type(job_type: str) -> returneaza job_type-ul: remote,
-    hybrid, on-site
-
-    ########################################################################
-
-    4) ---> Item -> este un struct pentru datele pe care le vom stoca in lista
-    si, apoi, le vom trimite catre API.
-    exemplu: list_jobs.append(Item(job_title="titlu_str",
-                                    job_link="link",
-                                    company="nume_companie",
-                                    country="Romania",
-                                    county="Judetul",
-                                    city="Orasul",
-                                    remote="remote, onsite sau hibryd"))
-
-    ########################################################################
-
-    5) ---> clasa UpdateAPI are doua metode:
-    update_jobs(lista_dict_joburi) si update_logo(nume_companie, link_logo)
-
-    UpdateAPI().update_jobs(company_name: str, data_jobs: list)
-    UpdateAPI().update_logo(id_company: str, logo_link: str)
-
-    ########################################################################
-    '''
-
 def scraper():
     '''
     ... scrape data from corteva scraper.
