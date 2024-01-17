@@ -13,7 +13,7 @@
 # Link ------> https://boards.eu.greenhouse.io/bitpanda
 #
 #
-from __utils import (
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -95,7 +95,7 @@ def scraper():
                 job_title=job.find('a').text,
                 job_link='https://boards.eu.greenhouse.io' + job.find('a')['href'],
                 company='Bitpanda',
-                country='Romania',
+                country='România',
                 county=get_county(location[0]),
                 city=location[0],
                 remote='on-site',

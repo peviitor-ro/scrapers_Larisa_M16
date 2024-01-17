@@ -13,7 +13,7 @@
 # Link ------> https://www.bandainamcoent.ro/ro/careers/
 #
 #
-from __utils import (
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -93,7 +93,7 @@ def scraper():
             job_title=job.find('a').text.strip(),
             job_link= 'https://www.bandainamcoent.ro' + job.find("a")["href"].strip(),
             company='Bandainamco',
-            country='Romania',
+            country='România',
             county=get_county('Bucuresti'),
             city='Bucuresti',
             remote='on-site',
