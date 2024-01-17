@@ -13,7 +13,7 @@
 # Link ------> https://careers.yopeso.com/
 #
 #
-from __utils import (
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -104,7 +104,7 @@ def scraper():
                 job_title=job.find("a", attrs={"class":"sc-6exb5d-1 fmfYYf"}).text,
                 job_link='https://careers.yopeso.com' + job.find("a", attrs={"class":"sc-6exb5d-1 fmfYYf"})["href"],
                 company='yopeso',
-                country=country_,
+                country=country_.replace("Romania", "România"),
                 county=get_county(location),
                 city=location,
                 remote=get_job_type(new_job_type),

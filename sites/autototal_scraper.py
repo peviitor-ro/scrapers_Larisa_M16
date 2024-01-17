@@ -12,7 +12,7 @@
 # Link ------> https://www.autototal.ro/cariere
 #
 #
-from __utils import (
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -81,8 +81,6 @@ import requests
     ########################################################################
 '''
 import datetime
-import re
-import calendar
 
 current_year = datetime.datetime.now().year
 
@@ -129,7 +127,7 @@ def scraper():
                     job_title=job.find('a').text.strip(),
                     job_link=link_job,
                     company='AUTOTOTAL',
-                    country='Romania',
+                    country='România',
                     county=[get_county(city_l) for city_l in city_name if city_l not in special_c],
                     city=[city_l for city_l in city_name if city_l not in special_c],
                     remote='onsite',

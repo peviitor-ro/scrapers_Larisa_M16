@@ -12,14 +12,21 @@
 # Link ------> https://romania.cgsinc.com/vino-in-echipa-cgs/
 #
 #
-from __utils import (
-    GetRequestJson,
+from sites.__utils import (
+    GetStaticSoup,
     get_county,
     get_job_type,
     Item,
     UpdateAPI,
     HackCloudFlare,
 )
+ 
+import cfscrape
+from bs4 import BeautifulSoup
+from sites.__utils import DEFAULT_HEADERS
+from sites.__utils.req_bs4_shorts import HackCloudFlare
+
+data = HackCloudFlare('https://romania.cgsinc.com/vino-in-echipa-cgs/') 
  
 def has_hungarian_letters(text):
     # Check if the text contains Hungarian letters
@@ -64,8 +71,8 @@ def scraper():
             job_title=title_loc,
             job_link=job.find('a')['href'],
             company='CGSRomania',
-            country='Romania',
-            county=_,
+            country='România',
+            county='',
             city='',
             remote=''
         ).to_dict())
@@ -83,11 +90,9 @@ def main():
     logo_link = "https://romania.cgsinc.com/wp-content/uploads/2021/05/logo_CGS.svg"
 
     jobs = scraper()
-    print(jobs)
-
     # uncomment if your scraper done
-    #UpdateAPI().update_jobs(company_name, jobs)
-    #UpdateAPI().update_logo(company_name, logo_link)
+    UpdateAPI().update_jobs(company_name, jobs)
+    UpdateAPI().update_logo(company_name, logo_link)
 
 
 if __name__ == '__main__':
