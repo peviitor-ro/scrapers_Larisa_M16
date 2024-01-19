@@ -20,6 +20,22 @@ def get_job_details():
 
 @pytest.mark.regression
 @pytest.mark.API
+def test_yopeso_job_count_api(get_job_details):
+    allure.dynamic.title(f"Test number of jobs from the {company_name} website against Peviitor API Response")
+
+    scraped_jobs_data, peviitor_jobs_data = get_job_details
+    with allure.step("Step 1: Get job links from the scraper"):
+        job_links_scraper = len(scraped_jobs_data[3])
+    with allure.step("Step 2: Get job links from the Peviitor API"):
+        job_links_peviitor = len(peviitor_jobs_data[3])
+
+    with allure.step("Step 3: Compare number of job links from scraper response against Peviitor API Response"):
+        allure.attach(f"Expected Results: {job_links_scraper}", name="Expected Results")
+        allure.attach(f"Actual Results: {job_links_peviitor}", name="Actual Results")
+        TestUtils().check_job_count(job_links_scraper, job_links_peviitor)
+
+@pytest.mark.regression
+@pytest.mark.API
 def test_yopeso_title_api(get_job_details):
     allure.dynamic.title(f"Test job titles from the {company_name} website against Peviitor API Response")
 
