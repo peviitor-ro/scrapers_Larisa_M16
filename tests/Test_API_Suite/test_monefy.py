@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from sites.monefy_scraper import scraper as monefyScraper
+from scrapers.monefy_scraper import scraper as monefyScraper
 import pytest
 import allure
 import requests

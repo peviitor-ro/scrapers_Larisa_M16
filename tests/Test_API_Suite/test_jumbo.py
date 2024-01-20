@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from sites.jumbo_scraper import scraper as jumboScraper
+from scrapers.jumbo_scraper import scraper as jumboScraper
 import pytest
 import allure
 import requests

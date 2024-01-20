@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from sites.corteva_scraper import scraper as cortevaScraper
+from scrapers.corteva_scraper import scraper as cortevaScraper
 import pytest
 import allure
 import requests

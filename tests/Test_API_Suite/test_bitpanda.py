@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from sites.bitpanda_scraper import scraper as bitpandaScraper
+from scrapers.bitpanda_scraper import scraper as bitpandaScraper
 import pytest
 import allure
 import requests

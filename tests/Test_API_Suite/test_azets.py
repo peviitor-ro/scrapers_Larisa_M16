@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from sites.azets_scraper import scraper as azetsScraper
+from scrapers.azets_scraper import scraper as azetsScraper
 import pytest
 import allure
 import requests

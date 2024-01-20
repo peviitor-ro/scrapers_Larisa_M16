@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from sites.bandainamco_scraper import scraper as bandainamcoScraper
+from scrapers.bandainamco_scraper import scraper as bandainamcoScraper
 import pytest
 import allure
 import requests

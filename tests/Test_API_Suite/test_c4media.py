@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from sites.c4media_scraper import scraper as c4mediaScraper
+from scrapers.c4media_scraper import scraper as c4mediaScraper
 import pytest
 import allure
 import requests
