@@ -6,7 +6,7 @@ import requests
 
 company_name = 'yopeso'
 
-@pytest.fixture(scope="module", autouse=True)
+@pytest.fixture(scope="module")
 def get_job_details():
     """
     Fixture for scraping process from the career section.
