@@ -13,7 +13,7 @@
 # Link ------> https://monefy.ro/careers/
 #
 #
-from sites.__utils import (
+from scrapers.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -50,8 +50,8 @@ def scraper():
         job_list.append(Item(
             job_title=job.find('a').text,
             job_link=job.a['href'],
-            company='monefy',
-            country='România',
+            company='Monefy',
+            country='Romania',
             county=get_county(get_location(response)),
             city=get_location(response),
             remote='Remote',
@@ -67,7 +67,7 @@ def main():
     ---> update_jobs() and update_logo()
     '''
 
-    company_name = "monefy"
+    company_name = "Monefy"
     logo_link = "https://monefy.ro/wp-content/uploads/2021/02/Logo.png"
 
     jobs = scraper()

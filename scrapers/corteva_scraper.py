@@ -12,7 +12,7 @@
 # ---> get_data_with_regex(expression: str, object: str)
 #
 #
-from sites.__utils import (
+from scrapers.__utils import (
     GetDynamicSoup,
     get_county,
     get_job_type,
@@ -35,7 +35,7 @@ def scraper():
             job_title=job.find('a').text,
             job_link='https://careers.corteva.com/' + job.find('a')['href'],
             company='CORTEVA',
-            country='România',
+            country='Romania',
             county=location,
             city=location,
             remote='remote',
@@ -55,6 +55,7 @@ def main():
     logo_link = "https://cdn-static.findly.com/wp-content/uploads/sites/2491/2023/02/02100420/logo.svg"
 
     jobs = scraper()
+    print(jobs)
   
     # uncomment if your scraper done
     UpdateAPI().update_jobs(company_name, jobs)

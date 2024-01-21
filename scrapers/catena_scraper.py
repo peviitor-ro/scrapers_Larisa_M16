@@ -12,7 +12,7 @@
 # Link ------> https://www.catena.ro/cariere
 #
 #
-from sites.__utils import (
+from scrapers.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -43,7 +43,7 @@ def scraper():
             job_title=job.find('a').text.strip(),
             job_link='https://www.catena.ro' + job.find("a")["href"].strip(),
             company='Catena',
-            country='România',
+            country='Romania',
             county=[get_county(town) for town in catena_locations],
             city=catena_locations,
             remote='on-site',

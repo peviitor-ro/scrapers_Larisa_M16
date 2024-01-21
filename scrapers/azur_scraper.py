@@ -13,7 +13,7 @@
 # Link ------> https://www.azur.ro/ro/cariere
 #
 #
-from sites.__utils import (
+from scrapers.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -36,7 +36,7 @@ def scraper():
             job_title=job.find('a').text.strip(),
             job_link="https://www.azur.ro" + job.find("a")["href"].strip(),
             company='AZUR',
-            country='România',
+            country='Romania',
             county=get_county("Timisoara"),
             city='Timisoara',
             remote='on-site',
