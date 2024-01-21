@@ -14,7 +14,7 @@
 # Link ------>  https://jobs.bunge.com/search/?createNewAlert=false&q=&locationsearch=Romania&optionsFacetsDD_country=
 #
 #
-from sites.__utils import (
+from scrapers.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,

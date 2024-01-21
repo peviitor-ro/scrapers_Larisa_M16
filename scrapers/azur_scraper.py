@@ -13,7 +13,7 @@
 # Link ------> https://www.azur.ro/ro/cariere
 #
 #
-from sites.__utils import (
+from scrapers.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,

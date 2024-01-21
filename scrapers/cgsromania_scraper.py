@@ -12,7 +12,7 @@
 # Link ------> https://romania.cgsinc.com/vino-in-echipa-cgs/
 #
 #
-from sites.__utils import (
+from scrapers.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -23,8 +23,8 @@ from sites.__utils import (
  
 import cfscrape
 from bs4 import BeautifulSoup
-from sites.__utils import DEFAULT_HEADERS
-from sites.__utils.req_bs4_shorts import HackCloudFlare
+from scrapers.__utils import DEFAULT_HEADERS
+from scrapers.__utils.req_bs4_shorts import HackCloudFlare
 
 data = HackCloudFlare('https://romania.cgsinc.com/vino-in-echipa-cgs/') 
  
