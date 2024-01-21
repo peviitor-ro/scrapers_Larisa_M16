@@ -3,9 +3,9 @@
 #  Basic for scraping data from static pages
 # ------ IMPORTANT! ------
 # if you need return soup object:
-# you cand import from __utils -> GetHtmlSoup
+# you cand import from scrapers.__utils -> GetHtmlSoup
 # if you need return regex object:
-# you cand import from __utils ->
+# you cand import from scrapers.__utils ->
 # ---> get_data_with_regex(expression: str, object: str)
 #
 # Company ---> centric
@@ -18,35 +18,52 @@ from scrapers.__utils import (
     get_job_type,
     Item,
     UpdateAPI,
+    HackCloudFlare,
 )
+from scrapers.__utils.req_bs4_shorts import GetHtmlSoup, GetRequestJson
 
-
-
+from scrapers.__utils import DEFAULT_HEADERS
+import requests
+from bs4 import BeautifulSoup
+#
+import uuid
+import re
+import json
+ 
 def scraper():
     '''
-    ... scrape data from centric scraper.
+    ... scrape data from test scraper.
     '''
     soup = GetStaticSoup("https://careers.centric.eu/ro/open-positions/")
 
     job_list = []
-    for job in soup.find_all('div', attrs={'class':'card-grid__wrapper'}):
-        job_ = job.find('div', attrs={'class':'card  default'})
-       
+    matches = re.search(r"window\.FILTER_BAR_INITIAL = ({[\s\S]*?});\s*<\/script>", str(soup))
+ 
+    if matches:
+        json_content = matches.group(1)
+        filter_bar_initial = json.loads(json_content)
          
 
-        # get jobs items from response
-        job_list.append(Item(
-            job_title=job_,
-            job_link=job.find("a", attrs={"class":'card__anchor'})['href'],
-            company='centric',
-            country='',
-            county='',
-            city='',
-            remote='',
-        ).to_dict())
+        for data_rex in filter_bar_initial['results']:
+            soup_after_regex = GetHtmlSoup(data_rex)
 
-    return job_list
+            # scrape data from regex
+            for job in soup_after_regex('div', attrs={'class': 'card default'}):
+                link = job.find('a')['href']
+                title = job.find('div', attrs={'class': 'card__title'}).text
+                location = job['data-location']
 
+                # Append job details to the list
+                job_list.append({
+                    'job_title':title,
+                    'job_link':link,
+                    'company': 'Centric',
+                    'country': 'Romania',   
+                    'county': location,    
+                    'city': location,
+                    'remote': ('onsites','remote'),   
+                })
+    return job_list            
 
 def main():
     '''
@@ -55,15 +72,14 @@ def main():
     ---> update_jobs() and update_logo()
     '''
 
-    company_name = "centric"
-    logo_link = "logo_link"
+    company_name = "Centric"
+    logo_link = "https://careers.centric.eu/static/images/logo.svg"
 
     jobs = scraper()
-    print(jobs)
-
+   
     # uncomment if your scraper done
-    # UpdateAPI().update_jobs(company_name, jobs)
-    # UpdateAPI().update_logo(company_name, logo_link)
+    UpdateAPI().update_jobs(company_name, jobs)
+    UpdateAPI().update_logo(company_name, logo_link)
 
 
 if __name__ == '__main__':

@@ -36,7 +36,7 @@ class ConcreteCleanData(CleanData):
 def main():
 
     # company name, from terminal
-    input_company = input("Scrie numele companiei: ")
+    input_company = input("Bandainamco")
 
     # create a ConcreteCleanData object
     clean_data = ConcreteCleanData(api_key=os.environ.get("API_KEY"))
