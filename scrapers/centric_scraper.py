@@ -3,9 +3,9 @@
 #  Basic for scraping data from static pages
 # ------ IMPORTANT! ------
 # if you need return soup object:
-# you cand import from __utils -> GetHtmlSoup
+# you cand import from scrapers.__utils -> GetHtmlSoup
 # if you need return regex object:
-# you cand import from __utils ->
+# you cand import from scrapers.__utils ->
 # ---> get_data_with_regex(expression: str, object: str)
 #
 # Company ---> centric
@@ -20,9 +20,9 @@ from scrapers.__utils import (
     UpdateAPI,
     HackCloudFlare,
 )
-from __utils.req_bs4_shorts import GetHtmlSoup, GetRequestJson
+from scrapers.__utils.req_bs4_shorts import GetHtmlSoup, GetRequestJson
 
-from __utils import DEFAULT_HEADERS
+from scrapers.__utils import DEFAULT_HEADERS
 import requests
 from bs4 import BeautifulSoup
 #
