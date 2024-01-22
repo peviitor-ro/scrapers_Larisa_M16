@@ -1,0 +1,3 @@
+INFO     pyppeteer.chromium_downloader:chromium_downloader.py:76 Starting Chromium download.
+INFO     pyppeteer.chromium_downloader:chromium_downloader.py:107 Beginning extraction
+INFO     pyppeteer.chromium_downloader:chromium_downloader.py:134 Chromium extracted to: /home/runner/.local/share/pyppeteer/local-chromium/588429
