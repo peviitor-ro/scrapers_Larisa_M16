@@ -12,8 +12,9 @@ def get_job_details():
     Fixture for scraping process from the career section.
     """
     scraper_data = monefyScraper()
-    scraped_jobs_data = TestUtils.scrape_jobs(scraper_data)
-    peviitor_jobs_data = TestUtils.scrape_peviitor(company_name, 'România')
+    testutils = TestUtils()
+    scraped_jobs_data = testutils.scrape_jobs(scraper_data)
+    peviitor_jobs_data = testutils.scrape_peviitor(company_name, 'România')
     return scraped_jobs_data, peviitor_jobs_data
     
 # Test functions
