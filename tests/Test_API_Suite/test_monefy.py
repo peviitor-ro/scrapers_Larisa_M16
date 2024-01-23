@@ -112,7 +112,7 @@ def test_monefy_status_code_link_api(get_job_details):
 
     with allure.step("Step 2: Check job links for response code"):
         status_codes_expected_result = [200] * len(job_links_scraper)
-        status_codes_actual_result = [requests.get(link).status_code for link in job_links_scraper]
+        status_codes_actual_result = TestUtils().get_http_code(job_links_scraper)
         allure.attach(f"Expected Results: {status_codes_expected_result}", name="Expected Results")
         allure.attach(f"Actual Results: {status_codes_actual_result}", name="Actual Results")
         TestUtils().check_code_job_links(status_codes_expected_result, status_codes_actual_result)

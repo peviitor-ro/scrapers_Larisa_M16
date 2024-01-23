@@ -171,6 +171,17 @@ class TestUtils:
 
         allure.step(msg)
         assert expected_links_count == actual_links_count, msg
+        
+    # get http codes for links
+    @staticmethod
+    def get_http_code(job_links):
+        # Set headers for useragent
+        headers = {
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_8_8; like Mac OS X) AppleWebKit/535.14 (KHTML, like Gecko) Chrome/49.0.3028.253 Mobile Safari/603.0',
+        }
+        
+        # Get status code for every link in list
+        return [requests.get(link, headers=headers).status_code for link in job_links]
 
     # Check method for job links
     def check_code_job_links(self, status_codes_expected_result, status_codes_actual_result):
