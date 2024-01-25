@@ -45,7 +45,7 @@ class TestUtils:
         """
         Get the job details from the peviitor
         """
-        all_future_title, all_future_job_city, all_future_job_country, all_future_job_link = [], [], [], []
+        all_future_title, all_future_job_city, all_future_job_country, all_future_job_link, all_future_job_companies = [], [], [], [], []
 
         page = 1
         params = TestUtils._set_params(company_name, page, country)
@@ -54,6 +54,7 @@ class TestUtils:
             all_future_title.extend([title['job_title'][0] for title in response_data])
             all_future_job_country.extend([self.remove_diacritics(country['country'][0]) for country in response_data])
             all_future_job_link.extend([job_link['job_link'][0] for job_link in response_data])
+            all_future_job_companies.extend([company['company'][0] for company in response_data])
             
             # Check if the cities list is a nested list
             city_list = [self.remove_diacritics(city['city']) for city in response_data]
@@ -68,7 +69,7 @@ class TestUtils:
             params = TestUtils._set_params(company_name, page, country)
             response_data = TestUtils._get_request(params)
 
-        return all_future_title, all_future_job_city, all_future_job_country, all_future_job_link
+        return all_future_title, all_future_job_city, all_future_job_country, all_future_job_link, all_future_job_companies
     
     # Remove diacritics from input recursive
     def remove_diacritics(self, item):
@@ -171,6 +172,17 @@ class TestUtils:
 
         allure.step(msg)
         assert expected_links_count == actual_links_count, msg
+        
+    # get http codes for links
+    @staticmethod
+    def get_http_code(job_links):
+        # Set headers for useragent
+        headers = {
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_8_8; like Mac OS X) AppleWebKit/535.14 (KHTML, like Gecko) Chrome/49.0.3028.253 Mobile Safari/603.0',
+        }
+        
+        # Get status code for every link in list
+        return [requests.get(link, headers=headers).status_code for link in job_links]
 
     # Check method for job links
     def check_code_job_links(self, status_codes_expected_result, status_codes_actual_result):
@@ -189,4 +201,25 @@ class TestUtils:
         if not msg:
             msg = f"An unexpected error occured {status_codes_expected_result} {status_codes_actual_result}"
         assert status_codes_expected_result == status_codes_actual_result, msg
+        
+    # Check company job name in the response
+    def check_job_company(self, expected_company_name: list, actual_company_name: list):
+        
+        # Lowercase all items in list to ensure proper comparison
+        expected_company_name, actual_company_name = [name.lower() for name in expected_company_name], [name.lower() for name in actual_company_name]
+        
+        # If no actual company name is in the API
+        if not actual_company_name:
+            msg = f"No results display the company name within the API Response"
+            allure.step(msg)
+            raise AssertionError(msg)
+        
+        # If the actual company name in the api does not correspond to expected company name raise error
+        for actual_name, expected_name in zip(actual_company_name, expected_company_name):
+            if actual_name != expected_name:
+                msg = f"Company name does not match for one of the job results from the API Response"
+                allure.step(msg)
+                raise AssertionError(msg)
+        
+        assert expected_company_name == actual_company_name, "An unknown error occured in the API job company name test case"
         
