@@ -82,8 +82,25 @@ class TestUtils:
             return unidecode(item)
     
     # Utility function for checking missing items
-    def get_missing_items(self, list_a, list_b):
-        return [item for item in list_a if item not in list_b][:20]
+    def get_missing_items(self, expected_list, actual_list):
+        return [item for item in expected_list if item not in actual_list][:20]
+    
+    # Utility function for checking cities/country
+    def get_different_items(self, expected_list, actual_list, job_titles):
+        # Itterate over every city/country from the list
+        for expected_item in expected_list:
+            
+            # If the actual list is empty it means there are missing some element therefore no more popping is needed
+            if not actual_list:
+                return expected_list, job_titles
+            
+            # Pop elements from lists at index 0 if empty it means that all lists match
+            if expected_item in actual_list:
+                expected_list.pop(0), actual_list.pop(0), job_titles.pop(0)
+        
+        # Return empty list if expected cities/countries are matching the actual cities/countries 
+        return []
+
 
     # Check method for job titles
     def check_job_titles(self, expected_titles, actual_titles):
@@ -104,20 +121,22 @@ class TestUtils:
         assert expected_titles == actual_titles, msg
 
     # Check method for job cities
-    def check_job_cities(self, expected_cities, actual_cities):
-        missing_cities = self.get_missing_items(expected_cities, actual_cities)
-
-        if missing_cities:
-            msg = f"Peviitor is having extra job cities: {missing_cities}"
-        else:
-            missing_cities = self.get_missing_items(actual_cities, expected_cities)
-            msg = f"Peviitor is missing job cities: {missing_cities}"
-
+    def check_job_cities(self, expected_cities, actual_cities, job_titles_scraper):
         if not expected_cities and not actual_cities:
             msg = f"Scraper is not grabbing any job cities"
             allure.step(msg)
             raise AssertionError(msg)
-
+        
+        missing_cities = self.get_different_items(expected_cities, actual_cities, job_titles_scraper)
+        msg = "An unknown error occured"
+        
+        if missing_cities:
+            msg = f"Peviitor is having extra job cities for the following titles: {missing_cities[1]}"
+        else:
+            missing_cities = self.get_different_items(actual_cities, expected_cities, job_titles_scraper)
+            if missing_cities:
+                msg = f"Peviitor is missing job cities: {missing_cities[1]}"
+        
         allure.step(msg)
         assert expected_cities == actual_cities, msg
 
