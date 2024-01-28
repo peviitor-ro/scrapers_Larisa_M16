@@ -127,13 +127,15 @@ class TestUtils:
             allure.step(msg)
             raise AssertionError(msg)
         
-        missing_cities = self.get_different_items(expected_cities, actual_cities, job_titles_scraper)
+        # Setting dummy job titles for popping to not influence other tests
+        dummy_job_titles = job_titles_scraper[:]
+        missing_cities = self.get_different_items(expected_cities, actual_cities, dummy_job_titles)
         msg = "An unknown error occured"
         
         if missing_cities:
             msg = f"Peviitor is having extra job cities for the following titles: {missing_cities[1]}"
         else:
-            missing_cities = self.get_different_items(actual_cities, expected_cities, job_titles_scraper)
+            missing_cities = self.get_different_items(actual_cities, expected_cities, dummy_job_titles)
             if missing_cities:
                 msg = f"Peviitor is missing job cities: {missing_cities[1]}"
         
@@ -141,19 +143,23 @@ class TestUtils:
         assert expected_cities == actual_cities, msg
 
     # Check method for job countries
-    def check_job_countries(self, expected_countries, actual_countries):
-        missing_countries = self.get_missing_items(expected_countries, actual_countries)
-
-        if missing_countries:
-            msg = f"Peviitor is having extra job countries: {missing_countries}"
-        else:
-            missing_countries = self.get_missing_items(actual_countries, expected_countries)
-            msg = f"Peviitor is missing job countries: {missing_countries}"
-
+    def check_job_countries(self, expected_countries, actual_countries, job_titles_scraper):
         if not expected_countries and not actual_countries:
             msg = f"Scraper is not grabbing any job countries"
             allure.step(msg)
             raise AssertionError(msg)
+
+        # Setting dummy job titles for popping to not influence other tests
+        dummy_job_titles = job_titles_scraper[:]
+        missing_countries = self.get_different_items(expected_countries, actual_countries, dummy_job_titles)
+        msg = "An unknown error occured"
+
+        if missing_countries:
+            msg = f"Peviitor is having extra job countries for the following titles: {missing_countries[1]}"
+        else:
+            missing_countries = self.get_different_items(actual_countries, expected_countries, dummy_job_titles)
+            if missing_countries:
+                msg = f"Peviitor is missing job countries: {missing_countries[1]}"
 
         allure.step(msg)
         assert expected_countries == actual_countries, msg
