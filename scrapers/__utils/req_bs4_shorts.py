@@ -12,6 +12,7 @@ import requests
 from bs4 import BeautifulSoup
 #
 from .default_headers import DEFAULT_HEADERS
+import xml.etree.ElementTree as ET
 
 # Global Session -> avoid multiple requests
 # ... and all classes can use it in one script
@@ -108,3 +109,19 @@ class HackCloudFlare:
         scraper = cfscrape.create_scraper()
 
         return BeautifulSoup(scraper.get(url).content, 'lxml')
+    
+class GetXMLObject:
+    '''
+    this class will return data from XML stored in a list
+    '''
+    
+    def __new__(cls, url, custom_headers=None):
+        headers = DEFAULT_HEADERS.copy()
+
+        # if custom headers
+        if custom_headers:
+            headers.update(custom_headers)
+
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            return ET.fromstring(response.text)

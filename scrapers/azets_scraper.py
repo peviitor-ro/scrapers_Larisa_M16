@@ -40,7 +40,7 @@ def scraper():
         job_list.append(Item(
             job_title=second_soup.find('h1', attrs={'class': 'py-3'}).text.strip(),
             job_link=f"https://www.azets.ro/talentlink/advertpage/?advertid={id_}",
-            company='azets',
+            company='Azets',
             country='România',
             county=get_county(location),
             city=location,
