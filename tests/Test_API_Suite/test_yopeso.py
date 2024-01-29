@@ -12,8 +12,9 @@ def get_job_details():
     Fixture for scraping process from the career section.
     """
     scraper_data = yopesoScraper()
-    scraped_jobs_data = TestUtils.scrape_jobs(scraper_data)
-    peviitor_jobs_data = TestUtils.scrape_peviitor(company_name, 'România')
+    testutils = TestUtils()
+    scraped_jobs_data = testutils.scrape_jobs(scraper_data)
+    peviitor_jobs_data = testutils.scrape_peviitor(company_name, 'România')
     return scraped_jobs_data, peviitor_jobs_data
     
 # Test functions
@@ -105,13 +106,29 @@ def test_yopeso_link_api(get_job_details):
 def test_yopeso_status_code_link_api(get_job_details):
     allure.dynamic.title(f"Test http code response on job links for {company_name} website")
 
-    scraped_jobs_data, peviitor_jobs_data = get_job_details
+    scraped_jobs_data = get_job_details[0]
     with allure.step("Step 1: Get job links from the scraper"):
         job_links_scraper = sorted(scraped_jobs_data[3])
 
     with allure.step("Step 2: Check job links for response code"):
         status_codes_expected_result = [200] * len(job_links_scraper)
-        status_codes_actual_result = [requests.get(link).status_code for link in job_links_scraper]
+        status_codes_actual_result = TestUtils().get_http_code(job_links_scraper)
         allure.attach(f"Expected Results: {status_codes_expected_result}", name="Expected Results")
         allure.attach(f"Actual Results: {status_codes_actual_result}", name="Actual Results")
         TestUtils().check_code_job_links(status_codes_expected_result, status_codes_actual_result)
+        
+@pytest.mark.regression
+@pytest.mark.API
+def test_yopeso_company_api(get_job_details):
+    allure.dynamic.title(f"Test job companies from the {company_name} website against Peviitor API Response")
+
+    peviitor_jobs_data = get_job_details[1]
+    with allure.step("Step 1: Get expected job company names"):
+        job_companies_scraper = [company_name] * len(peviitor_jobs_data[4])
+    with allure.step("Step 2: Get actual job companies from the Peviitor API"):
+        job_companies_peviitor = peviitor_jobs_data[4]
+
+    with allure.step("Step 3: Compare job companies from scraper response against Peviitor API Response"):
+        allure.attach(f"Expected Results: {job_companies_scraper}", name="Expected Results")
+        allure.attach(f"Actual Results: {job_companies_peviitor}", name="Actual Results")
+        TestUtils().check_job_company(job_companies_scraper, job_companies_peviitor)
