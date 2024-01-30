@@ -59,15 +59,17 @@ def test_azets_city_api(get_job_details):
 
     scraped_jobs_data, peviitor_jobs_data = get_job_details
     with allure.step("Step 1: Get job cities from the scraper"):
-        job_cities_scraper = sorted(scraped_jobs_data[1])
-        
+        job_cities_scraper = scraped_jobs_data[1]
+        job_titles_scraper = scraped_jobs_data[0]
+    
     with allure.step("Step 2: Get job cities from the Peviitor API"):
-        job_cities_peviitor = sorted(peviitor_jobs_data[1])
+        job_cities_peviitor = peviitor_jobs_data[1]
 
     with allure.step("Step 3: Compare job cities from scraper response against Peviitor API Response"):
         allure.attach(f"Expected Results: {job_cities_scraper}", name="Expected Results")
         allure.attach(f"Actual Results: {job_cities_peviitor}", name="Actual Results")
-        TestUtils().check_job_cities(job_cities_scraper, job_cities_peviitor)
+        TestUtils().check_job_cities(job_cities_scraper, job_cities_peviitor, job_titles_scraper)
+
 
 @pytest.mark.regression
 @pytest.mark.API
@@ -76,14 +78,16 @@ def test_azets_country_api(get_job_details):
 
     scraped_jobs_data, peviitor_jobs_data = get_job_details
     with allure.step("Step 1: Get job countries from the scraper"):
-        job_countries_scraper = sorted(scraped_jobs_data[2])
+        job_countries_scraper = scraped_jobs_data[2]
+        job_titles_scraper = scraped_jobs_data[0]
+
     with allure.step("Step 2: Get job countries from the Peviitor API"):
-        job_countries_peviitor = sorted(peviitor_jobs_data[2])
+        job_countries_peviitor = peviitor_jobs_data[2]
 
     with allure.step("Step 3: Compare job countries from scraper response against Peviitor API Response"):
         allure.attach(f"Expected Results: {job_countries_scraper}", name="Expected Results")
         allure.attach(f"Actual Results: {job_countries_peviitor}", name="Actual Results")
-        TestUtils().check_job_countries(job_countries_scraper, job_countries_peviitor)
+        TestUtils().check_job_countries(job_countries_scraper, job_countries_peviitor, job_titles_scraper)
 
 @pytest.mark.regression
 @pytest.mark.API
@@ -106,7 +110,7 @@ def test_azets_link_api(get_job_details):
 def test_azets_status_code_link_api(get_job_details):
     allure.dynamic.title(f"Test http code response on job links for {company_name} website")
 
-    scraped_jobs_data, peviitor_jobs_data = get_job_details
+    scraped_jobs_data = get_job_details[0]
     with allure.step("Step 1: Get job links from the scraper"):
         job_links_scraper = sorted(scraped_jobs_data[3])
 
@@ -116,3 +120,19 @@ def test_azets_status_code_link_api(get_job_details):
         allure.attach(f"Expected Results: {status_codes_expected_result}", name="Expected Results")
         allure.attach(f"Actual Results: {status_codes_actual_result}", name="Actual Results")
         TestUtils().check_code_job_links(status_codes_expected_result, status_codes_actual_result)
+
+@pytest.mark.regression
+@pytest.mark.API
+def test_azets_company_api(get_job_details):
+    allure.dynamic.title(f"Test job companies from the {company_name} website against Peviitor API Response")
+
+    peviitor_jobs_data = get_job_details[1]
+    with allure.step("Step 1: Get expected job company names"):
+        job_companies_scraper = [company_name] * len(peviitor_jobs_data[4])
+    with allure.step("Step 2: Get actual job companies from the Peviitor API"):
+        job_companies_peviitor = peviitor_jobs_data[4]
+
+    with allure.step("Step 3: Compare job companies from scraper response against Peviitor API Response"):
+        allure.attach(f"Expected Results: {job_companies_scraper}", name="Expected Results")
+        allure.attach(f"Actual Results: {job_companies_peviitor}", name="Actual Results")
+        TestUtils().check_job_company(job_companies_scraper, job_companies_peviitor)

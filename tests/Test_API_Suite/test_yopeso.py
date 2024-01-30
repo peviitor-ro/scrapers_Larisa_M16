@@ -59,15 +59,16 @@ def test_yopeso_city_api(get_job_details):
 
     scraped_jobs_data, peviitor_jobs_data = get_job_details
     with allure.step("Step 1: Get job cities from the scraper"):
-        job_cities_scraper = sorted(scraped_jobs_data[1])
-        
+        job_cities_scraper = scraped_jobs_data[1]
+        job_titles_scraper = scraped_jobs_data[0]
+    
     with allure.step("Step 2: Get job cities from the Peviitor API"):
-        job_cities_peviitor = sorted(peviitor_jobs_data[1])
+        job_cities_peviitor = peviitor_jobs_data[1]
 
     with allure.step("Step 3: Compare job cities from scraper response against Peviitor API Response"):
         allure.attach(f"Expected Results: {job_cities_scraper}", name="Expected Results")
         allure.attach(f"Actual Results: {job_cities_peviitor}", name="Actual Results")
-        TestUtils().check_job_cities(job_cities_scraper, job_cities_peviitor)
+        TestUtils().check_job_cities(job_cities_scraper, job_cities_peviitor, job_titles_scraper)
 
 @pytest.mark.regression
 @pytest.mark.API
@@ -76,14 +77,16 @@ def test_yopeso_country_api(get_job_details):
 
     scraped_jobs_data, peviitor_jobs_data = get_job_details
     with allure.step("Step 1: Get job countries from the scraper"):
-        job_countries_scraper = sorted(scraped_jobs_data[2])
+        job_countries_scraper = scraped_jobs_data[2]
+        job_titles_scraper = scraped_jobs_data[0]
+
     with allure.step("Step 2: Get job countries from the Peviitor API"):
-        job_countries_peviitor = sorted(peviitor_jobs_data[2])
+        job_countries_peviitor = peviitor_jobs_data[2]
 
     with allure.step("Step 3: Compare job countries from scraper response against Peviitor API Response"):
         allure.attach(f"Expected Results: {job_countries_scraper}", name="Expected Results")
         allure.attach(f"Actual Results: {job_countries_peviitor}", name="Actual Results")
-        TestUtils().check_job_countries(job_countries_scraper, job_countries_peviitor)
+        TestUtils().check_job_countries(job_countries_scraper, job_countries_peviitor, job_titles_scraper)
 
 @pytest.mark.regression
 @pytest.mark.API
