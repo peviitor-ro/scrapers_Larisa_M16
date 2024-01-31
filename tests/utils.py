@@ -11,11 +11,12 @@ class TestUtils:
         title = [title['job_title'] for title in scraper_data]
         job_country = [self.remove_diacritics(country['country']) for country in scraper_data]
         job_link = [job_link['job_link'] for job_link in scraper_data]
+        job_type = [job_type['remote'] for job_type in scraper_data]
         
         # Check if the cities list is a nested list
         job_city = [self.remove_diacritics(city['city']) if isinstance(city['city'], list) else [self.remove_diacritics(city['city'])] for city in scraper_data]
             
-        return title, job_city, job_country, job_link
+        return title, job_city, job_country, job_link, job_type
 
     @staticmethod
     def _set_params(company_name, page, country):
@@ -45,7 +46,7 @@ class TestUtils:
         """
         Get the job details from the peviitor
         """
-        all_future_title, all_future_job_city, all_future_job_country, all_future_job_link, all_future_job_companies = [], [], [], [], []
+        all_future_title, all_future_job_city, all_future_job_country, all_future_job_link, all_future_job_companies, all_future_job_types = [], [], [], [], [], []
 
         page = 1
         params = TestUtils._set_params(company_name, page, country)
@@ -55,6 +56,7 @@ class TestUtils:
             all_future_job_country.extend([self.remove_diacritics(country['country'][0]) for country in response_data])
             all_future_job_link.extend([job_link['job_link'][0] for job_link in response_data])
             all_future_job_companies.extend([company['company'][0] for company in response_data])
+            all_future_job_types.extend([job_link['remote'][0] for job_link in response_data])
             
             # Check if the cities list is a nested list
             city_list = [self.remove_diacritics(city['city']) for city in response_data]
@@ -69,7 +71,7 @@ class TestUtils:
             params = TestUtils._set_params(company_name, page, country)
             response_data = TestUtils._get_request(params)
 
-        return all_future_title, all_future_job_city, all_future_job_country, all_future_job_link, all_future_job_companies
+        return all_future_title, all_future_job_city, all_future_job_country, all_future_job_link, all_future_job_companies, all_future_job_types
     
     # Remove diacritics from input recursive
     def remove_diacritics(self, item):
@@ -163,6 +165,28 @@ class TestUtils:
 
         allure.step(msg)
         assert expected_countries == actual_countries, msg
+
+    # Check method for job types
+    def check_job_types(self, expected_types, actual_types, job_titles_scraper):
+        if not expected_types and not actual_types:
+            msg = f"Scraper is not grabbing any job types"
+            allure.step(msg)
+            raise AssertionError(msg)
+        
+        # Setting dummy job titles for popping to not influence other tests
+        dummy_job_titles = job_titles_scraper[:]
+        missing_types = self.get_different_items(expected_types, actual_types, dummy_job_titles)
+        msg = "An unknown error occured"
+        
+        if missing_types:
+            msg = f"Peviitor is having extra job types for the following titles: {missing_types[1]}"
+        else:
+            missing_types = self.get_different_items(actual_types, expected_types, dummy_job_titles)
+            if missing_types:
+                msg = f"Peviitor is missing job types: {missing_types[1]}"
+        
+        allure.step(msg)
+        assert expected_types == actual_types, msg
 
     # Check method for job links
     def check_job_links(self, expected_links, actual_links):
