@@ -2,7 +2,6 @@ from tests.utils import TestUtils
 from scrapers.bandainamco_scraper import scraper as bandainamcoScraper
 import pytest
 import allure
-import requests
 
 company_name = 'bandainamco'
 
@@ -104,6 +103,24 @@ def test_bandainamco_link_api(get_job_details):
         allure.attach(f"Expected Results: {job_links_scraper}", name="Expected Results")
         allure.attach(f"Actual Results: {job_links_peviitor}", name="Actual Results")
         TestUtils().check_job_links(job_links_scraper, job_links_peviitor)
+
+@pytest.mark.regression
+@pytest.mark.API
+def test_bandainamco_type_api(get_job_details):
+    allure.dynamic.title(f"Test job types from the {company_name} website against Peviitor API Response")
+
+    scraped_jobs_data, peviitor_jobs_data = get_job_details
+    with allure.step("Step 1: Get job types from the scraper"):
+        job_types_scraper = scraped_jobs_data[4]
+        job_titles_scraper = scraped_jobs_data[0]
+    
+    with allure.step("Step 2: Get job types from the Peviitor API"):
+        job_types_peviitor = peviitor_jobs_data[5]
+
+    with allure.step("Step 3: Compare job types from scraper response against Peviitor API Response"):
+        allure.attach(f"Expected Results: {job_types_scraper}", name="Expected Results")
+        allure.attach(f"Actual Results: {job_types_peviitor}", name="Actual Results")
+        TestUtils().check_job_types(job_types_scraper, job_types_peviitor, job_titles_scraper)
 
 @pytest.mark.regression
 @pytest.mark.API
