@@ -1,6 +1,7 @@
 #
 #
 #  Basic for scraping data from static pages
+#
 # ------ IMPORTANT! ------
 # if you need return soup object:
 # you cand import from __utils -> GetHtmlSoup
@@ -8,11 +9,11 @@
 # you cand import from __utils ->
 # ---> get_data_with_regex(expression: str, object: str)
 #
-# Company ---> emia
-# Link ------> https://emia.com/jobs/
+# Company ---> bandainamco
+# Link ------> https://www.bandainamcoent.ro/ro/careers/
 #
 #
-from scrapers.__utils import (
+from __utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -20,28 +21,28 @@ from scrapers.__utils import (
     UpdateAPI,
 )
 
+
 def scraper():
     '''
-    ... scrape data from emia scraper.
+    ... scrape data from bandainamco scraper.
     '''
-    soup = GetStaticSoup("https://emia.com/jobs/")
-     
+    soup = GetStaticSoup("https://www.bandainamcoent.ro/ro/careers/")
+
     job_list = []
-    for job in soup.find_all('div', attrs={'class': 'col-lg-4 col-md-6 pt--30'}):
-            
+    for job in soup.find_all('p', attrs={'class':'career_job_links has-text-align-center has-black-color has-text-color'}):
+        
         # get jobs items from response
         job_list.append(Item(
-            job_title=job.find('h5', attrs={'class':'h5'}).text,
-            job_link=job.find('a', attrs={'class':'card-job top-only'})['href'],
-            company='Emia',
-            country='Romania',
-            county="Bucuresti",
+            job_title=job.find('a').text.strip(),
+            job_link= 'https://www.bandainamcoent.ro' + job.find("a")["href"].strip(),
+            company='Bandainamco',
+            country='România',
+            county=get_county('Bucuresti'),
             city='Bucuresti',
             remote='on-site',
         ).to_dict())
 
     return job_list
-
 
 def main():
     '''
@@ -50,11 +51,11 @@ def main():
     ---> update_jobs() and update_logo()
     '''
 
-    company_name = "Emia"
-    logo_link = "https://emia.com/image/emia-logo.png"
+    company_name = "Bandainamco"
+    logo_link = "https://www.bandainamcoent.ro/wp-content/themes/namco/img/logo_small.jpg"
 
     jobs = scraper()
-
+     
     # uncomment if your scraper done
     UpdateAPI().update_jobs(company_name, jobs)
     UpdateAPI().update_logo(company_name, logo_link)

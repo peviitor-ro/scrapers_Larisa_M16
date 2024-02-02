@@ -12,7 +12,7 @@
 # Link ------> https://careers.centric.eu/ro/open-positions/
 #
 #
-from scrapers.__utils import (
+from __utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
@@ -20,9 +20,9 @@ from scrapers.__utils import (
     UpdateAPI,
     HackCloudFlare,
 )
-from scrapers.__utils.req_bs4_shorts import GetHtmlSoup, GetRequestJson
+from  __utils.req_bs4_shorts import GetHtmlSoup, GetRequestJson
 
-from scrapers.__utils import DEFAULT_HEADERS
+from  __utils import DEFAULT_HEADERS
 import requests
 from bs4 import BeautifulSoup
 #

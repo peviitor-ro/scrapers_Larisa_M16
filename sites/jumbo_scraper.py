@@ -13,7 +13,7 @@
 # Link ------> https://corporate.e-jumbo.gr/ro/job-opportunities/theseis-ergasias/
 #
 #
-from scrapers.__utils import (
+from  __utils import (
     GetStaticSoup,
     get_county,
     get_job_type,

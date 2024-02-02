@@ -12,7 +12,7 @@
 # ---> get_data_with_regex(expression: str, object: str)
 #
 #
-from scrapers.__utils import (
+from __utils import (
     GetDynamicSoup,
     get_county,
     get_job_type,

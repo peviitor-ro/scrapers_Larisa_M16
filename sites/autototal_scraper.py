@@ -12,7 +12,7 @@
 # Link ------> https://www.autototal.ro/cariere
 #
 #
-from scrapers.__utils import (
+from __utils import (
     GetStaticSoup,
     get_county,
     get_job_type,

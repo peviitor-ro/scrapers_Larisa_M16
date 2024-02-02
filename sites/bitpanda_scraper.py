@@ -13,7 +13,7 @@
 # Link ------> https://boards.eu.greenhouse.io/bitpanda
 #
 #
-from scrapers.__utils import (
+from __utils import (
     GetStaticSoup,
     get_county,
     get_job_type,

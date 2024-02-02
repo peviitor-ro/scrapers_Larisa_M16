@@ -12,7 +12,7 @@
 # Link ------>  https://www.canam.com/en/job-opportunities/?country%5B%5D=romania&search=
 #
 #
-from scrapers.__utils import (
+from __utils import (
     GetStaticSoup,
     get_county,
     get_job_type,

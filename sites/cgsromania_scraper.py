@@ -23,8 +23,8 @@ from scrapers.__utils import (
  
 import cfscrape
 from bs4 import BeautifulSoup
-from scrapers.__utils import DEFAULT_HEADERS
-from scrapers.__utils.req_bs4_shorts import HackCloudFlare
+from  __utils import DEFAULT_HEADERS
+from  __utils.req_bs4_shorts import HackCloudFlare
 
 data = HackCloudFlare('https://romania.cgsinc.com/vino-in-echipa-cgs/') 
  

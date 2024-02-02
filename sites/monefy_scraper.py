@@ -13,7 +13,7 @@
 # Link ------> https://monefy.ro/careers/
 #
 #
-from scrapers.__utils import (
+from  __utils import (
     GetStaticSoup,
     get_county,
     get_job_type,
