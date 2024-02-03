@@ -57,17 +57,18 @@ def test_c4media_city_api(get_job_details):
     allure.dynamic.title(f"Test job cities from the {company_name} website against Peviitor API Response")
 
     scraped_jobs_data, peviitor_jobs_data = get_job_details
-    with allure.step("Step 1: Get job cities from the scraper"):
+    with allure.step("Step 1: Get job cities and titles from the scraper"):
         job_cities_scraper = scraped_jobs_data[1]
         job_titles_scraper = scraped_jobs_data[0]
     
-    with allure.step("Step 2: Get job cities from the Peviitor API"):
+    with allure.step("Step 2: Get job cities and titles from the Peviitor API"):
         job_cities_peviitor = peviitor_jobs_data[1]
+        job_titles_peviitor = peviitor_jobs_data[0]
 
     with allure.step("Step 3: Compare job cities from scraper response against Peviitor API Response"):
         allure.attach(f"Expected Results: {job_cities_scraper}", name="Expected Results")
         allure.attach(f"Actual Results: {job_cities_peviitor}", name="Actual Results")
-        TestUtils().check_job_cities(job_cities_scraper, job_cities_peviitor, job_titles_scraper)
+        TestUtils().check_job_cities(job_cities_scraper, job_cities_peviitor, job_titles_scraper, job_titles_peviitor)
 
 
 @pytest.mark.regression
@@ -76,17 +77,18 @@ def test_c4media_country_api(get_job_details):
     allure.dynamic.title(f"Test job countries from the {company_name} website against Peviitor API Response")
 
     scraped_jobs_data, peviitor_jobs_data = get_job_details
-    with allure.step("Step 1: Get job countries from the scraper"):
+    with allure.step("Step 1: Get job countries and titles from the scraper"):
         job_countries_scraper = scraped_jobs_data[2]
         job_titles_scraper = scraped_jobs_data[0]
 
-    with allure.step("Step 2: Get job countries from the Peviitor API"):
+    with allure.step("Step 2: Get job countries and titles from the Peviitor API"):
         job_countries_peviitor = peviitor_jobs_data[2]
+        job_titles_peviitor = peviitor_jobs_data[0]
 
     with allure.step("Step 3: Compare job countries from scraper response against Peviitor API Response"):
         allure.attach(f"Expected Results: {job_countries_scraper}", name="Expected Results")
         allure.attach(f"Actual Results: {job_countries_peviitor}", name="Actual Results")
-        TestUtils().check_job_countries(job_countries_scraper, job_countries_peviitor, job_titles_scraper)
+        TestUtils().check_job_countries(job_countries_scraper, job_countries_peviitor, job_titles_scraper, job_titles_peviitor)
 
 @pytest.mark.regression
 @pytest.mark.API
@@ -142,14 +144,15 @@ def test_c4media_type_api(get_job_details):
     allure.dynamic.title(f"Test job types from the {company_name} website against Peviitor API Response")
 
     scraped_jobs_data, peviitor_jobs_data = get_job_details
-    with allure.step("Step 1: Get job types from the scraper"):
+    with allure.step("Step 1: Get job types and titles from the scraper"):
         job_types_scraper = scraped_jobs_data[4]
         job_titles_scraper = scraped_jobs_data[0]
     
-    with allure.step("Step 2: Get job types from the Peviitor API"):
+    with allure.step("Step 2: Get job types and titles from the Peviitor API"):
         job_types_peviitor = peviitor_jobs_data[5]
+        job_titles_peviitor = peviitor_jobs_data[0]
 
     with allure.step("Step 3: Compare job types from scraper response against Peviitor API Response"):
         allure.attach(f"Expected Results: {job_types_scraper}", name="Expected Results")
         allure.attach(f"Actual Results: {job_types_peviitor}", name="Actual Results")
-        TestUtils().check_job_types(job_types_scraper, job_types_peviitor, job_titles_scraper)
+        TestUtils().check_job_types(job_types_scraper, job_types_peviitor, job_titles_scraper, job_titles_peviitor)
