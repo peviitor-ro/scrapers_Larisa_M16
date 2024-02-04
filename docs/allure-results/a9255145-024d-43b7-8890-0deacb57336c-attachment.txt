@@ -1,2 +1,0 @@
-INFO     pyppeteer.chromium_downloader:chromium_downloader.py:76 Starting Chromium download.
-INFO     pyppeteer.chromium_downloader:chromium_downloader.py:107 Beginning extraction

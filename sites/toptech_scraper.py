@@ -73,7 +73,7 @@ def scraper():
          
             job_list.append({
                 'job_title': job_title,
-                'job_link': job_link,
+                'job_link': 'https://www.toptech.ro/cariere.html',
                 'company': 'Toptech',
                 'country':'Romania',
                 'county': county,
