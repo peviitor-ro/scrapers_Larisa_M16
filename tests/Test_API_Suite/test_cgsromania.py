@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from scrapers.cgsromania_scraper import scraper as cgsromaniaScraper
+from sites.cgsromania_scraper import scraper as cgsromaniaScraper
 import pytest
 import allure
 

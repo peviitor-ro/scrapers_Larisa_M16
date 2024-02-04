@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from scrapers.yopeso_scraper import scraper as yopesoScraper
+from sites.yopeso_scraper import scraper as yopesoScraper
 import pytest
 import allure
 

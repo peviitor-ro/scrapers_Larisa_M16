@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from scrapers.elektrobit_scraper import scraper as elektrobitScraper
+from sites.elektrobit_scraper import scraper as elektrobitScraper
 import pytest
 import allure
 

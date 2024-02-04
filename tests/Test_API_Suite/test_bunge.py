@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from scrapers.bunge_scraper import scraper as bungeScraper
+from sites.bunge_scraper import scraper as bungeScraper
 import pytest
 import allure
 

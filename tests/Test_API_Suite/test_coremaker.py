@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from scrapers.coremaker_scraper import scraper as coremakerScraper
+from sites.coremaker_scraper import scraper as coremakerScraper
 import pytest
 import allure
 

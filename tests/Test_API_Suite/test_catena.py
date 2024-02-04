@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from scrapers.catena_scraper import scraper as catenaScraper
+from sites.catena_scraper import scraper as catenaScraper
 import pytest
 import allure
 

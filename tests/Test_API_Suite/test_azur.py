@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from scrapers.azur_scraper import scraper as azurScraper
+from sites.azur_scraper import scraper as azurScraper
 import pytest
 import allure
 

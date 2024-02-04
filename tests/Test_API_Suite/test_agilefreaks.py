@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from scrapers.agilefreaks_scraper import scraper as agilefreaksScraper
+from sites.agilefreaks_scraper import scraper as agilefreaksScraper
 import pytest
 import allure
 

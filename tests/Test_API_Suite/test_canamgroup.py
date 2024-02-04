@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from scrapers.canamgroup_scraper import scraper as canamgroupScraper
+from sites.canamgroup_scraper import scraper as canamgroupScraper
 import pytest
 import allure
 

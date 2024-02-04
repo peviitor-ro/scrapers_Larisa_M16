@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from scrapers.emia_scraper import scraper as emiaScraper
+from sites.emia_scraper import scraper as emiaScraper
 import pytest
 import allure
 

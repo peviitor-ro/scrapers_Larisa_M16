@@ -1,5 +1,5 @@
 from tests.utils import TestUtils
-from scrapers.autototal_scraper import scraper as autototalScraper
+from sites.autototal_scraper import scraper as autototalScraper
 import pytest
 import allure
 
