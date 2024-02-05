@@ -12,7 +12,12 @@
 # Link ------> https://jobs.elektrobit.com/job-offers.html?order%5Bdir%5D=asc&order%5Bfield%5D=stellenbezeichnung&filter[countr][]=Romania+-+Brasov&filter[countr][]=Romania+-+Oradea&filter[countr][]=Romania+-+Timisoara&filter[volltext]=
 #
 #
-from  __utils import (
+import sys
+import os
+directory = os.path.abspath(".\\")
+sys.path.append(directory)
+
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,

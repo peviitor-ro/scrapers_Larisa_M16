@@ -1,4 +1,0 @@
-[INFO] Starting Chromium download.
-  0%|          | 0.00/109M [00:00<?, ?b/s] 10%|█         | 11.2M/109M [00:00<00:01, 64.2Mb/s] 19%|█▊        | 20.3M/109M [00:00<00:01, 75.8Mb/s] 32%|███▏      | 34.9M/109M [00:00<00:00, 90.1Mb/s] 53%|█████▎    | 57.6M/109M [00:00<00:00, 135Mb/s]  68%|██████▊   | 73.7M/109M [00:00<00:00, 143Mb/s] 93%|█████████▎| 101M/109M [00:00<00:00, 172Mb/s] 100%|██████████| 109M/109M [00:00<00:00, 142Mb/s]
-[INFO] Beginning extraction
-[INFO] Chromium extracted to: /home/runner/.local/share/pyppeteer/local-chromium/588429

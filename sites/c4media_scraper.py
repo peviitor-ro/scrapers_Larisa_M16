@@ -12,7 +12,12 @@
 # Link ------> https://c4media.com/career
 #
 #
-from __utils import (
+import sys
+import os
+directory = os.path.abspath(".\\")
+sys.path.append(directory)
+
+from sites.__utils import (
     GetStaticSoup,
     get_county,
     get_job_type,

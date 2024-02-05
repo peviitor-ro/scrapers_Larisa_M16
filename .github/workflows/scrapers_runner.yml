@@ -65,11 +65,11 @@ jobs:
         echo '{
           "name": "GitHub Actions",
           "type": "github",
-          "url": "https://github.com/peviitor-ro/RaresTestHub/actions/runs/'"${GITHUB_RUN_ID}"'",
+          "url": "https://github.com/peviitor-ro/scrapers_Larisa_M16/actions/runs/'"${GITHUB_RUN_ID}"'",
           "buildName": "'"${GITHUB_RUN_NUMBER}"'",
-          "buildUrl": "https://github.com/peviitor-ro/RaresTestHub/actions/runs/'"${GITHUB_RUN_ID}"'",
+          "buildUrl": "https://github.com/peviitor-ro/scrapers_Larisa_M16/actions/runs/'"${GITHUB_RUN_ID}"'",
           "reportName": "Allure Report",
-          "reportUrl": "https://github.com/peviitor-ro/RaresTestHub/actions/runs/'"${GITHUB_RUN_ID}"'"
+          "reportUrl": "https://github.com/peviitor-ro/scrapers_Larisa_M16/actions/runs/'"${GITHUB_RUN_ID}"'"
         }' > docs/allure-results/executor.json
           
     - name: Generate Allure report
