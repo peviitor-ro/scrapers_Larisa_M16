@@ -89,20 +89,21 @@ class TestUtils:
     
     # Utility function for checking cities/country
     def get_different_items(self, expected_list, actual_list, job_titles):
-        # Itterate over every city/country from the list
-        for expected_item in expected_list:
-            
-            # If the actual list is empty it means there are missing some element therefore no more popping is needed
-            if not actual_list:
-                return expected_list, job_titles
-            
-            # Pop elements from lists at index 0 if empty it means that all lists match
-            if expected_item in actual_list:
-                expected_list.pop(0), actual_list.pop(0), job_titles.pop(0)
+        # Check if actual list is empty
+        if not actual_list:
+            return expected_list, job_titles
         
-        # Return empty list if expected cities/countries are matching the actual cities/countries 
-        return []
+        dummy_actual_list = actual_list[:]
 
+        for expected_index, expected_item in enumerate(expected_list):
+
+            # Check if actual list is empty otherwise pop
+            if not dummy_actual_list:
+                return expected_list[expected_index:], job_titles[expected_index:]
+            
+            dummy_actual_list.pop(0)
+        
+        return [], []
 
     # Check method for job titles
     def check_job_titles(self, expected_titles, actual_titles):
@@ -121,69 +122,84 @@ class TestUtils:
         
         allure.step(msg)
         assert expected_titles == actual_titles, msg
-
+        
     # Check method for job cities
-    def check_job_cities(self, expected_cities, actual_cities, job_titles_scraper):
-        if not expected_cities and not actual_cities:
+    def check_job_cities(self, expected_cities, actual_cities, job_titles_scraper, api_job_titles):
+        if not expected_cities:
             msg = f"Scraper is not grabbing any job cities"
             allure.step(msg)
             raise AssertionError(msg)
         
-        # Setting dummy job titles for popping to not influence other tests
-        dummy_job_titles = job_titles_scraper[:]
-        missing_cities = self.get_different_items(expected_cities, actual_cities, dummy_job_titles)
-        msg = "An unknown error occured"
+        msg = "An unknown error occurred"
         
-        if missing_cities:
-            msg = f"Peviitor is having extra job cities for the following titles: {missing_cities[1]}"
+        # Check jobs from scraper against the peviitor api
+        scraper_actual_cities, scraper_job_titles = self.get_different_items(expected_cities, actual_cities, job_titles_scraper)
+
+        if scraper_actual_cities:
+            msg = f"Peviitor is missing job cities for the following job titles: {scraper_job_titles}"
+            allure.step(msg)
+            raise AssertionError(msg)
         else:
-            missing_cities = self.get_different_items(actual_cities, expected_cities, dummy_job_titles)
-            if missing_cities:
-                msg = f"Peviitor is missing job cities: {missing_cities[1]}"
-        
+            # Check jobs from peviitor against the scraper response
+            peviitor_actual_cities, peviitor_job_titles = self.get_different_items(actual_cities, expected_cities, api_job_titles)
+            if peviitor_actual_cities:
+                msg = f"Peviitor is having extra job cities for the following job titles: {peviitor_job_titles}"
+                allure.step(msg)
+                raise AssertionError(msg)
+
         allure.step(msg)
         assert expected_cities == actual_cities, msg
 
     # Check method for job countries
-    def check_job_countries(self, expected_countries, actual_countries, job_titles_scraper):
-        if not expected_countries and not actual_countries:
+    def check_job_countries(self, expected_countries, actual_countries, job_titles_scraper, api_job_titles):
+        if not expected_countries:
             msg = f"Scraper is not grabbing any job countries"
             allure.step(msg)
             raise AssertionError(msg)
 
-        # Setting dummy job titles for popping to not influence other tests
-        dummy_job_titles = job_titles_scraper[:]
-        missing_countries = self.get_different_items(expected_countries, actual_countries, dummy_job_titles)
         msg = "An unknown error occured"
 
-        if missing_countries:
-            msg = f"Peviitor is having extra job countries for the following titles: {missing_countries[1]}"
+        # Check job countries from scraper against the peviitor api
+        scraper_actual_countries, scraper_job_titles = self.get_different_items(expected_countries, actual_countries, job_titles_scraper)
+
+        if scraper_actual_countries:
+            msg = f"Peviitor is missing job countries for the following job titles: {scraper_job_titles}"
+            allure.step(msg)
+            raise AssertionError(msg)
         else:
-            missing_countries = self.get_different_items(actual_countries, expected_countries, dummy_job_titles)
-            if missing_countries:
-                msg = f"Peviitor is missing job countries: {missing_countries[1]}"
+            # Check job countries from peviitor against the scraper response
+            peviitor_actual_countries, peviitor_job_titles = self.get_different_items(actual_countries, expected_countries, api_job_titles)
+            if peviitor_actual_countries:
+                msg = f"Peviitor is having extra job countries for the following titles: {peviitor_job_titles}"
+                allure.step(msg)
+                raise AssertionError(msg)
 
         allure.step(msg)
         assert expected_countries == actual_countries, msg
 
     # Check method for job types
-    def check_job_types(self, expected_types, actual_types, job_titles_scraper):
-        if not expected_types and not actual_types:
+    def check_job_types(self, expected_types, actual_types, job_titles_scraper, api_job_titles):
+        if not expected_types:
             msg = f"Scraper is not grabbing any job types"
             allure.step(msg)
             raise AssertionError(msg)
         
-        # Setting dummy job titles for popping to not influence other tests
-        dummy_job_titles = job_titles_scraper[:]
-        missing_types = self.get_different_items(expected_types, actual_types, dummy_job_titles)
         msg = "An unknown error occured"
         
-        if missing_types:
-            msg = f"Peviitor is having extra job types for the following titles: {missing_types[1]}"
+        # Check job types from scraper against the peviitor api
+        scraper_actual_types, scraper_job_titles = self.get_different_items(expected_types, actual_types, job_titles_scraper)
+        
+        if scraper_actual_types:
+            msg = f"Peviitor is missing job types for the following jobs: {scraper_job_titles}"
+            allure.step(msg)
+            raise AssertionError(msg)
         else:
-            missing_types = self.get_different_items(actual_types, expected_types, dummy_job_titles)
-            if missing_types:
-                msg = f"Peviitor is missing job types: {missing_types[1]}"
+            # Check job types from peviitor against the scraper response
+            peviitor_actual_countries, peviitor_job_titles = self.get_different_items(actual_types, expected_types, api_job_titles)
+            if peviitor_actual_countries:
+                msg = f"Peviitor is having extra job types for the following titles: {peviitor_job_titles}"
+                allure.step(msg)
+                raise AssertionError(msg)
         
         allure.step(msg)
         assert expected_types == actual_types, msg

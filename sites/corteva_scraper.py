@@ -12,7 +12,12 @@
 # ---> get_data_with_regex(expression: str, object: str)
 #
 #
-from __utils import (
+import sys
+import os
+directory = os.path.abspath(".\\")
+sys.path.append(directory)
+
+from sites.__utils import (
     GetDynamicSoup,
     get_county,
     get_job_type,
