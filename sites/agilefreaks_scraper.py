@@ -18,7 +18,6 @@ from __utils.peviitor_update import UpdateAPI
 from __utils.found_county import get_county
 from __utils.get_job_type import get_job_type
 
-
 def scraper():
     '''
     ... scrape data from agilefreaks scraper.
