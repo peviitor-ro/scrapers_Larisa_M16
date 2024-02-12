@@ -12,18 +12,10 @@
 # ---> get_data_with_regex(expression: str, object: str)
 #
 #
-import sys
-import os
-directory = os.path.abspath(".\\")
-sys.path.append(directory)
-
-from sites.__utils import (
-    GetDynamicSoup,
-    get_county,
-    get_job_type,
-    Item,
-    UpdateAPI,
-)
+#
+from sites.__utils.dynamic_requests_html_shorts import GetDynamicSoup
+from sites.__utils.items_struct import Item
+from sites.__utils.peviitor_update import UpdateAPI
 
 def scraper():
     '''
@@ -60,7 +52,6 @@ def main():
     logo_link = "https://cdn-static.findly.com/wp-content/uploads/sites/2491/2023/02/02100420/logo.svg"
 
     jobs = scraper()
-    print(jobs)
   
     # uncomment if your scraper done
     UpdateAPI().update_jobs(company_name, jobs)

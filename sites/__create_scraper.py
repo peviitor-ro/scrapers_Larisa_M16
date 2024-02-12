@@ -32,13 +32,12 @@ def create_static_scraper_config(nume_scraper, link):
 # Link ------> {link}
 #
 #
-from __utils import (
-    GetStaticSoup,
-    get_county,
-    get_job_type,
-    Item,
-    UpdateAPI,
-)
+#
+from sites.__utils.req_bs4_shorts import GetXMLObject, GetStaticSoup
+from sites.__utils.items_struct import Item
+from sites.__utils.peviitor_update import UpdateAPI
+from sites.__utils.found_county import get_county
+from sites.__utils.get_job_type import get_job_type
 
 
 '''

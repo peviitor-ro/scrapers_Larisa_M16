@@ -12,13 +12,10 @@
 # Link ------> https://careers.egger.com/go/Jobs-in-Romania/8984955/
 #
 #
-from __utils import (
-    GetStaticSoup,
-    get_county,
-    get_job_type,
-    Item,
-    UpdateAPI,
-)
+#
+from sites.__utils.req_bs4_shorts import GetStaticSoup
+from sites.__utils.items_struct import Item
+from sites.__utils.peviitor_update import UpdateAPI
 
 from urllib.parse import unquote
 

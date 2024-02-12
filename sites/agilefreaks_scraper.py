@@ -12,11 +12,12 @@
 # Link ------>  https://careers.agilefreaks.com/jobs
 #
 #
-from __utils.req_bs4_shorts import GetXMLObject, GetStaticSoup
-from __utils.items_struct import Item
-from __utils.peviitor_update import UpdateAPI
-from __utils.found_county import get_county
-from __utils.get_job_type import get_job_type
+
+from sites.__utils.req_bs4_shorts import GetStaticSoup
+from sites.__utils.items_struct import Item
+from sites.__utils.peviitor_update import UpdateAPI
+from sites.__utils.found_county import get_county
+from sites.__utils.get_job_type import get_job_type
 
 def scraper():
     '''

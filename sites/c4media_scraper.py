@@ -12,18 +12,10 @@
 # Link ------> https://c4media.com/career
 #
 #
-import sys
-import os
-directory = os.path.abspath(".\\")
-sys.path.append(directory)
-
-from sites.__utils import (
-    GetStaticSoup,
-    get_county,
-    get_job_type,
-    Item,
-    UpdateAPI,
-)
+#
+from sites.__utils.req_bs4_shorts import GetStaticSoup
+from sites.__utils.items_struct import Item
+from sites.__utils.peviitor_update import UpdateAPI
 
 def scraper():
     '''
