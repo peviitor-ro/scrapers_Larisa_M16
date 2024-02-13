@@ -3,6 +3,7 @@ from sites.yopeso_scraper import scraper as yopesoScraper
 import pytest
 import allure
 
+
 company_name = 'yopeso'
 
 @pytest.fixture(scope="module")

@@ -12,22 +12,14 @@
 # Link ------> https://www.autototal.ro/cariere
 #
 #
-import sys
-import os
-directory = os.path.abspath(".\\")
-sys.path.append(directory)
-
-from sites.__utils import (
-    GetStaticSoup,
-    get_county,
-    get_job_type,
-    Item,
-    UpdateAPI,
-)
-
+#
+from sites.__utils.req_bs4_shorts import GetStaticSoup
+from sites.__utils.items_struct import Item
+from sites.__utils.peviitor_update import UpdateAPI
+from sites.__utils.found_county import get_county
+from sites.__utils.get_job_type import get_job_type
 from datetime import date
-import uuid
-import requests
+
 import datetime
 
 current_year = datetime.datetime.now().year

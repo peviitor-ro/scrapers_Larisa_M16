@@ -12,26 +12,11 @@
 # Link ------> https://careers.centric.eu/ro/open-positions/
 #
 #
-import sys
-import os
-directory = os.path.abspath(".\\")
-sys.path.append(directory)
-
-from sites.__utils import (
-    GetStaticSoup,
-    get_county,
-    get_job_type,
-    Item,
-    UpdateAPI,
-    HackCloudFlare,
-)
-from sites.__utils.req_bs4_shorts import GetHtmlSoup, GetRequestJson
-
-from sites.__utils import DEFAULT_HEADERS
-import requests
-from bs4 import BeautifulSoup
 #
-import uuid
+from sites.__utils.req_bs4_shorts import GetHtmlSoup, GetStaticSoup
+from sites.__utils.peviitor_update import UpdateAPI
+#
+
 import re
 import json
  
