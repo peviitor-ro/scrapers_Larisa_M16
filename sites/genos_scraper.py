@@ -12,13 +12,10 @@
 # Link ------> https://www.genosdanmark.eu/vacancies
 #
 #
-from __utils import (
-    GetStaticSoup,
-    get_county,
-    get_job_type,
-    Item,
-    UpdateAPI,
-)
+#
+from sites.__utils.req_bs4_shorts import GetStaticSoup
+from sites.__utils.items_struct import Item
+from sites.__utils.peviitor_update import UpdateAPI
 
 def scraper():
     '''

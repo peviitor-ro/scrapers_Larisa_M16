@@ -13,21 +13,12 @@
 # Link ------> https://www.accenture.com/ro-en/jobpostings-sitemap.xml
 #
 #
-import sys
-import os
-directory = os.path.abspath(".\\")
-sys.path.append(directory)
+#
+from sites.__utils.req_bs4_shorts import GetXMLObject, GetStaticSoup
+from sites.__utils.items_struct import Item
+from sites.__utils.peviitor_update import UpdateAPI
+from sites.__utils.found_county import get_county
 
-from sites.__utils import (
-    GetStaticSoup,
-    get_county,
-    get_job_type,
-    Item,
-    UpdateAPI,
-)
-
-# single, because it used once
-from __utils import GetXMLObject
 import time
 from random import randint
 

@@ -12,24 +12,11 @@
 # Link ------> https://romania.cgsinc.com/vino-in-echipa-cgs/
 #
 #
-import sys
-import os
-directory = os.path.abspath(".\\")
-sys.path.append(directory)
-
-from sites.__utils import (
-    GetStaticSoup,
-    get_county,
-    get_job_type,
-    Item,
-    UpdateAPI,
-    HackCloudFlare,
-)
- 
-import cfscrape
-from bs4 import BeautifulSoup
-from sites.__utils import DEFAULT_HEADERS
+#
 from sites.__utils.req_bs4_shorts import HackCloudFlare
+from sites.__utils.items_struct import Item
+from sites.__utils.peviitor_update import UpdateAPI
+
 
 data = HackCloudFlare('https://romania.cgsinc.com/vino-in-echipa-cgs/') 
  

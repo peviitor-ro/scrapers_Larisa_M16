@@ -3,3 +3,4 @@
 /.vscode
 /Selenium
 /env
+*.egg-info

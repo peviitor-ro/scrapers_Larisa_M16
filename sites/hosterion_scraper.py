@@ -12,19 +12,14 @@
 # Link ------> https://hosterion.ro/cariere
 #
 #
-from bs4 import BeautifulSoup
-from __utils import (
-    GetStaticSoup,
-    get_county,
-    get_job_type,
-    Item,
-    UpdateAPI,
-)
+#
+
+from sites.__utils.items_struct import Item
+from sites.__utils.peviitor_update import UpdateAPI
 import requests
 
-from sites.__utils.default_headers import DEFAULT_HEADERS
-
-
+from bs4 import BeautifulSoup
+from __utils.default_headers import DEFAULT_HEADERS
 
 def scraper():
     '''
