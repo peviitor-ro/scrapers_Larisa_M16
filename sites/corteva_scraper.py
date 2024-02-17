@@ -49,7 +49,7 @@ def main():
     '''
 
     company_name = "CORTEVA"
-    logo_link = "https://cdn-static.findly.com/wp-content/uploads/sites/2491/2023/02/02100420/logo.svg"
+    logo_link = "https://assets.corteva.com/is/image/Corteva/CortevaLegal_HorColor_RGB_no_tagline"
 
     jobs = scraper()
   

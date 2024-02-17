@@ -38,10 +38,16 @@ def scraper():
             location = job.find('div', attrs={'class': 'job-location m-grid-col m-grid-col-middle m-grid-col-left m-grid-col-md-2 m-grid-col-sm-12'}).text.strip().split('\n')[0]
             if location == 'Fully remote':
                 location = ""
+            if location == 'Fully remote':
+                location = ""
             if location == 'Cluj-Napoca':
                 location = "Cluj"
             if location == 'Ploiesti':
                 location = "Prahova"
+            if location == 'Timisoara':
+                location = "Timis"
+            if location == 'Caracal':
+                location = "Olt"
 
             city = job.find('div', attrs={'class': 'job-location m-grid-col m-grid-col-middle m-grid-col-left m-grid-col-md-2 m-grid-col-sm-12'}).text.strip().split('\n')[0]
             if city == 'Fully remote':
