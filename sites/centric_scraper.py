@@ -47,7 +47,7 @@ def scraper():
                 job_list.append({
                     'job_title':title,
                     'job_link':link,
-                    'company': 'Centric',
+                    'company': 'CENTRIC',
                     'country': 'Romania',   
                     'county': location,    
                     'city': location,
