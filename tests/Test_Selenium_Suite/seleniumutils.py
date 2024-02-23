@@ -114,7 +114,7 @@ class TestUtils:
             msg = f"Peviitor is missing job titles: {missing_titles}"
         
         allure.step(msg)
-        
+            
         assert sorted(expected_titles) == sorted(actual_titles), msg
 
     # Check method for job titles from ui against scraper jobs
@@ -126,7 +126,7 @@ class TestUtils:
         
         msg = "An unknown error occured"
         
-        peviitor_actual_titles, peviitor_expected_elements = self.get_different_items(actual_titles, expected_titles, expected_elements)
+        peviitor_actual_titles, peviitor_expected_elements = self.get_different_items(expected_titles, actual_titles, expected_elements)
 
         if peviitor_actual_titles:
             msg = f"Peviitor is having extra job titles: {peviitor_actual_titles}"
@@ -233,7 +233,7 @@ class TestUtils:
         
         msg = "An unknown error occured"
 
-        missing_links = self.get_missing_items(actual_links, expected_links)
+        missing_links = self.get_missing_items(expected_links, actual_links)
         if missing_links:
             msg = f"Peviitor is missing job links: {missing_links}"
 
