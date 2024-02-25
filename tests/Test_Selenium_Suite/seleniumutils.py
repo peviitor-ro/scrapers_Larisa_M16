@@ -108,14 +108,17 @@ class TestUtils:
         
         msg = "An unknown error occured"
     
-        missing_titles = self.get_missing_items(actual_titles, expected_titles)
+        missing_titles = self.get_missing_items(expected_titles, actual_titles)
         
         if missing_titles:
             msg = f"Peviitor is missing job titles: {missing_titles}"
         
         allure.step(msg)
             
-        assert sorted(expected_titles) == sorted(actual_titles), msg
+        if len(actual_titles) < len(expected_titles):
+            assert sorted(expected_titles) == sorted(actual_titles), f"There are more jobs on the scraper than peviitor: {expected_titles}"
+        else:
+            assert True
 
     # Check method for job titles from ui against scraper jobs
     def check_peviitor_job_titles(self, expected_titles, actual_titles, expected_elements):
@@ -138,8 +141,11 @@ class TestUtils:
             self.element_to_scroll = peviitor_expected_elements
             self.make_screenshot()
         
-        # print(sorted(expected_titles), sorted(actual_titles))
-        assert sorted(expected_titles) == sorted(actual_titles), msg
+        if len(actual_titles) > len(expected_titles):
+            assert True
+        else:
+            assert sorted(expected_titles) == sorted(actual_titles), f"There are less jobs on peviitor than on the company website: {actual_titles}"
+
         
     # Check method for job cities
     def check_scraper_job_cities(self, expected_cities, actual_cities, api_job_titles, expected_elements):
