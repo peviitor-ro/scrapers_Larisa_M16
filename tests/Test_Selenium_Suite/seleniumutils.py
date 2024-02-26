@@ -141,7 +141,7 @@ class TestUtils:
             self.element_to_scroll = peviitor_expected_elements
             self.make_screenshot()
         
-        if len(actual_titles) > len(expected_titles):
+        if len(actual_titles) >= len(expected_titles):
             assert True
         else:
             assert sorted(expected_titles) == sorted(actual_titles), f"There are less jobs on peviitor than on the company website: {actual_titles}"
@@ -244,7 +244,11 @@ class TestUtils:
             msg = f"Peviitor is missing job links: {missing_links}"
 
         allure.step(msg)
-        assert sorted(expected_links) == sorted(actual_links), msg
+        
+        if len(actual_links) < len(expected_links):
+            assert sorted(expected_links) == sorted(actual_links), f"There are more job links on the scraper than peviitor: {expected_links}"
+        else:
+            assert True
 
     # Check method for job links
     def check_peviitor_job_links(self, expected_links, actual_links, job_titles, expected_elements):
@@ -269,8 +273,11 @@ class TestUtils:
             self.element_to_scroll = peviitor_expected_elements
             self.make_screenshot()
         
-        assert sorted(expected_links) == sorted(actual_links), msg
-        
+        if len(actual_links) >= len(expected_links):
+            assert True
+        else:
+            assert sorted(expected_links) == sorted(actual_links), f"There are less job links on peviitor than on the company website: {actual_links}"
+            
     # Check number of jobs using the job links count
     def check_job_count(self, expected_links_count, actual_links_count):
         

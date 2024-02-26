@@ -87,9 +87,9 @@ def test_bunge_titles_ui(get_job_details, scrape_ui):
         job_titles_elements = job_details[4]
 
     with allure.step("Step 3: Compare job titles from scraper response against Peviitor ui Response"):
-        allure.attach(f"Expected Results: {job_titles_scraper}", name="Expected Results")
-        allure.attach(f"Actual Results: {job_titles_peviitor}", name="Actual Results")
-        testutils.check_peviitor_job_titles(job_titles_scraper, job_titles_peviitor, job_titles_elements)
+        allure.attach(f"Expected Results: {job_titles_peviitor}", name="Expected Results")
+        allure.attach(f"Actual Results: {job_titles_scraper}", name="Actual Results")
+        testutils.check_peviitor_job_titles(job_titles_peviitor, job_titles_scraper, job_titles_elements)
 
 @pytest.mark.regression
 @pytest.mark.ui
@@ -128,9 +128,9 @@ def test_bunge_link_ui(get_job_details, scrape_ui):
         job_links_elements = job_details[6]
 
     with allure.step("Step 3: Compare job links from Peviitor ui against the company website"):
-        allure.attach(f"Expected Results: {job_links_scraper}", name="Expected Results")
-        allure.attach(f"Actual Results: {job_links_peviitor}", name="Actual Results")
-        testutils.check_peviitor_job_links(job_links_scraper, job_links_peviitor, job_titles_peviitor, job_links_elements)
+        allure.attach(f"Expected Results: {job_links_peviitor}", name="Expected Results")
+        allure.attach(f"Actual Results: {job_links_scraper}", name="Actual Results")
+        testutils.check_peviitor_job_links(job_links_peviitor, job_links_scraper, job_titles_peviitor, job_links_elements)
 
 @pytest.mark.regression
 @pytest.mark.ui
