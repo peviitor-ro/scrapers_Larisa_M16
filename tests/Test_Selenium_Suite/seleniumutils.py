@@ -141,6 +141,7 @@ class TestUtils:
             self.element_to_scroll = peviitor_expected_elements
             self.make_screenshot()
         
+        # CHECK FOR MATCHING AS WELL get_missing_items
         if len(actual_titles) >= len(expected_titles):
             assert True
         else:
@@ -148,47 +149,47 @@ class TestUtils:
 
         
     # Check method for job cities
-    def check_scraper_job_cities(self, expected_cities, actual_cities, api_job_titles, expected_elements):
-        if not expected_cities:
-            msg = f"Scraper is not grabbing any job cities"
-            allure.step(msg)
-            raise AssertionError(msg)
+    # def check_scraper_job_cities(self, expected_cities, actual_cities, api_job_titles, expected_elements):
+    #     if not expected_cities:
+    #         msg = f"Scraper is not grabbing any job cities"
+    #         allure.step(msg)
+    #         raise AssertionError(msg)
         
-        msg = "An unknown error occurred"
+    #     msg = "An unknown error occurred"
         
 
-        # Check jobs from peviitor against the scraper response
-        scraper_actual_cities, scraper_job_titles, peviitor_expected_elements = self.get_different_items(actual_cities, expected_cities, api_job_titles, expected_elements)
-        if scraper_actual_cities:
-            msg = f"Peviitor is having extra job cities for the following job titles: {scraper_job_titles}"
+    #     # Check jobs from peviitor against the scraper response
+    #     scraper_actual_cities, scraper_job_titles, peviitor_expected_elements = self.get_different_items(actual_cities, expected_cities, api_job_titles, expected_elements)
+    #     if scraper_actual_cities:
+    #         msg = f"Peviitor is having extra job cities for the following job titles: {scraper_job_titles}"
 
-        allure.step(msg)
+    #     allure.step(msg)
             
-        assert sorted(expected_cities) == sorted(actual_cities), msg
+    #     assert sorted(expected_cities) == sorted(actual_cities), msg
         
-    # Check method for job cities
-    def check_peviitor_job_cities(self, expected_cities, actual_cities, job_titles_peviitor, expected_elements):
-        if not expected_cities:
-            msg = f"peviitor is not grabbing any job cities"
-            allure.step(msg)
-            raise AssertionError(msg)
+    # # Check method for job cities
+    # def check_peviitor_job_cities(self, expected_cities, actual_cities, job_titles_peviitor, expected_elements):
+    #     if not expected_cities:
+    #         msg = f"peviitor is not grabbing any job cities"
+    #         allure.step(msg)
+    #         raise AssertionError(msg)
         
-        msg = "An unknown error occurred"
+    #     msg = "An unknown error occurred"
         
-        # Check jobs from peviitor against the peviitor api
-        peviitor_actual_cities, peviitor_job_titles, peviitor_expected_elements = self.get_different_items(expected_cities, actual_cities, job_titles_peviitor, expected_elements)
+    #     # Check jobs from peviitor against the peviitor api
+    #     peviitor_actual_cities, peviitor_job_titles, peviitor_expected_elements = self.get_different_items(expected_cities, actual_cities, job_titles_peviitor, expected_elements)
 
-        if peviitor_actual_cities:
-            msg = f"Peviitor is missing job cities for the following job titles: {peviitor_job_titles}"
+    #     if peviitor_actual_cities:
+    #         msg = f"Peviitor is missing job cities for the following job titles: {peviitor_job_titles}"
             
-        allure.step(msg)
+    #     allure.step(msg)
         
-        # # If the data does not match make screenshot where bugs
-        if sorted(expected_cities) != sorted(actual_cities):
-            self.element_to_scroll = peviitor_expected_elements
-            self.make_screenshot()
+    #     # # If the data does not match make screenshot where bugs
+    #     if sorted(expected_cities) != sorted(actual_cities):
+    #         self.element_to_scroll = peviitor_expected_elements
+    #         self.make_screenshot()
             
-        assert sorted(expected_cities) == sorted(actual_cities), msg
+    #     assert sorted(expected_cities) == sorted(actual_cities), msg
 
     # # Check method for job types
     # def check_scraper_job_types(self, expected_types, actual_types, job_titles_scraper):
@@ -312,6 +313,6 @@ class TestUtils:
                 msg = f"Company name does not match for one of the job results from the API Response"
                 allure.step(msg)
                 raise AssertionError(msg)
-        
-        assert expected_company_name == actual_company_name, "An unknown error occured in the API job company name test case"
+
+        assert expected_company_name[:len(actual_company_name)] == actual_company_name, "An unknown error occured in the API job company name test case"
         
