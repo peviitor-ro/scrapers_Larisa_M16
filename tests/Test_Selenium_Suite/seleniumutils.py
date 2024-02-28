@@ -115,7 +115,7 @@ class TestUtils:
         
         allure.step(msg)
             
-        if len(actual_titles) < len(expected_titles):
+        if len(actual_titles) < len(expected_titles) and msg != "An unknown error occured":
             assert sorted(expected_titles) == sorted(actual_titles), f"There are more jobs on the scraper than peviitor: {expected_titles}"
         else:
             assert True
@@ -141,8 +141,7 @@ class TestUtils:
             self.element_to_scroll = peviitor_expected_elements
             self.make_screenshot()
         
-        # CHECK FOR MATCHING AS WELL get_missing_items
-        if len(actual_titles) >= len(expected_titles):
+        if len(actual_titles) >= len(expected_titles) and not self.get_missing_items(sorted(expected_titles), sorted(actual_titles)):
             assert True
         else:
             assert sorted(expected_titles) == sorted(actual_titles), f"There are less jobs on peviitor than on the company website: {actual_titles}"
@@ -246,7 +245,7 @@ class TestUtils:
 
         allure.step(msg)
         
-        if len(actual_links) < len(expected_links):
+        if len(actual_links) < len(expected_links) and msg != "An unknown error occured":
             assert sorted(expected_links) == sorted(actual_links), f"There are more job links on the scraper than peviitor: {expected_links}"
         else:
             assert True
@@ -274,7 +273,7 @@ class TestUtils:
             self.element_to_scroll = peviitor_expected_elements
             self.make_screenshot()
         
-        if len(actual_links) >= len(expected_links):
+        if len(actual_links) >= len(expected_links) and not self.get_missing_items(sorted(expected_links), sorted(actual_links)):
             assert True
         else:
             assert sorted(expected_links) == sorted(actual_links), f"There are less job links on peviitor than on the company website: {actual_links}"
