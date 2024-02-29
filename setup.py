@@ -51,6 +51,7 @@ setup(
         'pytest-xdist==3.3.1',
         'allure-pytest==2.13.2',
         'unidecode==1.3.8',
+        'webdriver-manager==4.0.1',
     ],
     python_requires='>=3.6',
 )
