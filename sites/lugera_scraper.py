@@ -21,55 +21,56 @@ from sites.__utils.found_county import get_county
 from sites.__utils.get_job_type import get_job_type
 
 
+def extract_jobs_num():
+    '''
+    ... extract jobs num'''
+
+    return int(GetStaticSoup('https://www.lugera.ro/jobex/public/ro?txt=%20&country=Romania&cities%5B0%5D=&page=1').select_one('h1.jobsHomeTitle').text.strip().split('(')[-1].split('-')[0].strip())
 def scraper():
     '''
     ... scrape data from Lugera scraper.
     '''
+
     job_list = []
-    page = 1
+    for page in range(1, (extract_jobs_num()) // 20 + 2):
+        soup = GetStaticSoup(f"https://www.lugera.ro/jobex/public/ro?txt=%20&country=Romania&cities%5B0%5D=&page={str(page)}")
 
-    while page <= 6:
-        url = f"https://www.lugera.ro/jobex/public/ro?txt=+&country=Romania&cities%5B%5D=&page={page}"
-        response = requests.get(url)
-        soup = BeautifulSoup(response.text, 'html.parser')
+        if len(soup_data := soup.select_one('div.jobs-listing.jobs.jobex-search-results.row').select('div.job.col-xs-12.m-grid.m-grid-responsive-sm')) > 0:
 
-        for job in soup.find_all("div", attrs={'class': 'job col-xs-12 m-grid m-grid-responsive-sm'}):
-            job_t = job.find('a', class_='job-title-link').text
-            location = job.find('div', attrs={'class': 'job-location m-grid-col m-grid-col-middle m-grid-col-left m-grid-col-md-2 m-grid-col-sm-12'}).text.strip().split('\n')[0]
-            if location == 'Fully remote':
-                location = ""
-            if location == 'Fully remote':
-                location = ""
-            if location == 'Cluj-Napoca':
-                location = "Cluj"
-            if location == 'Ploiesti':
-                location = "Prahova"
-            if location == 'Timisoara':
-                location = "Timis"
-            if location == 'Caracal':
-                location = "Olt"
+            new_location = None
+            job_type = None
+            for data_job in soup_data:
+                location = data_job.select_one('div.job-location').text.strip().split('\n')[0] 
+                link = 'https://www.lugera.ro' + data_job.select_one('a.job-title-link')['href']
+                job_t = data_job.select_one('a.job-title-link').text
+                
+                if 'bucuresti' in location.lower():
+                    new_location = 'Bucuresti'
+                elif 'fully remote' == location.lower():
+                    new_location = ''
+                    job_type = 'remote'
+                elif 'hybrid' == location.lower():
+                    new_location = ''
+                    job_type = 'hybrid'
+                else:
+                    new_location = location
+                    job_type = 'on-site'
 
-            city = job.find('div', attrs={'class': 'job-location m-grid-col m-grid-col-middle m-grid-col-left m-grid-col-md-2 m-grid-col-sm-12'}).text.strip().split('\n')[0]
-            if city == 'Fully remote':
-                city = ""
-            remote_status = job.find('div', attrs={'class': 'job-location m-grid-col m-grid-col-middle m-grid-col-left m-grid-col-md-2 m-grid-col-sm-12'}).text.strip().split('\n')[0]
-            remote_status = 'Hybrid' if 'Hybrid' in remote_status else 'Fully remote' if 'Fully remote' in remote_status else 'remote' if 'remote' in remote_status else 'onsite'
-            
-            job_list.append(Item(
-                job_title=job_t,
-                job_link="https://www.lugera.ro" + job.find('a', class_='job-title-link')['href'],
-                company='Lugera',
-                country='Romania',
-                county=location,
-                city=city,
-                remote=remote_status,
-            ).to_dict())
-        
-        page += 1
+                
+                # get jobs items from response
+                job_list.append(Item(
+                    job_title=job_t,
+                    job_link=link,
+                    company='Lugera',
+                    country='Romania',
+                    county='' if location == None else get_county(new_location),
+                    city=new_location,
+                    remote=job_type,
+                ).to_dict())
 
     return job_list
-
-
+            
+        
 def main():
     '''
     ... Main:
@@ -81,6 +82,7 @@ def main():
     logo_link = "https://www.lugera.ro/jobex/public/theme/images/logo-lugera-color-small.png"
 
     jobs = scraper()
+    
    
     # uncomment if your scraper done
     UpdateAPI().update_jobs(company_name, jobs)
