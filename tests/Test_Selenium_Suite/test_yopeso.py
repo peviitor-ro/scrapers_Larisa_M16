@@ -33,8 +33,8 @@ def scrape_ui(driver, expected_wait):
     
 
 @pytest.mark.regression
-@pytest.mark.API
-def test_yopeso_job_count_api(get_job_details, scrape_ui):
+@pytest.mark.ui
+def test_yopeso_job_count_ui(get_job_details, scrape_ui):
     allure.dynamic.title(f"Test number of jobs for the company {company_name} against the number of jobs Peviitor")
 
     scraped_jobs_data = get_job_details

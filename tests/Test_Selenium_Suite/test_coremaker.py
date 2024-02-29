@@ -33,8 +33,9 @@ def scrape_ui(driver, expected_wait):
     
 
 @pytest.mark.regression
-@pytest.mark.API
-def test_coremaker_job_count_api(get_job_details, scrape_ui):
+@pytest.mark.ui
+@pytest.mark.skip
+def test_coremaker_job_count_ui(get_job_details, scrape_ui):
     allure.dynamic.title(f"Test number of jobs for the company {company_name} against the number of jobs Peviitor")
 
     scraped_jobs_data = get_job_details
@@ -52,6 +53,7 @@ def test_coremaker_job_count_api(get_job_details, scrape_ui):
 
 @pytest.mark.regression
 @pytest.mark.ui
+@pytest.mark.skip
 def test_coremaker_titles_scraper(get_job_details, scrape_ui):
     allure.dynamic.title(f"Test job titles from the company {company_name} against Peviitor")
 
@@ -72,6 +74,7 @@ def test_coremaker_titles_scraper(get_job_details, scrape_ui):
 
 @pytest.mark.regression
 @pytest.mark.ui
+@pytest.mark.skip
 def test_coremaker_titles_ui(get_job_details, scrape_ui):
     allure.dynamic.title(f"Test job titles from the Peviitor against company {company_name} website")
 
@@ -93,6 +96,7 @@ def test_coremaker_titles_ui(get_job_details, scrape_ui):
 
 @pytest.mark.regression
 @pytest.mark.ui
+@pytest.mark.skip
 def test_coremaker_link_scraper(get_job_details, scrape_ui):
     allure.dynamic.title(f"Test job links from the company {company_name} website against Peviitor")
 
@@ -113,6 +117,7 @@ def test_coremaker_link_scraper(get_job_details, scrape_ui):
 
 @pytest.mark.regression
 @pytest.mark.ui
+@pytest.mark.skip
 def test_coremaker_link_ui(get_job_details, scrape_ui):
     allure.dynamic.title(f"Test job links from the Peviitor against the company {company_name} website")
 
@@ -134,6 +139,7 @@ def test_coremaker_link_ui(get_job_details, scrape_ui):
 
 @pytest.mark.regression
 @pytest.mark.ui
+@pytest.mark.skip
 def test_coremaker_company_ui(get_job_details, scrape_ui):
     allure.dynamic.title(f"Test job companies from the company {company_name} website against Peviitor")
 

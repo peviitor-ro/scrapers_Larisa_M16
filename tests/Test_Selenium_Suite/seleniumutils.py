@@ -115,10 +115,12 @@ class TestUtils:
         
         allure.step(msg)
             
-        if len(actual_titles) < len(expected_titles) and msg != "An unknown error occured":
-            assert sorted(expected_titles) == sorted(actual_titles), f"There are more jobs on the scraper than peviitor: {expected_titles}"
+        if len(expected_titles) > len(actual_titles) and msg != "An unknown error occured":
+            msg = f"There are more jobs on the scraper than peviitor: {expected_titles}"
         else:
-            assert True
+            msg = f"There are less jobs on peviitor than on the company website: {actual_titles}"
+        
+        assert sorted(expected_titles) == sorted(actual_titles), msg
 
     # Check method for job titles from ui against scraper jobs
     def check_peviitor_job_titles(self, expected_titles, actual_titles, expected_elements):
@@ -141,10 +143,12 @@ class TestUtils:
             self.element_to_scroll = peviitor_expected_elements
             self.make_screenshot()
         
-        if len(actual_titles) >= len(expected_titles) and not self.get_missing_items(sorted(expected_titles), sorted(actual_titles)):
-            assert True
+        if len(expected_titles) > len(actual_titles) and not self.get_missing_items(sorted(expected_titles), sorted(actual_titles)):
+            msg = f"There are more jobs on peviitor than on the company website: {expected_titles}"
         else:
-            assert sorted(expected_titles) == sorted(actual_titles), f"There are less jobs on peviitor than on the company website: {actual_titles}"
+            msg = f"There are less jobs on peviitor than on the company website: {actual_titles}"
+            
+        assert sorted(expected_titles) == sorted(actual_titles), msg
 
         
     # Check method for job cities
@@ -245,10 +249,12 @@ class TestUtils:
 
         allure.step(msg)
         
-        if len(actual_links) < len(expected_links) and msg != "An unknown error occured":
-            assert sorted(expected_links) == sorted(actual_links), f"There are more job links on the scraper than peviitor: {expected_links}"
+        if len(expected_links) > len(actual_links) and msg != "An unknown error occured":
+            msg = f"There are more job links on the scraper than peviitor: {expected_links}"
         else:
-            assert True
+            msg = f"There are less job links on the scraper than peviitor: {actual_links}"
+        
+        assert sorted(expected_links) == sorted(actual_links), msg
 
     # Check method for job links
     def check_peviitor_job_links(self, expected_links, actual_links, job_titles, expected_elements):
@@ -259,8 +265,6 @@ class TestUtils:
         
         msg = "An unknown error occured"
         
-        # self.get_different_items(expected_links, actual_links, job_titles, expected_elements)
-        # missing_links = self.get_missing_items(expected_links, actual_links)
         peviitor_actual_links, peviitor_job_titles, peviitor_expected_elements = self.get_different_items(expected_links, actual_links, job_titles, expected_elements)
 
         if peviitor_actual_links:
@@ -273,10 +277,12 @@ class TestUtils:
             self.element_to_scroll = peviitor_expected_elements
             self.make_screenshot()
         
-        if len(actual_links) >= len(expected_links) and not self.get_missing_items(sorted(expected_links), sorted(actual_links)):
-            assert True
+        if len(expected_links) > len(actual_links) and not self.get_missing_items(sorted(expected_links), sorted(actual_links)):
+            msg = f"There are more job links on peviitor than on the company website: {expected_links}"
         else:
-            assert sorted(expected_links) == sorted(actual_links), f"There are less job links on peviitor than on the company website: {actual_links}"
+            msg = f"There are less job links on peviitor than on the company website: {actual_links}"
+        
+        assert sorted(expected_links) == sorted(actual_links), msg
             
     # Check number of jobs using the job links count
     def check_job_count(self, expected_links_count, actual_links_count):
