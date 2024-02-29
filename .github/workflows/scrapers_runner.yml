@@ -75,14 +75,14 @@ jobs:
         
     - name: Move Allure results to docs folder
       run: |
-        rm -rf docs/api_test_report.html
-        mv -f allure-report/index.html docs/api_test_report.html
+        rm -rf docs/test_report.html
+        mv -f allure-report/index.html docs/test_report.html
 
     - name: Commit and push Allure report
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add docs/api_test_report.html docs/allure-results
+        git add docs/test_report.html docs/allure-results
         git commit -m "Add Allure test report"
         git push origin main
         

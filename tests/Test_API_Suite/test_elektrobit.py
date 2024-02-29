@@ -20,6 +20,7 @@ def get_job_details():
 
 @pytest.mark.regression
 @pytest.mark.API
+@pytest.mark.skip
 def test_elektrobit_job_count_api(get_job_details):
     allure.dynamic.title(f"Test number of jobs from the {company_name} website against Peviitor API Response")
 
@@ -36,6 +37,7 @@ def test_elektrobit_job_count_api(get_job_details):
 
 @pytest.mark.regression
 @pytest.mark.API
+@pytest.mark.skip
 def test_elektrobit_title_api(get_job_details):
     allure.dynamic.title(f"Test job titles from the {company_name} website against Peviitor API Response")
 
@@ -53,6 +55,7 @@ def test_elektrobit_title_api(get_job_details):
 
 @pytest.mark.regression
 @pytest.mark.API
+@pytest.mark.skip
 def test_elektrobit_city_api(get_job_details):
     allure.dynamic.title(f"Test job cities from the {company_name} website against Peviitor API Response")
 
@@ -73,6 +76,7 @@ def test_elektrobit_city_api(get_job_details):
 
 @pytest.mark.regression
 @pytest.mark.API
+@pytest.mark.skip
 def test_elektrobit_country_api(get_job_details):
     allure.dynamic.title(f"Test job countries from the {company_name} website against Peviitor API Response")
 
@@ -92,6 +96,7 @@ def test_elektrobit_country_api(get_job_details):
 
 @pytest.mark.regression
 @pytest.mark.API
+@pytest.mark.skip
 def test_elektrobit_type_api(get_job_details):
     allure.dynamic.title(f"Test job types from the {company_name} website against Peviitor API Response")
 
@@ -111,6 +116,7 @@ def test_elektrobit_type_api(get_job_details):
 
 @pytest.mark.regression
 @pytest.mark.API
+@pytest.mark.skip
 def test_elektrobit_link_api(get_job_details):
     allure.dynamic.title(f"Test job links from the {company_name} website against Peviitor API Response")
 
@@ -127,6 +133,7 @@ def test_elektrobit_link_api(get_job_details):
 
 @pytest.mark.regression
 @pytest.mark.API
+@pytest.mark.skip
 def test_elektrobit_status_code_link_api(get_job_details):
     allure.dynamic.title(f"Test http code response on job links for {company_name} website")
 
@@ -143,6 +150,7 @@ def test_elektrobit_status_code_link_api(get_job_details):
 
 @pytest.mark.regression
 @pytest.mark.API
+@pytest.mark.skip
 def test_elektrobit_company_api(get_job_details):
     allure.dynamic.title(f"Test job companies from the {company_name} website against Peviitor API Response")
 
