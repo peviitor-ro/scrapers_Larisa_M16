@@ -5,14 +5,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
 import pytest
 
-# Set the location and name of the HTML report
-def pytest_configure(config):
-    config.option.htmlpath = '.\\Reports\\report_selenium.html'
-
-# Set the HTML Report title Name
-def pytest_html_report_title(report):
-    report.title = "Full Selenium Test Run"
-
 @pytest.fixture(scope="module")
 def driver():
     # Set up the service object
