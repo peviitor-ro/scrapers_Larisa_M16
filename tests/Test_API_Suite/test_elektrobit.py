@@ -31,8 +31,8 @@ def test_elektrobit_job_count_api(get_job_details):
         job_links_peviitor = len(peviitor_jobs_data[3])
 
     with allure.step("Step 3: Compare number of job links from scraper response against Peviitor API Response"):
-        allure.attach(f"Expected Results: {job_links_scraper}", name="Expected Results")
-        allure.attach(f"Actual Results: {job_links_peviitor}", name="Actual Results")
+        allure.attach(f"Scraper Expected Results: {job_links_scraper}", name="Expected Results")
+        allure.attach(f"Peviitor Actual Results: {job_links_peviitor}", name="Actual Results")
         TestUtils().check_job_count(job_links_scraper, job_links_peviitor)
 
 @pytest.mark.regression
@@ -49,8 +49,8 @@ def test_elektrobit_title_api(get_job_details):
         job_titles_peviitor = sorted(peviitor_jobs_data[0])
 
     with allure.step("Step 3: Compare job titles from scraper response against Peviitor API Response"):
-        allure.attach(f"Expected Results: {job_titles_scraper}", name="Expected Results")
-        allure.attach(f"Actual Results: {job_titles_peviitor}", name="Actual Results")
+        allure.attach(f"Scraper Expected Results: {job_titles_scraper}", name="Expected Results")
+        allure.attach(f"Peviitor Actual Results: {job_titles_peviitor}", name="Actual Results")
         TestUtils().check_job_titles(job_titles_scraper, job_titles_peviitor)
 
 @pytest.mark.regression
@@ -69,8 +69,8 @@ def test_elektrobit_city_api(get_job_details):
         job_titles_peviitor = peviitor_jobs_data[0]
 
     with allure.step("Step 3: Compare job cities from scraper response against Peviitor API Response"):
-        allure.attach(f"Expected Results: {job_cities_scraper}", name="Expected Results")
-        allure.attach(f"Actual Results: {job_cities_peviitor}", name="Actual Results")
+        allure.attach(f"Scraper Expected Results: {job_cities_scraper}", name="Expected Results")
+        allure.attach(f"Peviitor Actual Results: {job_cities_peviitor}", name="Actual Results")
         TestUtils().check_job_cities(job_cities_scraper, job_cities_peviitor, job_titles_scraper, job_titles_peviitor)
 
 
@@ -90,8 +90,8 @@ def test_elektrobit_country_api(get_job_details):
         job_titles_peviitor = peviitor_jobs_data[0]
 
     with allure.step("Step 3: Compare job countries from scraper response against Peviitor API Response"):
-        allure.attach(f"Expected Results: {job_countries_scraper}", name="Expected Results")
-        allure.attach(f"Actual Results: {job_countries_peviitor}", name="Actual Results")
+        allure.attach(f"Scraper Expected Results: {job_countries_scraper}", name="Expected Results")
+        allure.attach(f"Peviitor Actual Results: {job_countries_peviitor}", name="Actual Results")
         TestUtils().check_job_countries(job_countries_scraper, job_countries_peviitor, job_titles_scraper, job_titles_peviitor)
 
 @pytest.mark.regression
@@ -110,8 +110,8 @@ def test_elektrobit_type_api(get_job_details):
         job_titles_peviitor = peviitor_jobs_data[0]
 
     with allure.step("Step 3: Compare job types from scraper response against Peviitor API Response"):
-        allure.attach(f"Expected Results: {job_types_scraper}", name="Expected Results")
-        allure.attach(f"Actual Results: {job_types_peviitor}", name="Actual Results")
+        allure.attach(f"Scraper Expected Results: {job_types_scraper}", name="Expected Results")
+        allure.attach(f"Peviitor Actual Results: {job_types_peviitor}", name="Actual Results")
         TestUtils().check_job_types(job_types_scraper, job_types_peviitor, job_titles_scraper, job_titles_peviitor)
 
 @pytest.mark.regression
@@ -127,8 +127,8 @@ def test_elektrobit_link_api(get_job_details):
         job_links_peviitor = sorted(peviitor_jobs_data[3])
 
     with allure.step("Step 3: Compare job links from scraper response against Peviitor API Response"):
-        allure.attach(f"Expected Results: {job_links_scraper}", name="Expected Results")
-        allure.attach(f"Actual Results: {job_links_peviitor}", name="Actual Results")
+        allure.attach(f"Scraper Expected Results: {job_links_scraper}", name="Expected Results")
+        allure.attach(f"Peviitor Actual Results: {job_links_peviitor}", name="Actual Results")
         TestUtils().check_job_links(job_links_scraper, job_links_peviitor)
 
 @pytest.mark.regression
