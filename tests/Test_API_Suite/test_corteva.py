@@ -143,6 +143,20 @@ def test_corteva_status_code_link_api(get_job_details):
 
 @pytest.mark.regression
 @pytest.mark.API
+def test_corteva_format_type_api(get_job_details):
+    allure.dynamic.title(f"Test job types formats from the {company_name} website against requirements job type formats")
+
+    scraped_jobs_data = get_job_details[0]
+    with allure.step("Step 1: Get job types and titles from the scraper"):
+        job_types_scraper = set(scraped_jobs_data[4])
+
+    with allure.step("Step 2: Compare job types formats from scraper response against requirements job type formats"):
+        allure.attach(f"Expected Results: ['hybrid', 'remote', 'on-site']", name="Expected Results")
+        allure.attach(f"Scraper Actual Results: {job_types_scraper}", name="Actual Results")
+        TestUtils().check_job_format_types(job_types_scraper)
+
+@pytest.mark.regression
+@pytest.mark.API
 def test_corteva_company_api(get_job_details):
     allure.dynamic.title(f"Test job companies from the {company_name} website against Peviitor API Response")
 
