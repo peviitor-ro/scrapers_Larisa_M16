@@ -70,7 +70,7 @@ def scraper():
                     country='România',
                     county=[get_county(city_l) for city_l in city_name if city_l not in special_c],
                     city=[city_l for city_l in city_name if city_l not in special_c],
-                    remote='onsite',
+                    remote='on-site',
                 ).to_dict())
         except:
             continue

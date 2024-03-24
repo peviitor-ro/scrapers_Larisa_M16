@@ -49,7 +49,7 @@ def scraper():
                 company='Yopeso',
                 country=country_.replace("Romania", "Romania"),
                 county=get_county(location),
-                city=location,
+                city=location.replace("Cluj Napoca", "Cluj-Napoca"),
                 remote=get_job_type(new_job_type),
             ).to_dict())
 

@@ -12,7 +12,8 @@ exclude = ['__init__.py',
            '__create_scraper.py',
            "__main_RunnerFile.py",
            'bandainamco_scraper.py',
-           'coremaker_scraper.py'
+           'coremaker_scraper.py',
+           'cgsromania_scraper.py'
 
            ]
 
