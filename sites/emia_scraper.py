@@ -17,6 +17,9 @@ from sites.__utils.req_bs4_shorts import GetStaticSoup
 from sites.__utils.items_struct import Item
 from sites.__utils.peviitor_update import UpdateAPI
 
+def filter_job_titles(job_titles):
+    return " ".join([title for title in job_titles.split(" ") if title != ''])
+
 def scraper():
     '''
     ... scrape data from emia scraper.
@@ -28,7 +31,7 @@ def scraper():
             
         # get jobs items from response
         job_list.append(Item(
-            job_title=job.find('h5', attrs={'class':'h5'}).text,
+            job_title=filter_job_titles(job.find('h5', attrs={'class':'h5'}).text),
             job_link=job.find('a', attrs={'class':'card-job top-only'})['href'],
             company='Emia',
             country='Romania',
