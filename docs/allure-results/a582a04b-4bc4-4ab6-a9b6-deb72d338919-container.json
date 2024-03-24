@@ -1,0 +1,1 @@
+{"uuid": "edded430-8b8b-4f12-8331-0bfae63dd022", "children": ["db57e972-5780-4eb7-a72c-39949b4f0bf5", "cf97de83-100d-489d-a83e-6779438a3dc0"], "befores": [{"name": "get_job_details", "status": "passed", "start": 1710998147390, "stop": 1710998149930}], "start": 1710998147390, "stop": 1710998151569}
