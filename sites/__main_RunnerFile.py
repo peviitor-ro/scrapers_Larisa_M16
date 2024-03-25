@@ -13,7 +13,9 @@ exclude = ['__init__.py',
            "__main_RunnerFile.py",
            'bandainamco_scraper.py',
            'coremaker_scraper.py',
-           'cgsromania_scraper.py'
+           'cgsromania_scraper.py',
+           '000.py'
+           
 
            ]
 
