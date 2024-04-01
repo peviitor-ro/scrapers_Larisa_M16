@@ -6,8 +6,6 @@ import allure
 class TestUtils:
     
     def __init__(self, company_name):
-        # Element to scroll if an error occours
-        self.element_to_scroll = None
         self.company_name = company_name
 
     def scrape_jobs(self, scraper_data):
@@ -73,13 +71,6 @@ class TestUtils:
     
     def close_browser(self):
         self.browser.close_browser()  # Close the browser after each test
-        
-    def make_screenshot(self):
-        # Use execute_script to scroll the element into view
-        if self.element_to_scroll:
-
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", self.element_to_scroll[0])
-            allure.attach(self.driver.get_screenshot_as_png(), name=f"{self.company_name}_title_ui", attachment_type=allure.attachment_type.PNG)
 
     # Function to interact with the browser and get job information.
     def get_jobs_selenium(self):
@@ -138,11 +129,6 @@ class TestUtils:
         
         allure.step(msg)
         
-        # If the data does not match make screenshot where bugs
-        if sorted(expected_titles) != sorted(actual_titles):
-            self.element_to_scroll = peviitor_expected_elements
-            self.make_screenshot()
-        
         if len(expected_titles) > len(actual_titles) and not self.get_missing_items(sorted(expected_titles), sorted(actual_titles)):
             msg = f"There are more jobs on peviitor than on the company website: {expected_titles}"
         else:
@@ -186,11 +172,6 @@ class TestUtils:
     #         msg = f"Peviitor is missing job cities for the following job titles: {peviitor_job_titles}"
             
     #     allure.step(msg)
-        
-    #     # # If the data does not match make screenshot where bugs
-    #     if sorted(expected_cities) != sorted(actual_cities):
-    #         self.element_to_scroll = peviitor_expected_elements
-    #         self.make_screenshot()
             
     #     assert sorted(expected_cities) == sorted(actual_cities), msg
 
@@ -225,11 +206,6 @@ class TestUtils:
     #     peviitor_actual_cities, peviitor_job_titles, peviitor_expected_elements = self.get_different_items(actual_types, expected_types, job_titles_peviitor, expected_elements)
     #     if peviitor_actual_cities:
     #         msg = f"Peviitor is having extra job types for the following titles: {peviitor_job_titles}"
-        
-    #     # # If the data does not match make screenshot where bugs
-    #     if sorted(expected_types) != sorted(actual_types):
-    #         self.element_to_scroll = peviitor_expected_elements
-    #         self.make_screenshot()
         
     #     allure.step(msg)
     #     assert sorted(expected_types) == sorted(actual_types), msg
@@ -271,11 +247,6 @@ class TestUtils:
             msg = f"Peviitor is having extra job links: {peviitor_actual_links}"
 
         allure.step(msg)
-        
-        # If the data does not match make screenshot where bugs
-        if sorted(expected_links) != sorted(actual_links):
-            self.element_to_scroll = peviitor_expected_elements
-            self.make_screenshot()
         
         if len(expected_links) > len(actual_links) and not self.get_missing_items(sorted(expected_links), sorted(actual_links)):
             msg = f"There are more job links on peviitor than on the company website: {expected_links}"
