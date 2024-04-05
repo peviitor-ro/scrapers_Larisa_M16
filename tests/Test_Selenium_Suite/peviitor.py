@@ -5,20 +5,21 @@ from selenium.common.exceptions import StaleElementReferenceException, TimeoutEx
 
 class Peviitor:
     
-    search_input_css = "div.input-container > input"
-    search_job_css = "button[class='btn-yellow btn']"
-    job_count_class = "bold"
-    load_jobs_css = "section.load-more > button"
-    job_titles_class = "position"
-    job_company_css = "p[class='company']"
+    search_input_css = 'input[placeholder="Ce doriți să lucrați?"]'
+    search_job_css = "button[type='submit']"
+    job_count_class = "total-rezultate"
+    load_jobs_css = "button[class='load-more']"
+    job_titles_class = "job-title"
+    job_company_css = "p[class='company-name']"
     job_location_class = "location"
-    job_url_css = "div.button-position > a"
+    job_url_class = "btn"
 
-    def __init__(self, expected_wait):
+    def __init__(self, expected_wait, driver):
         """
         Setting up the expected wait which will wait for all elements to load
         """
         self.expected_wait = expected_wait
+        self.driver = driver
         
     def search_company(self, company):
         """
@@ -30,13 +31,15 @@ class Peviitor:
         """
         Click on the search button
         """
-        self.expected_wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR , self.search_job_css))).click()
+        # self.expected_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR , self.search_job_css))).click()
+        click_element = self.expected_wait.until(EC.presence_of_element_located((By.CSS_SELECTOR , self.search_job_css)))
+        self.driver.execute_script("arguments[0].click();", click_element)
     
     def get_jobs_number(self):
         """
         Get the number of jobs of the company
         """
-        return self.expected_wait.until(EC.visibility_of_element_located((By.CLASS_NAME , self.job_count_class))).text
+        return int(self.expected_wait.until(EC.visibility_of_element_located((By.CLASS_NAME , self.job_count_class))).text.split()[0])
 
     def load_all_jobs(self):
         """
@@ -74,5 +77,5 @@ class Peviitor:
         """
         Get all the job urls on the page
         """
-        job_urls = self.expected_wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR , self.job_url_css)))
+        job_urls = self.expected_wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME , self.job_url_class)))
         return [job_url.get_attribute("href") for job_url in job_urls], job_urls

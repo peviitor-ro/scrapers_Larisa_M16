@@ -67,7 +67,7 @@ class TestUtils:
         self.browser = webbrowser(driver, expected_wait)
         self.browser.open_webpage()  # Open the webpage before each test
         
-        self.peviitor = Peviitor(expected_wait)
+        self.peviitor = Peviitor(expected_wait, driver)
     
     def close_browser(self):
         self.browser.close_browser()  # Close the browser after each test
