@@ -77,7 +77,7 @@ class TestUtils:
     # Check if a string has special characters
     def check_special_characters(self, string):
         # Regular expression to match any special characters
-        regex = re.compile(r'[@_!$%^&*()<>?|}{~:]')
+        regex = re.compile(r'[@_!$%^&*<>?|}{~:]')
 
         # Search for special characters in the string
         if regex.search(string) is not None:
