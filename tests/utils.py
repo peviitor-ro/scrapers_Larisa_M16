@@ -1,6 +1,7 @@
 from unidecode import unidecode
 import requests
 import allure
+import re
 
 class TestUtils:
 
@@ -72,6 +73,27 @@ class TestUtils:
             response_data = TestUtils._get_request(params)
 
         return all_future_title, all_future_job_city, all_future_job_country, all_future_job_link, all_future_job_companies, all_future_job_types
+
+    # Check if a string has special characters
+    def check_special_characters(self, string):
+        # Regular expression to match any special characters
+        regex = re.compile(r'[@_!$%^&*()<>?|}{~:]')
+
+        # Search for special characters in the string
+        if regex.search(string) is not None:
+            return string
+        else:
+            return False
+
+    # return the non special characters for a job title
+    def return_without_special_characters(self, string):
+        # Regular expression to match any non-letter, non-digit, non-exception characters
+        regex = re.compile(r'[^a-zA-Z0-9\s#/\\(),.]')
+
+        # Replace special characters with an empty string
+        result = re.sub(regex, '', string)
+
+        return result
     
     # Remove diacritics from input recursive
     def remove_diacritics(self, item):
@@ -122,6 +144,28 @@ class TestUtils:
         
         allure.step(msg)
         assert expected_titles == actual_titles, msg
+
+    # Check method for job titles special characters
+    def check_special_job_titles(self, expected_titles):
+        # return if any job title contains special characters
+        special_job_titles = [self.check_special_characters(job_title) for job_title in expected_titles if self.check_special_characters(job_title) != False]
+        
+        msg = "Unknown error occured"
+
+        if special_job_titles:
+            msg = f"Peviitor is having job titles with special characters: {special_job_titles}"
+
+        if not expected_titles and not special_job_titles:
+            msg = f"Scraper is not grabbing any job titles"
+            allure.step(msg)
+            raise AssertionError(msg)
+        
+        # Search if there are special job titles missing from expected_titles
+        filtered_special_job_titles = [self.return_without_special_characters(job_title) for job_title in expected_titles]
+        allure.attach(f"Scraper Expected Results: {filtered_special_job_titles}", name="Actual Results")
+        
+        allure.step(msg)
+        assert special_job_titles == [], msg
         
     # Check method for job cities
     def check_job_cities(self, expected_cities, actual_cities, job_titles_scraper, api_job_titles):

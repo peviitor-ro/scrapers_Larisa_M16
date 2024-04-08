@@ -56,6 +56,20 @@ def test_coremaker_title_api(get_job_details):
 @pytest.mark.regression
 @pytest.mark.API
 @pytest.mark.skip
+def test_coremaker_special_title_api(get_job_details):
+    allure.dynamic.title(f"Test if job titles from the {company_name} website contains special characters")
+
+    scraped_jobs_data, peviitor_jobs_data = get_job_details
+    with allure.step("Step 1: Get job titles from the scraper"):
+        job_titles_scraper = sorted(scraped_jobs_data[0])
+
+    with allure.step("Step 2: Compare job titles from scraper response against the non special character variant"):
+        allure.attach(f"Scraper Actual Results: {job_titles_scraper}", name="Expected Results")
+        TestUtils().check_special_job_titles(job_titles_scraper)
+
+@pytest.mark.regression
+@pytest.mark.API
+@pytest.mark.skip
 def test_coremaker_city_api(get_job_details):
     allure.dynamic.title(f"Test job cities from the {company_name} website against Peviitor API Response")
 

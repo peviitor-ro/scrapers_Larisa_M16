@@ -51,6 +51,20 @@ def test_jumbo_title_api(get_job_details):
         allure.attach(f"Peviitor Actual Results: {job_titles_peviitor}", name="Actual Results")
         TestUtils().check_job_titles(job_titles_scraper, job_titles_peviitor)
 
+
+@pytest.mark.regression
+@pytest.mark.API
+def test_jumbo_special_title_api(get_job_details):
+    allure.dynamic.title(f"Test if job titles from the {company_name} website contains special characters")
+
+    scraped_jobs_data, peviitor_jobs_data = get_job_details
+    with allure.step("Step 1: Get job titles from the scraper"):
+        job_titles_scraper = sorted(scraped_jobs_data[0])
+
+    with allure.step("Step 2: Compare job titles from scraper response against the non special character variant"):
+        allure.attach(f"Scraper Actual Results: {job_titles_scraper}", name="Expected Results")
+        TestUtils().check_special_job_titles(job_titles_scraper)
+
 @pytest.mark.regression
 @pytest.mark.API
 def test_jumbo_city_api(get_job_details):
