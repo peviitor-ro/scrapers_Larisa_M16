@@ -26,9 +26,12 @@ class TestUtils:
         """
         params = {
             'company': company_name,
-            'country': country,
             'page': page,
+            'page_size': '10000',
+            'order': 'all',
+            'search': '',
         }
+        
         return params
     
     @staticmethod
@@ -36,9 +39,14 @@ class TestUtils:
         """
         Send a get request to get the jobs from future
         """
-        response = requests.get('https://api.peviitor.ro/v3/search/', params=params).json()
-        if 'response' in response and 'docs' in response['response']:
-            response_data = response['response']['docs']
+        headers = {
+            'accept': 'application/json, text/plain, */*',
+            'authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzODAwMzA0LCJpYXQiOjE3MTI5MzYzMDQsImp0aSI6IjAwNDg5MWFjOWVjMTRiNTA4MTAyNTlhMjQyMThlNjk5IiwidXNlcl9pZCI6OX0.lKNW4nPjqmqd5UcXIZsHeeXSGaTNlo02kObq0kEVXvk',
+        }
+        
+        response = requests.get('https://api.laurentiumarian.ro/jobs/get/', params=params, headers=headers).json()
+        if 'results' in response:
+            response_data = response['results']
             return response_data
         else:
             return []
