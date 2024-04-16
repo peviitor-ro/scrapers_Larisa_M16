@@ -61,11 +61,11 @@ class TestUtils:
         params = TestUtils._set_params(company_name, page, country)
         response_data = TestUtils._get_request(params)
         while response_data:
-            all_future_title.extend([title['job_title'][0] for title in response_data])
+            all_future_title.extend([title['job_title'] for title in response_data])
             all_future_job_country.extend([self.remove_diacritics(country['country'][0]) for country in response_data])
-            all_future_job_link.extend([job_link['job_link'][0] for job_link in response_data])
-            all_future_job_companies.extend([company['company'][0] for company in response_data])
-            all_future_job_types.extend([job_link['remote'][0] for job_link in response_data])
+            all_future_job_link.extend([job_link['job_link'] for job_link in response_data])
+            all_future_job_companies.extend([company['company'] for company in response_data])
+            all_future_job_types.extend([job_link['remote'] for job_link in response_data])
             
             # Check if the cities list is a nested list
             city_list = [self.remove_diacritics(city['city']) for city in response_data]
@@ -231,12 +231,15 @@ class TestUtils:
 
     # Check method for job types
     def check_job_types(self, expected_types, actual_types, job_titles_scraper, api_job_titles):
+        
         if not expected_types:
             msg = f"Scraper is not grabbing any job types"
             allure.step(msg)
             raise AssertionError(msg)
         
         msg = "An unknown error occured"
+        
+        expected_types, actual_types, job_titles_scraper, api_job_titles = sorted(expected_types), sorted(actual_types), sorted(job_titles_scraper), sorted(api_job_titles)
         
         # Check job types from scraper against the peviitor api
         scraper_actual_types, scraper_job_titles = self.get_different_items(expected_types, actual_types, job_titles_scraper)
