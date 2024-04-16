@@ -177,6 +177,7 @@ class TestUtils:
         
     # Check method for job cities
     def check_job_cities(self, expected_cities, actual_cities, job_titles_scraper, api_job_titles):
+        expected_cities, actual_cities, job_titles_scraper, api_job_titles = sorted(expected_cities), sorted(actual_cities), sorted(job_titles_scraper), sorted(api_job_titles)
         if not expected_cities:
             msg = f"Scraper is not grabbing any job cities"
             allure.step(msg)
