@@ -23,7 +23,7 @@ class UpdateAPI:
 
     def __init__(self):
         self.email = os.environ.get('EMAIL')
-        self.logo_url = 'https://api.peviitor.ro/v1/logo/add/'
+        # self.logo_url = 'https://api.peviitor.ro/v1/logo/add/'
 
         self.logo_header = {
             'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ class UpdateAPI:
         # don't delete this lines if you want to see the graph on scraper's page
         file = company_name.lower() + '.py'
         data = {'data': len(data_jobs)}
-        dataset_url = f'https://dev.laurentiumarian.ro/dataset/JobsScrapers/{file}/'
+        dataset_url = f'https://dev.laurentiumarian.ro/dataset/scrapers_Larisa_M16/{file}/'
         requests.post(dataset_url, json=data)
         ########################################################
     
@@ -72,7 +72,8 @@ class UpdateAPI:
         ... update logo on peviitor.ro
         '''
 
-        data = json.dumps([{"id": id_company, "logo": logo_link}])
-        response = requests.post(self.logo_url, headers=self.logo_header, data=data)
+        # data = json.dumps([{"id": id_company, "logo": logo_link}])
+        # response = requests.post(self.logo_url, headers=self.logo_header, data=data)
+        pass
 
         #  print(f'Logo update ---> succesfuly {response}')
