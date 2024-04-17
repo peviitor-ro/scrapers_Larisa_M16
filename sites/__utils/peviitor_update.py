@@ -39,23 +39,16 @@ class UpdateAPI:
         'Content-Type': 'application/json'
         }
 
-        self.access_token = requests.request("POST", "https://api.laurentiumarian.ro/get_token", headers=post_header, data=payload).json()['access']
+        self.access_token = requests.request("POST", "https://api.peviitor.ro/get_token", headers=post_header, data=payload).json()['access']
 
-    def add_jobs(self, company_name, data_jobs):
+    def add_jobs(self, data_jobs):
 
         post_header = {
         'Authorization': f'Bearer {self.access_token}',
         'Content-Type': 'application/json'
         }
 
-        requests.request("POST", "https://api.laurentiumarian.ro/jobs/add/", headers=post_header, data=json.dumps(data_jobs))
-        
-        # don't delete this lines if you want to see the graph on scraper's page
-        file = company_name.lower() + '.py'
-        data = {'data': len(data_jobs)}
-        dataset_url = f'https://dev.laurentiumarian.ro/dataset/scrapers_Larisa_M16/{file}/'
-        requests.post(dataset_url, json=data)
-        ########################################################
+        requests.request("POST", "https://api.peviitor.ro/jobs/add/", headers=post_header, data=json.dumps(data_jobs))
     
 
     def update_jobs(self, company_name: str, data_jobs: list):
@@ -65,7 +58,7 @@ class UpdateAPI:
         '''
         self.get_token()
         time.sleep(0.2)
-        self.add_jobs(company_name, data_jobs)
+        self.add_jobs(data_jobs)
 
     def update_logo(self, id_company: str, logo_link: str):
         '''
