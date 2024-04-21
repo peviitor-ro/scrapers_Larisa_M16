@@ -14,7 +14,8 @@ def get_job_details():
     testutils = TestUtils()
     scraped_jobs_data = testutils.scrape_jobs(scraper_data)
     peviitor_jobs_data = testutils.scrape_peviitor(company_name, 'România')
-    return scraped_jobs_data, peviitor_jobs_data
+    yield scraped_jobs_data, peviitor_jobs_data
+    testutils.send_to_prod(company_name)
     
 # Test functions
 

@@ -1,4 +1,5 @@
 from unidecode import unidecode
+from tests.push_to_prod import Pushprod
 import requests
 import allure
 import re
@@ -17,6 +18,9 @@ class TestUtils:
         # Check if the cities list is a nested list
         job_city = [self.remove_diacritics(city['city']) if isinstance(city['city'], list) else [self.remove_diacritics(city['city'])] for city in scraper_data]
             
+        # Filtered jobs that we will push to prod
+        self.filtered_job_titles, self.filtered_job_cities, self.filtered_job_links, self.filtered_job_types, self.filtered_job_countries = title, job_city, job_link, job_type, job_country
+        
         return title, job_city, job_country, job_link, job_type
 
     @staticmethod
@@ -162,6 +166,10 @@ class TestUtils:
 
         if special_job_titles:
             msg = f"Peviitor is having job titles with special characters: {special_job_titles}"
+            for special_job_title in special_job_titles:
+                for job_title_index, job_title in enumerate(self.filtered_job_titles):
+                    if special_job_title == job_title:
+                        self.filtered_job_titles[job_title_index] = 'REMOVED_JOB'
 
         if not expected_titles and not special_job_titles:
             msg = f"Scraper is not grabbing any job titles"
@@ -267,6 +275,9 @@ class TestUtils:
         for job_type in job_types_scraper:
             if job_type not in expected_job_type_formats:
                 msg = f"One of the job format types is not within the expected job type formats"
+                for scraper_job_type_index, scraper_job_type in enumerate(self.filtered_job_types):
+                    if job_type == scraper_job_type:
+                        self.filtered_job_titles[scraper_job_type_index] = 'REMOVED_JOB'
                 raise AssertionError(msg)
         
         assert job_types_scraper, msg
@@ -324,6 +335,10 @@ class TestUtils:
         if not http_codes:
             msg = f"Some job links from scraper do not return 200 http status code: {http_codes}"
             allure.step(msg)
+            # scraper_http_codes = TestUtils().get_http_code(self.filtered_job_links)
+            # for job_link_http_index, http_code in enumerate(scraper_http_codes):
+            #     if http_code != "200":
+            #         self.filtered_job_links[job_link_http_index] = 'REMOVED_JOB'
         
         if not status_codes_expected_result and not status_codes_actual_result:
             msg = f"Scraper is not grabbing any job links"
@@ -354,4 +369,11 @@ class TestUtils:
                 raise AssertionError(msg)
         
         assert expected_company_name == actual_company_name, "An unknown error occured in the API job company name test case"
+    
+    def send_to_prod(self, company_name):
+        pushprod = Pushprod(company_name)
+        pushprod.add_job_details(self.filtered_job_titles, self.filtered_job_cities, self.filtered_job_links, self.filtered_job_types, self.filtered_job_countries)
+        pushprod.set_headers()
+        pushprod.push_to_prod()
+        # print(self.filtered_job_titles, self.filtered_job_cities, self.filtered_job_links, self.filtered_job_types, self.filtered_job_countries)
         
