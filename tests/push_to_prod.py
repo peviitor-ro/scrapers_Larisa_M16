@@ -36,6 +36,5 @@ class Pushprod:
     
     def push_to_prod(self):
         requests.request("POST", "https://api.laurentiumarian.ro/jobs/publish/", headers=self.deploy_headers, data=json.dumps(self.payload)).json()
-        print(self.payload)
 
     

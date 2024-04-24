@@ -1,5 +1,6 @@
 from unidecode import unidecode
 from tests.push_to_prod import Pushprod
+from sites.__utils.peviitor_update import UpdateAPI
 import requests
 import allure
 import re
@@ -19,7 +20,7 @@ class TestUtils:
         job_city = [self.remove_diacritics(city['city']) if isinstance(city['city'], list) else [self.remove_diacritics(city['city'])] for city in scraper_data]
             
         # Filtered jobs that we will push to prod
-        self.filtered_job_titles, self.filtered_job_cities, self.filtered_job_links, self.filtered_job_types, self.filtered_job_countries = title, job_city, job_link, job_type, job_country
+        self.filtered_job_titles, self.filtered_job_cities, self.filtered_job_links, self.filtered_job_types, self.filtered_job_countries = title[:], job_city[:], job_link[:], job_type[:], job_country[:]
         
         return title, job_city, job_country, job_link, job_type
 
@@ -43,9 +44,12 @@ class TestUtils:
         """
         Send a get request to get the jobs from future
         """
+        updateapi = UpdateAPI()
+        updateapi.get_token()
+        
         headers = {
             'accept': 'application/json, text/plain, */*',
-            'authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzODAwMzA0LCJpYXQiOjE3MTI5MzYzMDQsImp0aSI6IjAwNDg5MWFjOWVjMTRiNTA4MTAyNTlhMjQyMThlNjk5IiwidXNlcl9pZCI6OX0.lKNW4nPjqmqd5UcXIZsHeeXSGaTNlo02kObq0kEVXvk',
+            'authorization': f'Bearer {updateapi.access_token}',
         }
         
         response = requests.get('https://api.laurentiumarian.ro/jobs/get/', params=params, headers=headers).json()
@@ -335,10 +339,9 @@ class TestUtils:
         if not http_codes:
             msg = f"Some job links from scraper do not return 200 http status code: {http_codes}"
             allure.step(msg)
-            # scraper_http_codes = TestUtils().get_http_code(self.filtered_job_links)
-            # for job_link_http_index, http_code in enumerate(scraper_http_codes):
-            #     if http_code != "200":
-            #         self.filtered_job_links[job_link_http_index] = 'REMOVED_JOB'
+            for job_link_http_index, http_code in enumerate(status_codes_actual_result):
+                if http_code != 200:
+                    self.filtered_job_links[job_link_http_index] = 'REMOVED_JOB'
         
         if not status_codes_expected_result and not status_codes_actual_result:
             msg = f"Scraper is not grabbing any job links"
