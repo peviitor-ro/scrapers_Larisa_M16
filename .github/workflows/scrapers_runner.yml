@@ -45,6 +45,8 @@ jobs:
         chmod +x allure/allure-2.25.0/bin/allure
 
     - name: Run pytest with Allure reporting
+      env:
+        API_KEY: ${{ secrets.API_KEY }}
       continue-on-error: true
       run: |
         pytest tests/ --alluredir=docs/allure-results -n auto
