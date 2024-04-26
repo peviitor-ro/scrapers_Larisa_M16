@@ -22,7 +22,7 @@ class UpdateAPI:
     '''
 
     def __init__(self):
-        self.email = os.environ.get('CHEIE')
+        self.email = os.environ.get('API_KEY')
         # self.logo_url = 'https://api.peviitor.ro/v1/logo/add/'
 
         self.logo_header = {
