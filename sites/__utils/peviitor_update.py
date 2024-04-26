@@ -22,7 +22,7 @@ class UpdateAPI:
     '''
 
     def __init__(self):
-        self.email = os.environ.get('API_KEY')
+        self.email = os.environ.get('CHEIE')
         # self.logo_url = 'https://api.peviitor.ro/v1/logo/add/'
 
         self.logo_header = {
@@ -38,7 +38,6 @@ class UpdateAPI:
         post_header = {
         'Content-Type': 'application/json'
         }
-
         self.access_token = requests.request("POST", "https://api.peviitor.ro/v5/get_token/", headers=post_header, data=payload).json()['access']
 
     def add_jobs(self, data_jobs):
