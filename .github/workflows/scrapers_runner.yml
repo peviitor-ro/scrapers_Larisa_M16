@@ -49,7 +49,7 @@ jobs:
         API_KEY: ${{ secrets.API_KEY }}
       continue-on-error: true
       run: |
-        pytest tests/ --alluredir=docs/allure-results -n auto
+        pytest tests/ --alluredir=docs/allure-results
         
     - name: Keep previous run history
       continue-on-error: true
