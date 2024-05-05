@@ -19,6 +19,7 @@ class Pushprod:
                     "country": job_country,
                     "city": job_city,
                     "remote": job_type,
+                    "published": True,
                     "company_name": self.company_name
                 })
                 
