@@ -1,10 +1,10 @@
-from tests.utils import TestUtils
+from tests.api_utils.job_details_utils import JobDetails
 from sites.agilefreaks_scraper import scraper as agilefreaksScraper
 import pytest
 import allure
 
 company_name = 'agilefreaks'
-testutils = TestUtils()
+testutils = JobDetails()
 
 @pytest.fixture(scope="module")
 def get_job_details():

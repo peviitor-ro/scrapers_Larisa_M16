@@ -1,10 +1,10 @@
-from tests.utils import TestUtils
+from tests.api_utils.job_details_utils import JobDetails
 from sites.azets_scraper import scraper as azetsScraper
 import pytest
 import allure
 
 company_name = 'azets'
-testutils = TestUtils()
+testutils = JobDetails()
 
 @pytest.fixture(scope="module")
 def get_job_details():

@@ -1,10 +1,10 @@
-from tests.utils import TestUtils
+from tests.api_utils.job_details_utils import JobDetails
 from sites.elektrobit_scraper import scraper as elektrobitScraper
 import pytest
 import allure
 
 company_name = 'elektrobit'
-testutils = TestUtils()
+testutils = JobDetails()
 
 @pytest.fixture(scope="module")
 def get_job_details():
