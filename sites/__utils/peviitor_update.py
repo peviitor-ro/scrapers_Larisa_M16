@@ -24,10 +24,34 @@ class UpdateAPI:
     def __init__(self):
         self.email = os.environ.get('API_KEY')
         # self.logo_url = 'https://api.peviitor.ro/v1/logo/add/'
+        self.email = os.environ.get('API_KEY')
+        # self.logo_url = 'https://api.peviitor.ro/v1/logo/add/'
 
         self.logo_header = {
             'Content-Type': 'application/json',
         }
+        
+    def get_token(self):
+
+        payload = json.dumps({
+        "email": self.email
+        })
+        
+        post_header = {
+        'Content-Type': 'application/json'
+        }
+
+        self.access_token = requests.request("POST", "https://api.peviitor.ro/v5/get_token/", headers=post_header, data=payload).json()['access']
+
+    def add_jobs(self, data_jobs):
+
+        post_header = {
+        'Authorization': f'Bearer {self.access_token}',
+        'Content-Type': 'application/json'
+        }
+
+        print(json.dumps(data_jobs))
+        requests.request("POST", "https://api.peviitor.ro/v5/add/", headers=post_header, data=json.dumps(data_jobs))
         
     def get_token(self):
 
@@ -57,7 +81,9 @@ class UpdateAPI:
 
         '''
         self.get_token()
+        self.get_token()
         time.sleep(0.2)
+        self.add_jobs(data_jobs)
         self.add_jobs(data_jobs)
 
     def update_logo(self, id_company: str, logo_link: str):
