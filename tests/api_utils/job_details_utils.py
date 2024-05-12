@@ -1,5 +1,4 @@
-from unidecode import unidecode
-from tests.push_to_prod import Pushprod
+from tests.api_utils.push_to_prod import Pushprod
 from sites.__utils.peviitor_update import UpdateAPI
 from tests.api_utils.utils import TestUtils
 from tests.api_utils.job_titles_utils import TitleTestUtils
@@ -11,8 +10,6 @@ from tests.api_utils.job_company_utils import CompanyTestUtils
 from tests.api_utils.job_countries_utils import CountriesTestUtils
 
 import requests
-import allure
-import re
 
 class JobDetails(TestUtils):
     
@@ -114,9 +111,6 @@ class JobDetails(TestUtils):
         pushprod.set_headers()
         pushprod.push_to_prod()
         # print(self.filtered_job_titles, self.filtered_job_cities, self.filtered_job_links, self.filtered_job_types, self.filtered_job_countries)
-    
-    # ADD OBJ TO PARAMETERS IN CASES OF JOB REMOVAL
-    
     
     # Title Section
     def check_job_titles(self, expected_titles, actual_titles):

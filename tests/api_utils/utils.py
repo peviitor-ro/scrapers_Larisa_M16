@@ -1,8 +1,4 @@
 from unidecode import unidecode
-from tests.push_to_prod import Pushprod
-from sites.__utils.peviitor_update import UpdateAPI
-import requests
-import allure
 import re
 
 class TestUtils:
@@ -59,11 +55,3 @@ class TestUtils:
             dummy_actual_list.pop(0)
         
         return [], []
-    
-    def send_to_prod(self, company_name):
-        pushprod = Pushprod(company_name)
-        pushprod.add_job_details(self.filtered_job_titles, self.filtered_job_cities, self.filtered_job_links, self.filtered_job_types, self.filtered_job_countries)
-        pushprod.set_headers()
-        pushprod.push_to_prod()
-        # print(self.filtered_job_titles, self.filtered_job_cities, self.filtered_job_links, self.filtered_job_types, self.filtered_job_countries)
-        

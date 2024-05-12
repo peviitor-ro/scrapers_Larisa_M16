@@ -1,10 +1,6 @@
 from unidecode import unidecode
-from tests.push_to_prod import Pushprod
-from sites.__utils.peviitor_update import UpdateAPI
 from tests.api_utils.utils import TestUtils
-import requests
 import allure
-import re
 
 class CitiesTestUtils(TestUtils):
 
