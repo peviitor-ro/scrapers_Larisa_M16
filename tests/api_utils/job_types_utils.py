@@ -34,16 +34,16 @@ class TypeTestUtils:
         allure.step(msg)
         assert expected_types == actual_types, msg
     
-    def check_job_format_types(self, mainobj, job_types_scraper):
+    def check_job_format_types(self, job_types_scraper):
         msg = "An unknown error occured"
         expected_job_type_formats = ["hybrid", "remote", "on-site"]
         
         for job_type in job_types_scraper:
             if job_type not in expected_job_type_formats:
                 msg = f"One of the job format types is not within the expected job type formats"
-                for scraper_job_type_index, scraper_job_type in enumerate(mainobj.filtered_job_types):
-                    if job_type == scraper_job_type:
-                        mainobj.filtered_job_titles[scraper_job_type_index] = 'REMOVED_JOB'
+                # for scraper_job_type_index, scraper_job_type in enumerate(mainobj.filtered_job_types):
+                #     if job_type == scraper_job_type:
+                #         mainobj.filtered_job_titles[scraper_job_type_index] = 'REMOVED_JOB'
                 raise AssertionError(msg)
         
         assert job_types_scraper, msg

@@ -35,16 +35,16 @@ class LinksTestUtils(TestUtils):
         return [requests.get(link, headers=headers).status_code for link in job_links]
 
     # Check method for job links
-    def check_code_job_links(self, mainobj, status_codes_expected_result, status_codes_actual_result):
+    def check_code_job_links(self, status_codes_expected_result, status_codes_actual_result):
         http_codes = TestUtils().get_missing_items(status_codes_expected_result, status_codes_actual_result)
         msg = ""
 
         if not http_codes:
             msg = f"Some job links from scraper do not return 200 http status code: {http_codes}"
             allure.step(msg)
-            for job_link_http_index, http_code in enumerate(status_codes_actual_result):
-                if http_code != 200:
-                    mainobj.filtered_job_links[job_link_http_index] = 'REMOVED_JOB'
+            # for job_link_http_index, http_code in enumerate(status_codes_actual_result):
+            #     if http_code != 200:
+            #         mainobj.filtered_job_links[job_link_http_index] = 'REMOVED_JOB'
         
         if not status_codes_expected_result and not status_codes_actual_result:
             msg = f"Scraper is not grabbing any job links"

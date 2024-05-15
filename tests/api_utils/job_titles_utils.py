@@ -22,7 +22,7 @@ class TitleTestUtils(TestUtils):
         assert expected_titles == actual_titles, msg
 
     # Check method for job titles special characters
-    def check_special_job_titles(self, mainobj, expected_titles):
+    def check_special_job_titles(self, expected_titles):
         # return if any job title contains special characters
         special_job_titles = [TestUtils().check_special_characters(job_title) for job_title in expected_titles if TestUtils().check_special_characters(job_title) != False]
         
@@ -30,10 +30,10 @@ class TitleTestUtils(TestUtils):
 
         if special_job_titles:
             msg = f"Peviitor is having job titles with special characters: {special_job_titles}"
-            for special_job_title in special_job_titles:
-                for job_title_index, job_title in enumerate(mainobj.filtered_job_titles):
-                    if special_job_title == job_title:
-                        mainobj.filtered_job_titles[job_title_index] = 'REMOVED_JOB'
+            # for special_job_title in special_job_titles:
+            #     for job_title_index, job_title in enumerate(mainobj.filtered_job_titles):
+            #         if special_job_title == job_title:
+            #             mainobj.filtered_job_titles[job_title_index] = 'REMOVED_JOB'
 
         if not expected_titles and not special_job_titles:
             msg = f"Scraper is not grabbing any job titles"

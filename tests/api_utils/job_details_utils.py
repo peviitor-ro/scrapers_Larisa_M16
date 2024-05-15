@@ -117,7 +117,7 @@ class JobDetails(TestUtils):
         self.titleutils.check_job_titles(expected_titles, actual_titles)
         
     def check_special_job_titles(self, expected_titles):
-        self.titleutils.check_special_job_titles(self, expected_titles)
+        self.titleutils.check_special_job_titles(expected_titles)
     
     # Cities Section
     def check_job_cities(self, expected_cities, actual_cities, job_titles_scraper, api_job_titles):
@@ -131,14 +131,14 @@ class JobDetails(TestUtils):
         return LinksTestUtils().get_http_code(job_links)
         
     def check_code_job_links(self, status_codes_expected_result, status_codes_actual_result):
-        self.linkutils.check_code_job_links(self, status_codes_expected_result, status_codes_actual_result)
+        self.linkutils.check_code_job_links(status_codes_expected_result, status_codes_actual_result)
 
     # Type Section
     def check_job_types(self, expected_types, actual_types, job_titles_scraper, api_job_titles):
         self.typeutils.check_job_types(expected_types, actual_types, job_titles_scraper, api_job_titles)
     
     def check_job_format_types(self, job_types_scraper):
-        self.typeutils.check_job_format_types(self, job_types_scraper)
+        self.typeutils.check_job_format_types(job_types_scraper)
     
     # Count section
     def check_job_count(self, expected_links_count, actual_links_count):
