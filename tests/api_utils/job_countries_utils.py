@@ -4,7 +4,7 @@ import allure
 class CountriesTestUtils(TestUtils):
 
     # Check method for job countries
-    def check_job_countries(self, expected_countries, actual_countries, job_titles_scraper, api_job_titles):
+    def check_job_countries(self, mainobj, expected_countries, actual_countries, job_titles_scraper, api_job_titles):
         if not expected_countries:
             msg = f"Scraper is not grabbing any job countries"
             allure.step(msg)
@@ -17,6 +17,10 @@ class CountriesTestUtils(TestUtils):
 
         if scraper_actual_countries:
             msg = f"Peviitor is missing job countries for the following job titles: {scraper_job_titles}"
+            for scraper_job_country in scraper_actual_countries:
+                for validator_job_country_index, validator_job_country in enumerate(mainobj.filtered_job_countries):
+                    if scraper_job_country == validator_job_country:
+                        mainobj.filtered_job_countries[validator_job_country_index] = 'REMOVED_JOB'
             allure.step(msg)
             raise AssertionError(msg)
         else:

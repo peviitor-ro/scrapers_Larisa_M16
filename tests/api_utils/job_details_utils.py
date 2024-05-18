@@ -146,7 +146,7 @@ class JobDetails(TestUtils):
     
     # Countries section
     def check_job_countries(self, expected_countries, actual_countries, job_titles_scraper, api_job_titles):
-        self.countryutils.check_job_countries(expected_countries, actual_countries, job_titles_scraper, api_job_titles)
+        self.countryutils.check_job_countries(self, expected_countries, actual_countries, job_titles_scraper, api_job_titles)
     
     # Company section
     def check_job_company(self, expected_company_name, actual_company_name):
