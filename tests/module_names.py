@@ -1,7 +1,7 @@
 module_names = [
-            'Bertrandtgroup'
+            'Bertrandtgroup',
             'Catena',
             'Cargus',
-            'Affidearomania'
+            'Affidearomania',
             # Add more module names as needed
             ]

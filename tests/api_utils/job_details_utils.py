@@ -6,6 +6,8 @@ from tests.api_utils.job_cities_utils import CitiesTestUtils
 from tests.api_utils.job_links_utils import LinksTestUtils
 from tests.api_utils.job_types_utils import TypeTestUtils
 from tests.api_utils.job_countries_utils import CountriesTestUtils
+import allure
+import time
 
 import requests
 
@@ -20,13 +22,13 @@ class JobDetails(TestUtils):
 
 
     @staticmethod
-    def _set_params(company_name):
+    def _set_params(company_name, page=1):
         """
         Setting params for peviitor jobs request
         """
         params = {
             'company': company_name,
-            'page': 1,
+            'page': page,
             'page_size': '10000',
             'order': 'all',
             'search': '',
@@ -35,7 +37,7 @@ class JobDetails(TestUtils):
         return params
     
     @staticmethod
-    def _get_request(params):
+    def _get_request(company_name):
         """
         Send a get request to get the jobs from future
         """
@@ -47,12 +49,36 @@ class JobDetails(TestUtils):
             'authorization': f'Bearer {updateapi.access_token}',
         }
         
+        params = JobDetails._set_params(company_name)
+        
         response = requests.get('https://api.laurentiumarian.ro/jobs/get/', params=params, headers=headers).json()
+        
+        # List to store all results
+        all_results = []
+
+        # Process initial response
         if 'results' in response:
             response_data = response['results']
-            return response_data
+            all_results.extend(response_data)  # Append initial results to the list
         else:
-            return []
+            allure.attach("No 'results' in initial response.", name="Initial response check", attachment_type=allure.attachment_type.TEXT)
+
+        # Loop to process subsequent pages if they exist
+        while 'next' in response and response['next'] is not None:
+            params['page'] += 1
+            response = requests.get('https://api.laurentiumarian.ro/jobs/get/', params=params, headers=headers).json()
+            
+            if 'results' in response:
+                response_data = response['results']
+                all_results.extend(response_data)  # Append results to the list
+            else:
+                allure.attach("No 'results' in response.", name=f"Page {params['page']} response check", attachment_type=allure.attachment_type.TEXT)
+                break
+        
+        time.sleep(0.5)
+        # allure.attach(f"Total results collected: {len(all_results)}", name="Results summary", attachment_type=allure.attachment_type.TEXT)
+        # allure.attach(f"Total job title results collected: {len([title['job_title'] for title in all_results])}", name="Results summary", attachment_type=allure.attachment_type.TEXT)
+        return all_results
 
     def scrape_peviitor(self, company_name):
         """
@@ -60,8 +86,7 @@ class JobDetails(TestUtils):
         """
         all_future_title, all_future_job_city, all_future_job_country, all_future_job_link, all_future_job_companies, all_future_job_types = [], [], [], [], [], []
 
-        params = JobDetails._set_params(company_name)
-        response_data = JobDetails._get_request(params)
+        response_data = JobDetails._get_request(company_name)
         
         all_future_title.extend([title['job_title'] for title in response_data])
         all_future_job_country.extend([self.remove_diacritics(country['country'][0]) for country in response_data])
