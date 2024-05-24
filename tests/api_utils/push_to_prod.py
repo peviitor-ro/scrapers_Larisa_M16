@@ -1,5 +1,6 @@
 from tests.api_utils.peviitor_update import UpdateAPI
 import requests
+import allure
 import json
 
 class Pushprod:
@@ -22,6 +23,8 @@ class Pushprod:
                     "published": True,
                     "company_name": self.company_name
                 })
+        
+        return self.payload
                 
     def set_headers(self):
         updateapi = UpdateAPI()
@@ -33,6 +36,7 @@ class Pushprod:
         }
     
     def push_to_prod(self):
-        pushed_msg = requests.request("POST", "https://api.laurentiumarian.ro/jobs/publish/", headers=self.deploy_headers, data=json.dumps(self.payload)).json()
-        assert pushed_msg['message'] == 'Job published'
-    
+        if self.payload:
+            pushed_msg = requests.request("POST", "https://api.laurentiumarian.ro/jobs/publish/", headers=self.deploy_headers, data=json.dumps(self.payload)).json()
+            assert pushed_msg['message'] == 'Job published'
+        
