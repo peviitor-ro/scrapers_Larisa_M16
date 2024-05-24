@@ -49,4 +49,4 @@ class LinksTestUtils(TestUtils):
                     if job_link == link:
                         mainobj.filtered_job_links[job_link_index] = 'REMOVED_JOB'
         
-        assert missing_job_links != [], f"The following job links {missing_job_links} do not contain the expected job title: {missing_job_titles}"
+        assert missing_job_links == [], f"The following job links {missing_job_links} do not contain the expected job title: {missing_job_titles}"
