@@ -35,11 +35,18 @@ class LinksTestUtils(TestUtils):
         missing_job_titles = []
         for link, job_title in zip(links, job_titles):
             job_content = LinksTestUtils().get_html_content(link)
+            
+            # Section where the content is not loaded after the request
             if job_content is None:
                 missing_job_links.append(link)
                 missing_job_titles.append(job_title)
                 print("Job Page content has not been loaded")
+                for job_link_index, job_link in enumerate(mainobj.filtered_job_links):
+                    if job_link == link:
+                        mainobj.filtered_job_links[job_link_index] = 'REMOVED_JOB'
                 continue
+            
+            # Section that run in case the job page content is loaded
             soup = BeautifulSoup(job_content, 'html.parser')
             job_content = soup.get_text()
             if job_title not in job_content:

@@ -23,8 +23,6 @@ class Pushprod:
                     "published": True,
                     "company_name": self.company_name
                 })
-        
-        return self.payload
                 
     def set_headers(self):
         updateapi = UpdateAPI()
