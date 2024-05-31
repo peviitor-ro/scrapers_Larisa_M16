@@ -118,8 +118,8 @@ class JobDetails(TestUtils):
         self.titleutils.check_special_job_titles(expected_titles)
     
     # Cities Section
-    def check_job_cities(self, job_cities):
-        self.cityutils.check_job_cities(job_cities)
+    def check_job_cities(self, job_cities, job_titles):
+        self.cityutils.check_job_cities(job_cities, job_titles)
         
     # Links Section
     def check_job_link_content(self, links, job_titles):
