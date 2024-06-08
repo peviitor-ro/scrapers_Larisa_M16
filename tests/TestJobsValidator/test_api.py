@@ -51,14 +51,14 @@ class TestScrapers:
         job_titles = peviitor_jobs_data[0]
         TestScrapers.setup_tests.jobdetails.check_job_link_content(job_links, job_titles)
     
-    # @pytest.mark.smoke
-    # def test_job_types(self, setup):
-    #     """
-    #     Test job types match ['hybrid', 'remote', 'on-site']
-    #     """
-    #     peviitor_jobs_data = setup
-    #     job_types = peviitor_jobs_data[3]
-    #     TestScrapers.setup_tests.jobdetails.check_job_format_types(job_types)
+    @pytest.mark.smoke
+    def test_job_types(self, setup):
+        """
+        Test job types match ['hybrid', 'remote', 'on-site']
+        """
+        peviitor_jobs_data = setup
+        job_types = peviitor_jobs_data[3]
+        TestScrapers.setup_tests.jobdetails.check_job_format_types(job_types)
 
     @pytest.mark.smoke
     def test_job_countries(self, setup):
@@ -69,12 +69,12 @@ class TestScrapers:
         job_countries = peviitor_jobs_data[4]
         TestScrapers.setup_tests.jobdetails.check_job_countries(job_countries)
     
-    # @pytest.mark.smoke
-    # def test_job_cities(self, setup):
-    #     """
-    #     Test job titles contain special characters
-    #     """
-    #     peviitor_jobs_data = setup
-    #     job_titles = peviitor_jobs_data[0]
-    #     job_cities = peviitor_jobs_data[1]
-    #     TestScrapers.setup_tests.jobdetails.check_job_cities(job_cities, job_titles)
+    @pytest.mark.smoke
+    def test_job_cities(self, setup):
+        """
+        Test job titles contain special characters
+        """
+        peviitor_jobs_data = setup
+        job_titles = peviitor_jobs_data[0]
+        job_cities = peviitor_jobs_data[1]
+        TestScrapers.setup_tests.jobdetails.check_job_cities(job_cities, job_titles)
