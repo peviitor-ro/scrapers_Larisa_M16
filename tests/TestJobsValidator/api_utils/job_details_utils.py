@@ -1,11 +1,11 @@
-from tests.api_utils.push_to_prod import Pushprod
-from tests.api_utils.peviitor_update import UpdateAPI
-from tests.api_utils.utils import TestUtils
-from tests.api_utils.job_titles_utils import TitleTestUtils
-from tests.api_utils.job_cities_utils import CitiesTestUtils
-from tests.api_utils.job_links_utils import LinksTestUtils
-from tests.api_utils.job_types_utils import TypeTestUtils
-from tests.api_utils.job_countries_utils import CountriesTestUtils
+from tests.TestJobsValidator.api_utils.push_to_prod import Pushprod
+from tests.TestJobsValidator.api_utils.peviitor_update import UpdateAPI
+from tests.TestJobsValidator.api_utils.utils import TestUtils
+from tests.TestJobsValidator.api_utils.job_titles_utils import TitleTestUtils
+from tests.TestJobsValidator.api_utils.job_cities_utils import CitiesTestUtils
+from tests.TestJobsValidator.api_utils.job_links_utils import LinksTestUtils
+from tests.TestJobsValidator.api_utils.job_types_utils import TypeTestUtils
+from tests.TestJobsValidator.api_utils.job_countries_utils import CountriesTestUtils
 import allure
 import time
 

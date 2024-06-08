@@ -1,5 +1,5 @@
-from tests.module_names import module_names
-from tests.api_utils.job_details_utils import JobDetails
+from tests.TestJobsValidator.module_names import module_names
+from tests.TestJobsValidator.api_utils.job_details_utils import JobDetails
 import importlib
 import pytest
 

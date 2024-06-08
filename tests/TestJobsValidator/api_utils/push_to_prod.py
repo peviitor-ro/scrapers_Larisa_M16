@@ -1,4 +1,4 @@
-from tests.api_utils.peviitor_update import UpdateAPI
+from tests.TestJobsValidator.api_utils.peviitor_update import UpdateAPI
 import requests
 import allure
 import json

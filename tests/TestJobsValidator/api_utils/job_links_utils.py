@@ -1,4 +1,4 @@
-from tests.api_utils.utils import TestUtils
+from tests.TestJobsValidator.api_utils.utils import TestUtils
 from bs4 import BeautifulSoup
 import subprocess
 import time
