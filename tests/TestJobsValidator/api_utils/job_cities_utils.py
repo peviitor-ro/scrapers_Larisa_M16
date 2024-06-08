@@ -1,5 +1,5 @@
-from tests.api_utils.utils import TestUtils
-from tests.api_utils.get_county_city import get_proper_city
+from tests.TestJobsValidator.api_utils.utils import TestUtils
+from tests.TestJobsValidator.api_utils.get_county_city import get_proper_city
 import allure
 
 class CitiesTestUtils(TestUtils):
