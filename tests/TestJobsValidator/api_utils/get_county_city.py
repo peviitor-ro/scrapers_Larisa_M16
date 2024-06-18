@@ -69,6 +69,23 @@ def get_proper_city(town):
         return town
     else:
         return None
+    
+def get_proper_county(county_list):
+    county_list = TestUtils().remove_diacritics(county_list)
+    # county_list = [format_city(county) for county in county_list]
+    expected_counties = county_list
+    actual_counties = []
+    for county in county_list:
+        for item in counties:
+            for key in item.keys():
+                if county.lower() == key.lower():
+                    actual_counties.append(key)
+                    break
+            
+    if len(actual_counties) == len(expected_counties):
+        return county_list
+    else:
+        return None
 
 def format_city(town):
     if town == "Cluj":

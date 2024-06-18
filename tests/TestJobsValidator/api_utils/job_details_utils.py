@@ -5,6 +5,7 @@ from tests.TestJobsValidator.api_utils.job_titles_utils import TitleTestUtils
 from tests.TestJobsValidator.api_utils.job_cities_utils import CitiesTestUtils
 from tests.TestJobsValidator.api_utils.job_links_utils import LinksTestUtils
 from tests.TestJobsValidator.api_utils.job_types_utils import TypeTestUtils
+from tests.TestJobsValidator.api_utils.job_counties_utils import CountyTestUtils
 from tests.TestJobsValidator.api_utils.job_countries_utils import CountriesTestUtils
 import allure
 import time
@@ -19,6 +20,7 @@ class JobDetails(TestUtils):
         self.linkutils = LinksTestUtils()
         self.typeutils = TypeTestUtils()
         self.countryutils = CountriesTestUtils()
+        self.countyutils = CountyTestUtils()
 
 
     @staticmethod
@@ -84,7 +86,7 @@ class JobDetails(TestUtils):
         """
         Get the job details from the peviitor
         """
-        all_future_title, all_future_job_city, all_future_job_country, all_future_job_link, all_future_job_companies, all_future_job_types = [], [], [], [], [], []
+        all_future_title, all_future_job_city, all_future_job_country, all_future_job_link, all_future_job_companies, all_future_job_types, all_future_job_counties = [], [], [], [], [], [], []
 
         response_data = JobDetails._get_request(company_name)
         
@@ -93,6 +95,7 @@ class JobDetails(TestUtils):
         all_future_job_link.extend([job_link['job_link'] for job_link in response_data])
         all_future_job_companies.extend([company['company'] for company in response_data])
         all_future_job_types.extend([job_link['remote'] for job_link in response_data])
+        all_future_job_counties.extend([county['county'] for county in response_data])
         
         # Check if the cities list is a nested list
         city_list = [self.remove_diacritics(city['city']) for city in response_data]
@@ -103,9 +106,8 @@ class JobDetails(TestUtils):
         else:
             all_future_job_city.extend([self.remove_diacritics(city['city'][0]) for city in response_data])
 
-
-        self.filtered_job_titles, self.filtered_job_cities, self.filtered_job_links, self.filtered_job_types, self.filtered_job_countries = all_future_title[:], all_future_job_city[:] ,all_future_job_link[:], all_future_job_types[:], all_future_job_country[:]
-        return all_future_title[:], all_future_job_city[:], all_future_job_link[:], all_future_job_types[:], all_future_job_country[:]
+        self.filtered_job_titles, self.filtered_job_cities, self.filtered_job_links, self.filtered_job_types, self.filtered_job_countries, self.filtered_job_counties = all_future_title[:], all_future_job_city[:], all_future_job_link[:], all_future_job_types[:], all_future_job_country[:], all_future_job_counties[:]
+        return all_future_title[:], all_future_job_city[:], all_future_job_link[:], all_future_job_types[:], all_future_job_country[:], all_future_job_counties[:]
     
     def send_to_prod(self, company_name):
         pushprod = Pushprod(company_name)
@@ -120,6 +122,10 @@ class JobDetails(TestUtils):
     # Cities Section
     def check_job_cities(self, job_cities, job_titles):
         self.cityutils.check_job_cities(job_cities, job_titles)
+    
+    # Counties Section
+    def check_job_counties(self, job_counties, job_titles):
+        self.countyutils.check_job_counties(job_counties, job_titles)
         
     # Links Section
     def check_job_link_content(self, links, job_titles):

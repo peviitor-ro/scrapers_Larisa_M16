@@ -78,3 +78,13 @@ class TestScrapers:
         job_titles = peviitor_jobs_data[0]
         job_cities = peviitor_jobs_data[1]
         TestScrapers.setup_tests.jobdetails.check_job_cities(job_cities, job_titles)
+    
+    @pytest.mark.smoke
+    def test_job_counties(self, setup):
+        """
+        Test job titles contain special characters
+        """
+        peviitor_jobs_data = setup
+        job_titles = peviitor_jobs_data[0]
+        job_counties = peviitor_jobs_data[5]
+        TestScrapers.setup_tests.jobdetails.check_job_counties(job_counties, job_titles)
