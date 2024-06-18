@@ -72,7 +72,7 @@ def get_proper_city(town):
     
 def get_proper_county(county_list):
     county_list = TestUtils().remove_diacritics(county_list)
-    # county_list = [format_city(county) for county in county_list]
+
     expected_counties = county_list
     actual_counties = []
     for county in county_list:
