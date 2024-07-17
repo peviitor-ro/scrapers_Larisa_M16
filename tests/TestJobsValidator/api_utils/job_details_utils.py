@@ -49,6 +49,7 @@ class JobDetails(TestUtils):
         headers = {
             'accept': 'application/json, text/plain, */*',
             'authorization': f'Bearer {updateapi.access_token}',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
         }
         
         params = JobDetails._set_params(company_name)
