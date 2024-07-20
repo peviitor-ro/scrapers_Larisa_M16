@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import subprocess
 import time
 import allure
+import urllib
 
 class LinksTestUtils(TestUtils):
 
@@ -35,6 +36,9 @@ class LinksTestUtils(TestUtils):
         missing_job_titles = []
         for link, job_title in zip(links, job_titles):
             job_content = LinksTestUtils().get_html_content(link)
+            # Decode url encoded response in case is needed to proper check the title presence in page
+            job_content = urllib.parse.unquote(job_content)
+            # assert job_title in job_content, f"Job title is:{job_title} and job_content: {job_content}"
             
             # Section where the content is not loaded after the request
             if job_content is None:
@@ -49,6 +53,7 @@ class LinksTestUtils(TestUtils):
             # Section that run in case the job page content is loaded
             soup = BeautifulSoup(job_content, 'html.parser')
             job_content = soup.get_text()
+            # assert job_title in job_content, f"Job title is:{job_title} and job_content: {job_content}"
             if job_title not in job_content:
                 missing_job_links.append(link)
                 missing_job_titles.append(job_title)
