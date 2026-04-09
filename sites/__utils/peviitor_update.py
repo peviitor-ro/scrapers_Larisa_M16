@@ -42,17 +42,25 @@ class UpdateAPI:
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
         }
 
-        self.access_token = requests.request("POST", "https://api.peviitor.ro/v5/get_token/", headers=post_header, data=payload).json()['access']
+        self.access_token = requests.request(
+            "POST", "https://api.laurentiumarian.ro/get_token", headers=post_header, data=payload).json()['access']
 
     def add_jobs(self, data_jobs):
-
         post_header = {
         'Authorization': f'Bearer {self.access_token}',
         'Content-Type': 'application/json',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
         }
 
-        requests.request("POST", "https://api.peviitor.ro/v5/add/", headers=post_header, data=json.dumps(data_jobs))
+        response = requests.request("POST", "https://api.laurentiumarian.ro/jobs/add/",
+                         headers=post_header, data=json.dumps(data_jobs))
+        
+        if response.status_code == 200:
+            print(json.dumps(data_jobs, indent=4))
+            print('Jobs update ---> succesfuly')
+        else:
+            print(f'Jobs update ---> failed with status code {response.status_code} and response: {response.text}')
+
     
 
     def update_jobs(self, company_name: str, data_jobs: list):
