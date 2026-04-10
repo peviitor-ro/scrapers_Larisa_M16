@@ -46,6 +46,10 @@ class UpdateAPI:
             "POST", "https://api.laurentiumarian.ro/get_token", headers=post_header, data=payload).json()['access']
 
     def add_jobs(self, data_jobs):
+        if not data_jobs:
+            print('No jobs to update.')
+            return
+        
         post_header = {
         'Authorization': f'Bearer {self.access_token}',
         'Content-Type': 'application/json',
@@ -55,12 +59,12 @@ class UpdateAPI:
         response = requests.request("POST", "https://api.laurentiumarian.ro/jobs/add/",
                          headers=post_header, data=json.dumps(data_jobs))
         
+        print(json.dumps(data_jobs, indent=4))
+        
         if response.status_code == 200:
-            print(json.dumps(data_jobs, indent=4))
             print('Jobs update ---> succesfuly')
         else:
             print(f'Jobs update ---> failed with status code {response.status_code} and response: {response.text}')
-
     
 
     def update_jobs(self, company_name: str, data_jobs: list):
