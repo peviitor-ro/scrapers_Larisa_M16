@@ -29,7 +29,7 @@ def scraper():
         # get jobs items from response
         job_list.append(Item(
             job_title=job.find("h4", attrs={'class', 'product-item__title'}).text.strip(),
-            job_link='https://www.genosdanmark.eu'+ job.find('a')['href'] ,
+            job_link='https://www.genosdanmark.eu/'+ job.find('a')['href'] ,
             company='Genos',
             country='Romania',
             county='Bucuresti',

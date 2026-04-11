@@ -13,63 +13,104 @@
 #
 #
 #
-from sites.__utils.req_bs4_shorts import HackCloudFlare
 from sites.__utils.items_struct import Item
 from sites.__utils.peviitor_update import UpdateAPI
+from sites.__utils.found_county import get_county
+
+from bs4 import BeautifulSoup
+import cloudscraper
+import re
 
 
-data = HackCloudFlare('https://romania.cgsinc.com/vino-in-echipa-cgs/') 
- 
-def has_hungarian_letters(text):
-    # Check if the text contains Hungarian letters
-    hungarian_letters = ['ő', 'ü', 'é', 'á']
-    return any(letter in text.lower() for letter in hungarian_letters)
-def remove_hungarian_letters(text):
-    # Remove Hungarian letters from the text
-    for letter in has_hungarian_letters:
-        text = text.replace(letter, 'ő', 'ü', 'é', 'á')
-    return text
+JOBS_URL = "https://romania.cgsinc.com/vino-in-echipa-cgs/"
+COMPANY = "CGSRomania"
+COUNTRY = "Romania"
+LOGO_LINK = "https://romania.cgsinc.com/wp-content/uploads/2021/05/logo_CGS.svg"
 
-sensors_letters = ['ő', 'ü', 'é', 'á']
+CITY_TRANSLATIONS = {
+    "bucharest": "Bucuresti",
+    "bucuresti": "Bucuresti",
+    "brasov": "Brasov",
+    "targu- jiu": "Targu Jiu",
+    "targu-jiu": "Targu Jiu",
+    "targu jiu": "Targu Jiu",
+}
+
+COUNTY_OVERRIDES = {
+    "Bucuresti": "Bucuresti",
+    "Brasov": "Brasov",
+    "Targu Jiu": "Gorj",
+}
+
+
+def normalize_city(city_name):
+    city_name = re.sub(r"\s+", " ", city_name).strip(" -–,;:/")
+    return CITY_TRANSLATIONS.get(city_name.lower(), city_name)
+
+
+def get_location_county(city_name):
+    return COUNTY_OVERRIDES.get(city_name, get_county(city_name))
+
+
+def extract_locations(location_text):
+    location_text = location_text.replace("Hybrid", "")
+    location_text = re.sub(r"\s+", " ", location_text)
+
+    locations = []
+    for raw_location in re.split(r"/", location_text):
+        city_name = normalize_city(raw_location)
+        if city_name and get_location_county(city_name) and city_name not in locations:
+            locations.append(city_name)
+
+    return locations
+
+
+def get_remote_type(title, location):
+    combined_text = f"{title} {location}".lower()
+    if "remote" in combined_text:
+        return "remote"
+    if "hybrid" in combined_text:
+        return "hybrid"
+    if "la sediu" in combined_text:
+        return "on-site"
+    return "on-site"
+
+
 def scraper():
-     data= HackCloudFlare("https://romania.cgsinc.com/vino-in-echipa-cgs/")
-     
-     
-     job_list = []
-     for job in data.select('article[class*="elementor-post"]'):
-        link = job.find('a')['href']
-        title_loc = job.find('div', attrs={'class': 'job-item'}).text.strip('-')
-        if len(title_loc) > 1:
-                    if  any(s_l in title_loc[0].lower() for s_l in sensors_letters):
-                         continue
+    '''
+    ... scrape data from CGS Romania scraper.
+    '''
+    scraper_client = cloudscraper.create_scraper(browser={'browser': 'chrome', 'platform': 'darwin', 'mobile': False})
+    soup = BeautifulSoup(scraper_client.get(JOBS_URL, timeout=30).text, 'lxml')
 
-        else:
-            title = title_loc[0].strip()
-            if title.startswith('Client'):
-              title = title.replace('Client', 'Client Relații Clienți')
-            if title.endswith('(Remote)'):
-                title = title.replace('(Remote)', '')
-            if title.endswith('Ügyfélszolgálati állásajánlat '):
-                title = title.replace('Ügyfélszolgálati állásajánlat ', 'Oferta de munca serviciu clienti')
-            job_list.append(title)
- 
-        for title in job_list:
-             print(title)
-            
-        _ = job.find('p', attrs={'class','fw-r text-white p'}).text
+    job_list = []
+    for job in soup.find_all("article"):
+        link_tag = job.find("a", href=True)
+        if "/joburi/" not in link_tag["href"]:
+            continue
 
+        card_lines = [line.strip() for line in job.get_text("\n", strip=True).split("\n") if line.strip()]
+        if len(card_lines) < 2:
+            continue
+
+        title = card_lines[0]
+        location_text = card_lines[1]
+        locations = extract_locations(location_text)
+        if not title or not locations:
+            continue
 
         job_list.append(Item(
-            job_title=title_loc,
-            job_link=job.find('a')['href'],
-            company='CGSRomania',
-            country='Romania',
-            county='',
-            city='',
-            remote=''
+            job_title=title,
+            job_link=link_tag["href"],
+            company=COMPANY,
+            country=COUNTRY,
+            county=[get_location_county(city_name) for city_name in locations],
+            city=locations,
+            remote=get_remote_type(title, location_text),
         ).to_dict())
-     return job_list
-     
+
+    return job_list
+
 
 def main():
     '''
@@ -78,8 +119,8 @@ def main():
     ---> update_jobs() and update_logo()
     '''
 
-    company_name = "CGSRomania"
-    logo_link = "https://romania.cgsinc.com/wp-content/uploads/2021/05/logo_CGS.svg"
+    company_name = COMPANY
+    logo_link = LOGO_LINK
 
     jobs = scraper()
     # uncomment if your scraper done

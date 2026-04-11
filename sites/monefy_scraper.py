@@ -19,40 +19,82 @@ from sites.__utils.items_struct import Item
 from sites.__utils.peviitor_update import UpdateAPI
 from sites.__utils.found_county import get_county
 
-def get_location(response: GetStaticSoup) -> str:
-    locations = [
-        location.split(":")[1]
-        for element in response.find_all("div", {"class": "et_pb_text_inner"})
-        for location in element.text.split()
-        if "location" in location.lower()
-    ]
+import re
 
-    if locations:
-        if locations[0] == 'Bucharest':
-            return 'Bucuresti'
 
-    return 'Bucuresti'
+JOBS_URL = "https://monefy.ro/careers/"
+COMPANY = "Monefy"
+COUNTRY = "Romania"
+LOGO_LINK = "https://monefy.ro/wp-content/uploads/2021/02/Logo.png"
+
+CITY_TRANSLATIONS = {
+    "bucharest": "Bucuresti",
+    "brașov": "Brasov",
+    "brasov": "Brasov",
+}
+
+COUNTY_OVERRIDES = {
+    "Bucuresti": "Bucuresti",
+    "Brasov": "Brasov",
+}
+
+
+def normalize_city(city_name):
+    city_name = re.sub(r"\s+", " ", city_name).strip(" -–,;:/")
+    return CITY_TRANSLATIONS.get(city_name.lower(), city_name)
+
+
+def get_location_county(city_name):
+    return COUNTY_OVERRIDES.get(city_name, get_county(city_name))
+
+
+def extract_location_and_remote(response):
+    page_text = response.get_text(" | ", strip=True)
+    match = re.search(r"Location\s*\|?\s*:?\s*\|?\s*([^|]+)", page_text, re.IGNORECASE)
+    if not match:
+        return "Bucuresti", "on-site"
+
+    location_text = match.group(1).strip()
+    location_lower = location_text.lower()
+    if "remote" in location_lower:
+        return "Bucuresti", "remote"
+
+    remote_type = "on-site"
+    if "on-site" in location_lower:
+        remote_type = "on-site"
+        location_text = location_text.replace("On-site", "").replace("on-site", "")
+
+    if "," in location_text:
+        location_parts = [part.strip() for part in location_text.split(",") if part.strip()]
+        location_text = next((part for part in location_parts if "site" not in part.lower()), location_parts[0])
+
+    city = normalize_city(location_text)
+    return city or "Bucuresti", remote_type
 
 
 def scraper():
     '''
     ... scrape data from monefy scraper.
     '''
-    soup = GetStaticSoup("https://monefy.ro/careers/")
+    soup = GetStaticSoup(JOBS_URL)
 
     job_list = []
-    for job in soup.find_all('h3', attrs={'class': 'entry-title'}):
-        response = GetStaticSoup(job.a['href'])
+    for job in soup.select('div.et_pb_ajax_pagination_container article.et_pb_post'):
+        link_tag = job.find('a', href=True)
+        if not link_tag:
+            continue
 
-        # get jobs items from response
+        response = GetStaticSoup(link_tag['href'])
+        city, remote_type = extract_location_and_remote(response)
+
         job_list.append(Item(
-            job_title=job.find('a').text,
-            job_link=job.a['href'],
-            company='Monefy',
-            country='Romania',
-            county=get_county(get_location(response)),
-            city=get_location(response),
-            remote='Remote',
+            job_title=link_tag.get_text(strip=True),
+            job_link=link_tag['href'],
+            company=COMPANY,
+            country=COUNTRY,
+            county=get_location_county(city),
+            city=city,
+            remote=remote_type,
         ).to_dict())
 
     return job_list
@@ -65,8 +107,8 @@ def main():
     ---> update_jobs() and update_logo()
     '''
 
-    company_name = "Monefy"
-    logo_link = "https://monefy.ro/wp-content/uploads/2021/02/Logo.png"
+    company_name = COMPANY
+    logo_link = LOGO_LINK
 
     jobs = scraper()
     

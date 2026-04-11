@@ -10,83 +10,145 @@
 # ---> get_data_with_regex(expression: str, object: str)
 #
 # Company ---> Accenture
-# Link ------> https://www.accenture.com/ro-en/jobpostings-sitemap.xml
+# Link ------> https://www.accenture.com/api/accenture/elastic/findjobs
 #
 #
 #
-from sites.__utils.req_bs4_shorts import GetXMLObject, GetStaticSoup
 from sites.__utils.items_struct import Item
 from sites.__utils.peviitor_update import UpdateAPI
 from sites.__utils.found_county import get_county
 
-import time
-from random import randint
+import re
+
+import requests
+
+
+API_URL = "https://www.accenture.com/api/accenture/elastic/findjobs"
+REFERER_URL = "https://www.accenture.com/ro-en/careers/jobsearch?jk=&sb=1&vw=0&is_rj=0&pg=1"
+COMPANY = "Accenture"
+COUNTRY = "Romania"
+LOGO_LINK = "/content/dam/accenture/final/images/icons/symbol/Acc_Logo_Black_Purple_RGB.png"
+PAGE_SIZE = 12
+
+CITY_TRANSLATIONS = {
+    "bucharest": "Bucuresti",
+    "cluj-napoca": "Cluj-Napoca",
+    "cluj napoca": "Cluj-Napoca",
+    "targu-mures": "Targu Mures",
+    "targu mures": "Targu Mures",
+    "timisoara": "Timisoara",
+}
+
+REMOTE_TRANSLATIONS = {
+    "hybrid": "hybrid",
+    "remote": "remote",
+    "on-site": "on-site",
+    "onsite": "on-site",
+    "on site": "on-site",
+    "on\u002dsite": "on-site",
+}
+
+REQUEST_HEADERS = {
+    "User-Agent": "Mozilla/5.0",
+    "Accept": "application/json, text/plain, */*",
+    "Origin": "https://www.accenture.com",
+    "Referer": REFERER_URL,
+    "X-Requested-With": "XMLHttpRequest",
+}
+
+
+def normalize_city(city_name):
+    city_name = re.sub(r"\s+", " ", city_name).strip(" -–,;:/")
+    return CITY_TRANSLATIONS.get(city_name.lower(), city_name)
+
+
+def normalize_remote(remote_value):
+    remote_value = (remote_value or "").strip().lower()
+    return REMOTE_TRANSLATIONS.get(remote_value, "on-site")
+
+
+def extract_locations(location_text):
+    if not location_text:
+        return []
+
+    if isinstance(location_text, list):
+        raw_locations = location_text
+    else:
+        raw_locations = re.split(r",|/|\|", location_text)
+
+    locations = []
+
+    for raw_location in raw_locations:
+        city_name = normalize_city(raw_location)
+        if city_name and get_county(city_name) and city_name not in locations:
+            locations.append(city_name)
+
+    return locations
+
+
+def fetch_jobs_page(start_index):
+    payload = {
+        "startIndex": str(start_index),
+        "maxResultSize": str(PAGE_SIZE),
+        "jobKeyword": "",
+        "jobCountry": COUNTRY,
+        "jobLanguage": "en",
+        "countrySite": "ro-en",
+        "sortBy": "1",
+        "searchType": "vectorSearch",
+        "enableQueryBoost": "true",
+        "minScore": "0.6",
+        "getFeedbackJudgmentEnabled": "true",
+        "useCleanEmbedding": "true",
+        "score": "true",
+        "totalHits": "true",
+        "debugQuery": "false",
+        "jobFilters": "[]",
+    }
+
+    response = requests.post(API_URL, headers=REQUEST_HEADERS, files=payload, timeout=30)
+    response.raise_for_status()
+    return response.json()
+
+
+def build_item(job_data):
+    title = (job_data.get("title") or "").strip()
+    job_link = (job_data.get("jobDetailUrl") or "").strip().replace("{0}", "ro-en")
+    locations = extract_locations(job_data.get("location", ""))
+    if not title or not job_link or not locations:
+        return None
+
+    return Item(
+        job_title=title,
+        job_link=job_link,
+        company=COMPANY,
+        country=COUNTRY,
+        county=[get_county(city_name) for city_name in locations],
+        city=locations,
+        remote=normalize_remote(job_data.get("remoteType", "")),
+    ).to_dict()
+
 
 def scraper():
     '''
     ... scrape data from Accenture scraper.
     '''
-    soup = GetXMLObject("https://www.accenture.com/ro-en/jobpostings-sitemap.xml")
     job_list = []
-    count = 0
-    for url_element in soup.findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}url'):
-        loc_element = url_element.find('{http://www.sitemaps.org/schemas/sitemap/0.9}loc')
+    start_index = 0
+    total_hits = None
 
-        if loc_element is not None and loc_element.text:
-            try:
-                extract_data = GetStaticSoup(loc_element.text.strip())
-            except:
-                continue
+    while total_hits is None or start_index < total_hits:
+        payload = fetch_jobs_page(start_index)
+        total_hits = payload.get("totalHits", {}).get("total", 0)
 
-            # find single and multiply locations...
-            location_final = list()
-            city_to_translate = ['bucharest']
-            #
-            location = extract_data.find('div', attrs={'class': 'cmp-job-listing-hero__labels-container'}).find('span', attrs={'class': 'cmp-text__label-small'})
-            if location.text.lower() in ['multiple locations', 'multiple location']:
-                data_loc_strip = extract_data.find('div', attrs={'class': 'cmp-job-listing-details__location-description'}).text.strip().split(',')
-                
-                new_lst_cities = list()
-                cluj_c = ['cluj napoca']
-                
-                for dd_city in data_loc_strip:
-                    if dd_city.lower().strip() in city_to_translate:
-                        dd_city = 'Bucuresti'
-                    elif dd_city.lower().strip() in cluj_c:
-                        dd_city = 'Cluj-Napoca'
-                    new_lst_cities.append(dd_city)
-                location_final.extend([x.strip() for x in new_lst_cities])
-            else:
-                if location:
-                    if location.text.lower() in city_to_translate:
-                        new_loc = "Bucuresti"
-                        location_final.append(new_loc)
-                else:
-                    location_final.append(location.text.strip())
+        for job_data in payload.get("data", []):
+            job_item = build_item(job_data)
+            if job_item:
+                job_list.append(job_item)
 
-            # ---> Title
-            title_site = extract_data.find('h1')
-            if title_site:
-                title_final = title_site.text.strip()
-            else: 
-                continue
+        start_index += PAGE_SIZE
 
-            job_list.append(Item(
-                job_title=title_final,
-                job_link=loc_element.text.strip(),
-                company='Accenture',
-                country='Romania',
-                county=[get_county(town) for town in location_final],
-                city=location_final, 
-                remote='remote',
-            ).to_dict())
-            time.sleep(randint(1,3))
-
-            count += 1
-            if count >= 10:
-                break
     return job_list
-         
 
 
 def main():
@@ -96,11 +158,11 @@ def main():
     ---> update_jobs() and update_logo()
     '''
 
-    company_name = "Accenture"
-    logo_link = "/content/dam/accenture/final/images/icons/symbol/Acc_Logo_Black_Purple_RGB.png"
+    company_name = COMPANY
+    logo_link = LOGO_LINK
 
     jobs = scraper()
-  
+
     # uncomment if your scraper done
     UpdateAPI().update_jobs(company_name, jobs)
     UpdateAPI().update_logo(company_name, logo_link)

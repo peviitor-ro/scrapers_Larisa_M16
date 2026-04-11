@@ -14,46 +14,76 @@
 #
 #
 from sites.__utils.req_bs4_shorts import GetHtmlSoup, GetStaticSoup
+from sites.__utils.items_struct import Item
 from sites.__utils.peviitor_update import UpdateAPI
-#
+from sites.__utils.found_county import get_county
 
-import re
 import json
- 
+import re
+
+
+JOBS_URL = "https://careers.centric.eu/ro/open-positions/"
+COMPANY = "Centric"
+COUNTRY = "Romania"
+LOGO_LINK = "https://careers.centric.eu/static/images/logo.svg"
+
+CITY_TRANSLATIONS = {
+    "iași": "Iasi",
+    "iasi": "Iasi",
+}
+
+COUNTY_OVERRIDES = {
+    "Iasi": "Iasi",
+}
+
+
+def normalize_city(city_name):
+    city_name = re.sub(r"\s+", " ", city_name).strip(" -–,;:/")
+    return CITY_TRANSLATIONS.get(city_name.lower(), city_name)
+
+
+def get_location_county(city_name):
+    return COUNTY_OVERRIDES.get(city_name, get_county(city_name))
+
+
+def extract_results(soup):
+    matches = re.search(r"window\.FILTER_BAR_INITIAL\s*=\s*(\{[\s\S]*?\});\s*</script>", str(soup))
+    if not matches:
+        return []
+
+    payload = json.loads(matches.group(1))
+    return payload.get("results", [])
+
+
 def scraper():
     '''
-    ... scrape data from test scraper.
+    ... scrape data from Centric scraper.
     '''
-    soup = GetStaticSoup("https://careers.centric.eu/ro/open-positions/")
+    soup = GetStaticSoup(JOBS_URL)
 
     job_list = []
-    matches = re.search(r"window\.FILTER_BAR_INITIAL = ({[\s\S]*?});\s*<\/script>", str(soup))
- 
-    if matches:
-        json_content = matches.group(1)
-        filter_bar_initial = json.loads(json_content)
-         
+    for raw_job in extract_results(soup):
+        soup_after_regex = GetHtmlSoup(raw_job)
 
-        for data_rex in filter_bar_initial['results']:
-            soup_after_regex = GetHtmlSoup(data_rex)
+        for job in soup_after_regex("div", attrs={"class": "card default"}):
+            link_tag = job.find("a", href=True)
+            title = (job.get("data-name") or "").strip()
+            city = normalize_city(job.get("data-location", ""))
+            if not link_tag or not title or not city:
+                continue
 
-            # scrape data from regex
-            for job in soup_after_regex('div', attrs={'class': 'card default'}):
-                link = job.find('a')['href']
-                title = job.find('div', attrs={'class': 'card__title'}).text
-                location = job['data-location']
+            job_list.append(Item(
+                job_title=title,
+                job_link=link_tag["href"],
+                company=COMPANY,
+                country=COUNTRY,
+                county=get_location_county(city),
+                city=city,
+                remote='on-site',
+            ).to_dict())
 
-                # Append job details to the list
-                job_list.append({
-                    'job_title':title,
-                    'job_link':link,
-                    'company': 'Centric',
-                    'country': 'Romania',   
-                    'county': location,    
-                    'city': location,
-                    'remote': ('onsites','remote'),   
-                })
-    return job_list            
+    return job_list
+
 
 def main():
     '''
@@ -62,11 +92,11 @@ def main():
     ---> update_jobs() and update_logo()
     '''
 
-    company_name = "Centric"
-    logo_link = "https://careers.centric.eu/static/images/logo.svg"
+    company_name = COMPANY
+    logo_link = LOGO_LINK
 
     jobs = scraper()
-   
+
     # uncomment if your scraper done
     UpdateAPI().update_jobs(company_name, jobs)
     UpdateAPI().update_logo(company_name, logo_link)

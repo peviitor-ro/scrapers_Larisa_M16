@@ -34,9 +34,9 @@ def scraper():
             job_link='https://careers.egger.com' + job.find('a')['href'].strip(),
             company='Egger',
             country='Romania',
-            county='Radauti',
+            county='Suceava',
             city='Radauti',
-            remote='onsite',
+            remote='on-site',
         ).to_dict())
 
     return job_list
