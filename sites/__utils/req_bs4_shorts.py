@@ -6,8 +6,6 @@
 #
 #  Start here!
 #
-#
-import cfscrape
 import requests
 from bs4 import BeautifulSoup
 #
@@ -100,6 +98,7 @@ class HackCloudFlare:
     '''
 
     def __new__(cls, url, custom_headers=None):
+        import cfscrape
         headers = DEFAULT_HEADERS.copy()
 
         # if headers is requiered
