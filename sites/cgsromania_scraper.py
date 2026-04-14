@@ -1,24 +1,10 @@
-#
-#
-#  Basic for scraping data from static pages
-# ------ IMPORTANT! ------
-# if you need return soup object:
-# you cand import from __utils -> GetHtmlSoup
-# if you need return regex object:
-# you cand import from __utils ->
-# ---> get_data_with_regex(expression: str, object: str)
-#
-# Company ---> cgsromania
-# Link ------> https://romania.cgsinc.com/vino-in-echipa-cgs/
-#
-#
-#
 from sites.__utils.items_struct import Item
 from sites.__utils.peviitor_update import UpdateAPI
 from sites.__utils.found_county import get_county
 
 from bs4 import BeautifulSoup
 import cloudscraper
+import time
 import re
 
 
@@ -80,8 +66,19 @@ def scraper():
     '''
     ... scrape data from CGS Romania scraper.
     '''
-    scraper_client = cloudscraper.create_scraper(browser={'browser': 'chrome', 'platform': 'darwin', 'mobile': False})
-    soup = BeautifulSoup(scraper_client.get(JOBS_URL, timeout=30).text, 'lxml')
+    scraper_client = cloudscraper.create_scraper(
+        browser={'browser': 'chrome', 'platform': 'darwin', 'mobile': False},
+        interpreter='native'
+    )
+    
+    max_retries = 15
+    for attempt in range(max_retries):
+        if attempt > 0:
+            time.sleep(2)
+        response = scraper_client.get(JOBS_URL, timeout=30)
+        soup = BeautifulSoup(response.text, 'lxml')
+        if soup.title and 'One moment' not in soup.title.string:
+            break
 
     job_list = []
     for job in soup.find_all("article"):

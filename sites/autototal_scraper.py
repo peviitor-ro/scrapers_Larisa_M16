@@ -17,9 +17,14 @@ from sites.__utils.req_bs4_shorts import GetStaticSoup
 from sites.__utils.items_struct import Item
 from sites.__utils.peviitor_update import UpdateAPI
 from sites.__utils.found_county import get_county
+from bs4 import BeautifulSoup
 
 from datetime import date
 import re
+import time
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 
 JOBS_URL = "https://www.autototal.ro/cariere/"
@@ -86,6 +91,19 @@ COUNTY_OVERRIDES = {
 }
 
 
+def get_session_with_retries():
+    session = requests.Session()
+    retry_strategy = Retry(
+        total=3,
+        backoff_factor=1,
+        status_forcelist=[500, 502, 503, 504],
+    )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    session.mount("http://", adapter)
+    session.mount("https://", adapter)
+    return session
+
+
 def is_active_job(summary_text):
     match = re.search(r'Expiră\s+(\d{1,2})\s+([A-Za-zăâîșț\.]+)\s+(\d{4})', summary_text, re.IGNORECASE)
     if not match:
@@ -144,7 +162,19 @@ def extract_title_locations(job_title):
 
 
 def extract_detail_locations(job_link):
-    soup = GetStaticSoup(job_link)
+    session = get_session_with_retries()
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept-Language': 'en-US,en;q=0.9,ro;q=0.8',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    }
+    
+    try:
+        response = session.get(job_link, headers=headers, timeout=60)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.content, 'lxml')
+    except requests.exceptions.RequestException:
+        return []
 
     for paragraph in soup.find_all('p'):
         paragraph_text = paragraph.get_text(' ', strip=True)
@@ -174,7 +204,30 @@ def scraper():
     '''
     ... scrape data from Autototal scraper.
     '''
-    soup = GetStaticSoup(JOBS_URL)
+    session = get_session_with_retries()
+    max_retries = 3
+    last_error = None
+    
+    for attempt in range(max_retries):
+        try:
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept-Language': 'en-US,en;q=0.9,ro;q=0.8',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Referer': 'https://www.autototal.ro/',
+            }
+            response = session.get(JOBS_URL, headers=headers, timeout=30)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, 'lxml')
+            break
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout, requests.exceptions.RequestException) as e:
+            last_error = e
+            if attempt < max_retries - 1:
+                wait_time = (attempt + 1) * 3
+                time.sleep(wait_time)
+            continue
+    else:
+        raise last_error
 
     job_list = []
     for job in soup.find_all('div', attrs={'class': 'gem-compact-tiny-right'}):
