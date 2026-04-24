@@ -47,6 +47,7 @@ setup(
         'wsproto==1.2.0',
         'zipp==3.15.0',
         'cfscrape==2.1.1',
+        'cloudscraper',
         'pytest==7.4.3',
         'pytest-xdist==3.3.1',
         'unidecode==1.3.8',
