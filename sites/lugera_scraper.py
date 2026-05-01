@@ -35,7 +35,8 @@ def scraper():
     for page in range(1, (extract_jobs_num()) // 20 + 2):
         soup = GetStaticSoup(f"https://www.lugera.ro/jobex/public/ro?txt=%20&country=Romania&cities%5B0%5D=&page={str(page)}")
 
-        if len(soup_data := soup.select_one('div.jobs-listing.jobs.jobex-search-results.row').select('div.job.col-xs-12.m-grid.m-grid-responsive-sm')) > 0:
+        container = soup.select_one('div.jobs-listing.jobs.jobex-search-results.row')
+        if container and len(soup_data := container.select('div.job.col-xs-12.m-grid.m-grid-responsive-sm')) > 0:
 
             new_location = None
             job_type = None
