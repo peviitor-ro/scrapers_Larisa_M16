@@ -23,7 +23,7 @@ def scraper():
     '''
     ... scrape data from elektrobit scraper.
     '''
-    json_data = GetRequestJson("https://jobs.elektrobit.com/api/jobs?country=Romania")
+    json_data = GetRequestJson("https://jobs.elektrobit.com/api/jobs?country=Romania") or {}
 
     job_list = []
     for job in json_data.get('jobs', []):
