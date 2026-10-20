@@ -13,7 +13,9 @@
 #
 #
 from bs4 import BeautifulSoup
+import time
 import requests
+from requests.exceptions import RequestException
 from sites.__utils.req_bs4_shorts import GetXMLObject, GetStaticSoup
 from sites.__utils.items_struct import Item
 from sites.__utils.peviitor_update import UpdateAPI
@@ -21,11 +23,25 @@ from sites.__utils.found_county import get_county
 from sites.__utils.get_job_type import get_job_type
 
 
+def get_soup(link, attempts=3, delay=2):
+    '''
+    ... get soup object, retrying on transient network errors
+    (e.g. temporary failure in name resolution).'''
+
+    for attempt in range(1, attempts + 1):
+        try:
+            return GetStaticSoup(link)
+        except RequestException:
+            if attempt == attempts:
+                raise
+            time.sleep(delay * attempt)
+
+
 def extract_jobs_num():
     '''
     ... extract jobs num'''
 
-    return int(GetStaticSoup('https://www.lugera.ro/jobex/public/ro?txt=%20&country=Romania&cities%5B0%5D=&page=1').select_one('h1.jobsHomeTitle').text.strip().split('(')[-1].split('-')[0].strip())
+    return int(get_soup('https://www.lugera.ro/jobex/public/ro?txt=%20&country=Romania&cities%5B0%5D=&page=1').select_one('h1.jobsHomeTitle').text.strip().split('(')[-1].split('-')[0].strip())
 def scraper():
     '''
     ... scrape data from Lugera scraper.
@@ -33,7 +49,7 @@ def scraper():
 
     job_list = []
     for page in range(1, (extract_jobs_num()) // 20 + 2):
-        soup = GetStaticSoup(f"https://www.lugera.ro/jobex/public/ro?txt=%20&country=Romania&cities%5B0%5D=&page={str(page)}")
+        soup = get_soup(f"https://www.lugera.ro/jobex/public/ro?txt=%20&country=Romania&cities%5B0%5D=&page={str(page)}")
 
         container = soup.select_one('div.jobs-listing.jobs.jobex-search-results.row')
         if container and len(soup_data := container.select('div.job.col-xs-12.m-grid.m-grid-responsive-sm')) > 0:
