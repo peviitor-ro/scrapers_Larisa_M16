@@ -13,6 +13,12 @@ import json
 #
 import time
 
+from .empty_jobs_repair import (
+    NO_JOBS_MARKER,
+    clear_cooldown_for_calling_scraper,
+    maybe_repair_empty_jobs_output,
+)
+
 
 class UpdateAPI:
     '''
@@ -72,6 +78,14 @@ class UpdateAPI:
         ... update and clean data on peviitor
 
         '''
+        # nu posta o lista goala: ar sterge joburile companiei de pe API
+        if not data_jobs:
+            print(json.dumps(data_jobs, indent=4))
+            print(f'{NO_JOBS_MARKER} {company_name}', flush=True)
+            maybe_repair_empty_jobs_output(company_name)
+            return None
+
+        clear_cooldown_for_calling_scraper()
         self.get_token()
         time.sleep(0.2)
         self.add_jobs(data_jobs)

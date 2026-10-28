@@ -35,11 +35,26 @@ jobs:
           sudo install "$OPENCODE_TMP_DIR/opencode" /usr/local/bin/opencode
           rm -rf "$OPENCODE_TMP_DIR"
 
+      - name: Restore empty-jobs repair state
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache
+          key: empty-jobs-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            empty-jobs-${{ runner.os }}-
+
       - name: All scrapers runs
         env:
           API_KEY: ${{ secrets.API_KEY }}
         run: |
           python sites/__main_RunnerFile.py
+
+      - name: Save empty-jobs repair state
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: .cache
+          key: empty-jobs-${{ runner.os }}-${{ github.run_id }}
 
       - name: Commit and push changes
         run: |
