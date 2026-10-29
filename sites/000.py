@@ -17,10 +17,17 @@ def delete_logo(company_name: str):
 
 
 if __name__ == "__main__":
-    company_name = input('Srie numele companiei: ')
-    response = delete_logo(company_name)
+    try:
+        company_name = input('Srie numele companiei: ')
+    except EOFError:
+        company_name = ""
 
-    if response.status_code == 200:
-        print("Logo sters cu succes")
+    if not company_name:
+        print("Numele companiei nu a fost furnizat")
     else:
-        print("Eroare la stergerea logo-ului")
+        response = delete_logo(company_name)
+
+        if response.status_code == 200:
+            print("Logo sters cu succes")
+        else:
+            print("Eroare la stergerea logo-ului")

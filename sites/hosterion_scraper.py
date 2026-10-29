@@ -20,9 +20,11 @@ import requests
 
 from bs4 import BeautifulSoup
 from sites.__utils.default_headers import DEFAULT_HEADERS
+import re
 
 
 JOBS_URL = "https://hosterion.ro/cariere"
+SITEMAP_URL = "https://hosterion.ro/sitemap.xml"
 COMPANY = "Hosterion"
 COUNTRY = "Romania"
 LOGO_LINK = "https://ctdefense.com/wp-content/uploads/2019/03/hoster.png"
@@ -36,24 +38,36 @@ def scraper():
     soup = BeautifulSoup(response.text, 'lxml')
 
     job_list = []
-    content_column = soup.find('div', attrs={'class': 'content-column'})
-    if not content_column:
-        return job_list
+    job_links = set()
 
-    careers_links = []
-    for job_link in content_column.find_all('a', href=True):
+    for job_link in soup.find_all('a', href=True):
         href = job_link['href'].strip()
-        if not href.startswith('https://hosterion.ro/cariere/'):
+        if href.startswith('https://hosterion.ro/cariere/'):
+            job_links.add(href)
+
+    for href in re.findall(r'"(/cariere/[^"#?]+)"', str(soup)):
+        job_links.add(f'https://hosterion.ro{href}')
+
+    sitemap_response = requests.get(url=SITEMAP_URL, headers=DEFAULT_HEADERS)
+    for loc in re.findall(r'<loc>\s*([^<]+?)\s*</loc>', sitemap_response.text):
+        if re.match(r'https://hosterion\.ro/cariere/[^/]+/?$', loc):
+            job_links.add(loc.strip())
+
+    for job_link in sorted(job_links):
+        if job_link.rstrip('/') == JOBS_URL:
             continue
 
-        if href.rstrip('/') == JOBS_URL:
+        job_response = requests.get(url=job_link, headers=DEFAULT_HEADERS)
+        job_soup = BeautifulSoup(job_response.text, 'lxml')
+        job_content = job_soup.find('div', attrs={'class': 'content-column'})
+        if not job_content:
             continue
 
-        careers_links.append(job_link)
+        if 'postul nu mai este disponibil' in job_content.get_text(' ', strip=True).lower():
+            continue
 
-    for job in careers_links:
-        job_title = job.get_text(strip=True)
-        job_link = job['href']
+        title_tag = job_content.find('h1')
+        job_title = title_tag.get_text(strip=True) if title_tag else ''
         if not job_title:
             continue
 

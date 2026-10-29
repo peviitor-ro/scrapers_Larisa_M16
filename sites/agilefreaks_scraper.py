@@ -37,7 +37,7 @@ def normalize_remote_type(remote_value):
 def parse_job_meta(job):
     meta_values = [
         span.get_text(" ", strip=True)
-        for span in job.select("div.mt-1.text-md span")
+        for span in job.select("div.text-md span")
     ]
     meta_values = [value for value in meta_values if value and value != "·"]
 

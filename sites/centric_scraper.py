@@ -13,12 +13,11 @@
 #
 #
 #
-from sites.__utils.req_bs4_shorts import GetHtmlSoup, GetStaticSoup
+from sites.__utils.req_bs4_shorts import GetStaticSoup
 from sites.__utils.items_struct import Item
 from sites.__utils.peviitor_update import UpdateAPI
 from sites.__utils.found_county import get_county
 
-import json
 import re
 
 
@@ -46,13 +45,12 @@ def get_location_county(city_name):
     return COUNTY_OVERRIDES.get(city_name, get_county(city_name))
 
 
-def extract_results(soup):
-    matches = re.search(r"window\.FILTER_BAR_INITIAL\s*=\s*(\{[\s\S]*?\});\s*</script>", str(soup))
-    if not matches:
-        return []
-
-    payload = json.loads(matches.group(1))
-    return payload.get("results", [])
+def extract_city(job):
+    for item in job.select(".vacancy-card__metadata-item"):
+        city = normalize_city(item.get_text(" ", strip=True))
+        if city:
+            return city
+    return ""
 
 
 def scraper():
@@ -62,25 +60,22 @@ def scraper():
     soup = GetStaticSoup(JOBS_URL)
 
     job_list = []
-    for raw_job in extract_results(soup):
-        soup_after_regex = GetHtmlSoup(raw_job)
+    for job in soup.select("a.vacancy-card"):
+        title_tag = job.select_one(".vacancy-card__title")
+        title = title_tag.get_text(" ", strip=True) if title_tag else ""
+        city = extract_city(job)
+        if not job.get("href") or not title or not city:
+            continue
 
-        for job in soup_after_regex("div", attrs={"class": "card default"}):
-            link_tag = job.find("a", href=True)
-            title = (job.get("data-name") or "").strip()
-            city = normalize_city(job.get("data-location", ""))
-            if not link_tag or not title or not city:
-                continue
-
-            job_list.append(Item(
-                job_title=title,
-                job_link=link_tag["href"],
-                company=COMPANY,
-                country=COUNTRY,
-                county=get_location_county(city),
-                city=city,
-                remote='on-site',
-            ).to_dict())
+        job_list.append(Item(
+            job_title=title,
+            job_link=job["href"],
+            company=COMPANY,
+            country=COUNTRY,
+            county=get_location_county(city),
+            city=city,
+            remote='on-site',
+        ).to_dict())
 
     return job_list
 
