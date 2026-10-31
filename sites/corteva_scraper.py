@@ -19,6 +19,8 @@ from sites.__utils.found_county import get_county
 
 import requests
 from bs4 import BeautifulSoup
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 
 JOBS_URL = "https://apply.corteva.com/careers?keyword=Romania&domain=corteva.com&start=0&location=Romania&pid=893393579943&sort_by=distance&filter_include_remote=1"
@@ -59,18 +61,33 @@ def get_remote_type(job_data):
 
 def create_session():
     session = requests.Session()
-    response = session.get(JOBS_URL, headers={"User-Agent": "Mozilla/5.0"}, timeout=30)
-    response.raise_for_status()
+    retry_strategy = Retry(
+        total=3,
+        backoff_factor=1,
+        status_forcelist=[429, 500, 502, 503, 504],
+        allowed_methods=["GET"],
+        respect_retry_after_header=True,
+    )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    session.mount("http://", adapter)
+    session.mount("https://", adapter)
+
+    session.headers.update({
+        "User-Agent": "Mozilla/5.0",
+        "x-requested-with": "XMLHttpRequest",
+    })
+
+    try:
+        response = requests.get(JOBS_URL, headers={"User-Agent": "Mozilla/5.0"}, timeout=30)
+        response.raise_for_status()
+    except requests.exceptions.RequestException:
+        return session
 
     soup = BeautifulSoup(response.text, "lxml")
     csrf_token = soup.find("meta", attrs={"name": "_csrf"})
     if csrf_token:
         session.headers.update({"x-csrf-token": csrf_token["content"]})
 
-    session.headers.update({
-        "User-Agent": "Mozilla/5.0",
-        "x-requested-with": "XMLHttpRequest",
-    })
     return session
 
 
