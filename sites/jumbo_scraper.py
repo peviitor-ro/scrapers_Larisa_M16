@@ -56,7 +56,7 @@ def get_location_county(city_name):
 
 
 def create_scraper():
-    return cloudscraper.create_scraper(browser={'browser': 'chrome', 'platform': 'darwin', 'mobile': False})
+    return cloudscraper.create_scraper(browser={'browser': 'firefox', 'platform': 'windows', 'mobile': False})
 
 
 def extract_city(job_title):

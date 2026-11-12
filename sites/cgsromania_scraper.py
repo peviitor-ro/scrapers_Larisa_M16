@@ -3,7 +3,7 @@ from sites.__utils.peviitor_update import UpdateAPI
 from sites.__utils.found_county import get_county
 
 from bs4 import BeautifulSoup
-import cloudscraper
+import requests
 import time
 import re
 
@@ -12,6 +12,12 @@ JOBS_URL = "https://romania.cgsinc.com/vino-in-echipa-cgs/"
 COMPANY = "CGSRomania"
 COUNTRY = "Romania"
 LOGO_LINK = "https://romania.cgsinc.com/wp-content/uploads/2021/05/logo_CGS.svg"
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "ro-RO,ro;q=0.9,en;q=0.8",
+}
 
 CITY_TRANSLATIONS = {
     "bucharest": "Bucuresti",
@@ -66,18 +72,14 @@ def scraper():
     '''
     ... scrape data from CGS Romania scraper.
     '''
-    scraper_client = cloudscraper.create_scraper(
-        browser={'browser': 'chrome', 'platform': 'darwin', 'mobile': False},
-        interpreter='native'
-    )
-    
     max_retries = 15
     for attempt in range(max_retries):
         if attempt > 0:
             time.sleep(2)
-        response = scraper_client.get(JOBS_URL, timeout=30)
+        response = requests.get(JOBS_URL, headers=HEADERS, timeout=30)
         soup = BeautifulSoup(response.text, 'lxml')
-        if soup.title and 'One moment' not in soup.title.string:
+        title = soup.title.get_text(strip=True) if soup.title else ""
+        if response.ok and title and 'Just a moment' not in title and 'One moment' not in title:
             break
 
     job_list = []
@@ -93,6 +95,8 @@ def scraper():
         title = card_lines[0]
         location_text = card_lines[1]
         locations = extract_locations(location_text)
+        if not locations and "remote" in location_text.lower():
+            locations = ["Bucuresti"]
         if not title or not locations:
             continue
 
