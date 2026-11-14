@@ -15,16 +15,19 @@
 #
 #
 #
+import urllib3
 from sites.__utils.req_bs4_shorts import GetStaticSoup
 from sites.__utils.items_struct import Item
 from sites.__utils.peviitor_update import UpdateAPI
 from sites.__utils.found_county import get_county
 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 def scraper():
     '''
     ... scrape data from bunge scraper.
     '''
-    soup = GetStaticSoup(" https://jobs.bunge.com/search/?createNewAlert=false&q=&locationsearch=Romania&optionsFacetsDD_country=")
+    soup = GetStaticSoup("https://jobs.bunge.com/search/?createNewAlert=false&q=&locationsearch=Romania&optionsFacetsDD_country=", verify=False)
 
     job_list = []
     for job in soup.find_all("tr", attrs={"class":"data-row"}):
