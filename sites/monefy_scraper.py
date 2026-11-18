@@ -20,6 +20,7 @@ from sites.__utils.peviitor_update import UpdateAPI
 from sites.__utils.found_county import get_county
 
 import re
+from urllib.parse import urljoin
 
 
 JOBS_URL = "https://monefy.ro/careers/"
@@ -49,26 +50,18 @@ def get_location_county(city_name):
 
 
 def extract_location_and_remote(response):
-    page_text = response.get_text(" | ", strip=True)
-    match = re.search(r"Location\s*\|?\s*:?\s*\|?\s*([^|]+)", page_text, re.IGNORECASE)
-    if not match:
-        return "Bucuresti", "on-site"
-
-    location_text = match.group(1).strip()
+    chips = [chip.get_text(" ", strip=True) for chip in response.select(".tagchip")]
+    location_text = next(
+        (chip for chip in chips if re.search(r"romania|remote|on-site|hybrid", chip, re.IGNORECASE)),
+        "",
+    )
     location_lower = location_text.lower()
     if "remote" in location_lower:
         return "Bucuresti", "remote"
 
-    remote_type = "on-site"
-    if "on-site" in location_lower:
-        remote_type = "on-site"
-        location_text = location_text.replace("On-site", "").replace("on-site", "")
-
-    if "," in location_text:
-        location_parts = [part.strip() for part in location_text.split(",") if part.strip()]
-        location_text = next((part for part in location_parts if "site" not in part.lower()), location_parts[0])
-
-    city = normalize_city(location_text)
+    remote_type = "hybrid" if "hybrid" in location_lower else "on-site"
+    location_text = re.sub(r"\([^)]*\)", "", location_text)
+    city = normalize_city(location_text.split(",")[0])
     return city or "Bucuresti", remote_type
 
 
@@ -79,17 +72,18 @@ def scraper():
     soup = GetStaticSoup(JOBS_URL)
 
     job_list = []
-    for job in soup.select('div.et_pb_ajax_pagination_container article.et_pb_post'):
-        link_tag = job.find('a', href=True)
-        if not link_tag:
+    for job in soup.select('a.job-card[href]'):
+        title_tag = job.find('h3')
+        if not title_tag:
             continue
 
-        response = GetStaticSoup(link_tag['href'])
+        job_link = urljoin(JOBS_URL, job['href'])
+        response = GetStaticSoup(job_link)
         city, remote_type = extract_location_and_remote(response)
 
         job_list.append(Item(
-            job_title=link_tag.get_text(strip=True),
-            job_link=link_tag['href'],
+            job_title=title_tag.get_text(strip=True),
+            job_link=job_link,
             company=COMPANY,
             country=COUNTRY,
             county=get_location_county(city),
