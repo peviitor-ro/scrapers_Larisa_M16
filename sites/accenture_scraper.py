@@ -19,6 +19,7 @@ from sites.__utils.peviitor_update import UpdateAPI
 from sites.__utils.found_county import get_county
 
 import re
+import time
 
 import requests
 
@@ -41,6 +42,7 @@ CITY_TRANSLATIONS = {
 
 REMOTE_TRANSLATIONS = {
     "hybrid": "hybrid",
+    "hybrid eligible": "hybrid",
     "remote": "remote",
     "on-site": "on-site",
     "onsite": "on-site",
@@ -95,6 +97,7 @@ def fetch_jobs_page(start_index):
         "jobLanguage": "en",
         "countrySite": "ro-en",
         "sortBy": "1",
+        "sortByLabelMapping": "1",
         "searchType": "vectorSearch",
         "enableQueryBoost": "true",
         "minScore": "0.6",
@@ -106,9 +109,16 @@ def fetch_jobs_page(start_index):
         "jobFilters": "[]",
     }
 
-    response = requests.post(API_URL, headers=REQUEST_HEADERS, files=payload, timeout=30)
-    response.raise_for_status()
-    return response.json()
+    for attempt in range(3):
+        response = requests.post(API_URL, headers=REQUEST_HEADERS, files=payload, timeout=30)
+        response.raise_for_status()
+        result = response.json()
+        if "error" not in result:
+            return result
+        if attempt < 2:
+            time.sleep(2)
+
+    raise RuntimeError(f"Accenture API returned an error: {result.get('error')}")
 
 
 def build_item(job_data):
